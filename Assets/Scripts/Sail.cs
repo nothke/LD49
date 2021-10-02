@@ -17,9 +17,10 @@ public class Sail : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 sailNormal = transform.forward;
-        Vector3 windVelocity = -rb.velocity;
+        Vector3 windVelocity = -rb.velocity + Wind.e.Velocity;
 
         float area = width * height;
+
         Vector3 force = Vector3.Project(windVelocity, sailNormal) * area * forceMultiplier;
         rb.AddForceAtPosition(force, transform.position);
     }

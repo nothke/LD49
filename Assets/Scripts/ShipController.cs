@@ -13,18 +13,27 @@ public class ShipController : MonoBehaviour
     public Transform[] rudders;
     float maxRudderSteeringAngle = 30;
 
+    public Transform mast;
+
     float inputX;
     float inputY;
+
+    float mastAngle;
 
     void Update()
     {
         inputX = Input.GetAxis("Horizontal");
         inputY = Input.GetAxis("Vertical");
+        float inputR = Input.GetAxis("Roll");
+
+        mastAngle += inputR;
 
         foreach (var rudder in rudders)
         {
             rudder.localRotation = Quaternion.Euler(0, -inputX * maxRudderSteeringAngle + 90, 0);
         }
+
+        mast.localRotation = Quaternion.Euler(0, mastAngle, 0);
     }
 
     private void FixedUpdate()
