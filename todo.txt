@@ -1,0 +1,21 @@
+LDJAM 49
+The multiplayer boat racing game!
+
+TODO: 
+
+# Implementation:
+
+- Physics:
+	- ⏹ Cube that turns around and pushed by force
+	- ⏹ Wind that pushes the sail
+	- ⏹ Leaning boat
+
+	- ⏹ Water wave
+
+# Art:
+
+- Boat
+- Sails
+- Characters
+- Dock
+- Rock
