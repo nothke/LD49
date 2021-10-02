@@ -10,6 +10,9 @@ public class ShipController : MonoBehaviour
     public float torqueMult = 1;
     public float forceMult = 1;
 
+    public Transform[] rudders;
+    float maxRudderSteeringAngle = 30;
+
     float inputX;
     float inputY;
 
@@ -17,11 +20,16 @@ public class ShipController : MonoBehaviour
     {
         inputX = Input.GetAxis("Horizontal");
         inputY = Input.GetAxis("Vertical");
+
+        foreach (var rudder in rudders)
+        {
+            rudder.localRotation = Quaternion.Euler(0, -inputX * maxRudderSteeringAngle + 90, 0);
+        }
     }
 
     private void FixedUpdate()
     {
-        rb.AddRelativeTorque(Vector3.up * inputX * torqueMult, ForceMode.Acceleration);
+        //rb.AddRelativeTorque(Vector3.up * inputX * torqueMult, ForceMode.Acceleration);
         rb.AddRelativeForce(Vector3.forward * inputY * forceMult, ForceMode.Acceleration);
     }
 }
