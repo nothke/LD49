@@ -14,8 +14,8 @@ TODO:
 
 # Art:
 
-- Boat
-- Sails
-- Characters
-- Dock
-- Rock
+- ⏹ Boat
+- ⏹ Sails
+- ⏹ Characters
+- ⏹ Dock
+- ⏹ Rock
