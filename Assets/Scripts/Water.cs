@@ -8,6 +8,7 @@ public class Water : MonoBehaviour
     //void Awake() { e = this; }
 
     public static float Height => 0;
+    public static float Density => 100; // How much force to multiply to air
 
     public static bool IsUnderwater(Vector3 position)
     {

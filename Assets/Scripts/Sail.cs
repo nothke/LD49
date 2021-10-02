@@ -9,6 +9,10 @@ public class Sail : MonoBehaviour
 
     Rigidbody rb;
 
+    public Vector3 Normal => transform.forward;
+
+    Vector3 force;
+
     private void Awake()
     {
         rb = GetComponentInParent<Rigidbody>();
@@ -16,21 +20,28 @@ public class Sail : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 sailNormal = transform.forward;
+        Vector3 sailPos = transform.position;
+
+        bool underwater = Water.IsUnderwater(sailPos);
+
+        Vector3 sailVelocity = rb.GetPointVelocity(sailPos);
 
         Vector3 windVelocity =
-            Water.IsUnderwater(transform.position) ? -rb.velocity :
-            -rb.velocity + Wind.Velocity;
+            underwater ?
+                -sailVelocity * Water.Density :
+                -sailVelocity * 0.1f + Wind.Velocity;
 
         float area = width * height;
 
-        Vector3 force = Vector3.Project(windVelocity, sailNormal) * area * forceMultiplier;
-        rb.AddForceAtPosition(force, transform.position);
+        force = Vector3.Project(windVelocity, Normal) * area * forceMultiplier;
+        rb.AddForceAtPosition(force, sailPos);
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Water.IsUnderwater(transform.position) ? Color.cyan : Color.yellow;
+        bool underwater = Water.IsUnderwater(transform.position);
+
+        Gizmos.color = underwater ? Color.cyan : Color.yellow;
         Gizmos.DrawRay(transform.position, transform.forward);
 
         Vector3 p0 = transform.TransformPoint(new Vector2(-width, -height));
@@ -43,5 +54,17 @@ public class Sail : MonoBehaviour
 
         Gizmos.DrawLine(p0, p2);
         Gizmos.DrawLine(p1, p3);
+
+        if (Application.isPlaying)
+        {
+            if (!underwater)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawRay(transform.position, Wind.Velocity);
+            }
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, force);
+        }
     }
 }
