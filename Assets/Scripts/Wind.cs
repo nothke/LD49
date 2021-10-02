@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Wind : MonoBehaviour
 {
-    public static Wind e;
-    void Awake() { e = this; }
+    public static Wind Instance;
+    void Awake() { Instance = this; }
 
     public float speed = 1;
 
-    public Vector3 Velocity => transform.forward * speed;
+    public static Vector3 Velocity => Instance.transform.forward * Instance.speed;
 }

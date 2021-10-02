@@ -17,7 +17,10 @@ public class Sail : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 sailNormal = transform.forward;
-        Vector3 windVelocity = -rb.velocity + Wind.e.Velocity;
+
+        Vector3 windVelocity =
+            Water.IsUnderwater(transform.position) ? -rb.velocity :
+            -rb.velocity + Wind.Velocity;
 
         float area = width * height;
 
@@ -27,7 +30,7 @@ public class Sail : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
+        Gizmos.color = Water.IsUnderwater(transform.position) ? Color.cyan : Color.yellow;
         Gizmos.DrawRay(transform.position, transform.forward);
 
         Vector3 p0 = transform.TransformPoint(new Vector2(-width, -height));
