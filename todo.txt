@@ -8,7 +8,7 @@ TODO:
 - Physics:
 	- ✅ Cube that turns around and pushed by force
 	- ✅ Sail and fins that work with velocity
-	- ⏹ Wind that pushes the sail
+	- ✅ Wind that pushes the sail
 	- ✅ Leaning boat
 	- ⏹ Buoyancy
 
