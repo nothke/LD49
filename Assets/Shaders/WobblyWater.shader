@@ -45,7 +45,7 @@ Shader "Custom/WobblyWater"
 				float h2 = WaterHeight(worldPos.xyz + float3(0, 0, -d));
 				float h3 = WaterHeight(worldPos.xyz + float3(0, 0, +d));
 
-				const float normalIntensity = 1;
+				const float normalIntensity = 0.5;
 				v.normal.x = (h1 - h0) * normalIntensity;
 				v.normal.z = (h3 - h2) * normalIntensity;
 
