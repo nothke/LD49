@@ -34,7 +34,7 @@ public class ShipController : MonoBehaviour
         mastAngle = Mathf.Clamp(mastAngle, -90, 90);
 
         // TODO maybe make the rudder angle be affected by the inputX rather than assigned to it
-        rudderAngle = -inputX * maxRudderSteeringAngle + 90;
+        rudderAngle = -inputX * maxRudderSteeringAngle;
 
         foreach (var rudder in rudders)
         {

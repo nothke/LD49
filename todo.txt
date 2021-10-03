@@ -14,6 +14,7 @@ TODO:
 	- ✅ Water wave
 	- ⏹ Movement on the ship - Ferran
 	- ⏹ Drag from submerged things
+	- ⏹ Speedometer
 	- ⏹ Legs snapping to the deck (once simple characters are done)
 	- ⏹ Water reflection
 

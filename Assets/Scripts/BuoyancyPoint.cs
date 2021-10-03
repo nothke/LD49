@@ -35,6 +35,10 @@ public class BuoyancyPoint : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, Vector3.one * 0.1f);
+        //Gizmos.DrawRay(transform.position, Vector3.up * 0.2f);
+        float scale = 0.2f;
+        Gizmos.DrawRay(transform.position - Vector3.right * scale * 0.5f, Vector3.right * scale);
+        Gizmos.DrawRay(transform.position - Vector3.forward * scale * 0.5f, Vector3.forward * scale);
+        //Gizmos.DrawWireCube(transform.position, Vector3.one * 0.1f);
     }
 }
