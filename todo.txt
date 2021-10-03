@@ -11,7 +11,10 @@ TODO:
 	- ✅ Wind that pushes the sail
 	- ✅ Leaning boat
 	- ✅ Buoyancy
-	- ⏹ Water wave
+	- ✅ Water wave
+	- ⏹ Movement on the ship
+	- ⏹ Drag from submerged things
+
 
 # Art:
 
@@ -20,3 +23,4 @@ TODO:
 - ⏹ Characters
 - ⏹ Dock
 - ⏹ Rock
+- ⏹ Buoy

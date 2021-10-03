@@ -29,7 +29,7 @@ Shader "Custom/WobblyWater"
 			float WaterHeight(float3 pos)
 			{
 				float time = _Time.y;
-				return sin(time + pos.x * 1.1f) * 0.4f;
+				return sin(time + pos.x * 1.1f) * 0.2f;
 			}
 
 			void vert(inout appdata_full v) {
