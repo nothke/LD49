@@ -12,9 +12,10 @@ TODO:
 	- ✅ Leaning boat
 	- ✅ Buoyancy
 	- ✅ Water wave
-	- ⏹ Movement on the ship
+	- ⏹ Movement on the ship - Ferran
 	- ⏹ Drag from submerged things
-
+	- ⏹ Legs snapping to the deck (once simple characters are done)
+	- ⏹ Water reflection
 
 # Art:
 
@@ -22,5 +23,5 @@ TODO:
 - ⏹ Sails
 - ⏹ Characters
 - ⏹ Dock
-- ⏹ Rock
+- ⏹ Rocks
 - ⏹ Buoy
