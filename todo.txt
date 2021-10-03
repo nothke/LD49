@@ -24,7 +24,7 @@ TODO:
 	- ✅ Steering wheel
 	- ✅ Sail booms
 - ✅ Sails
-- ⏹ Characters
-- ⏹ Dock
-- ⏹ Rocks
 - ⏹ Buoy
+- ⏹ Rocks
+- ⏹ Dock
+- ⏹ Characters
