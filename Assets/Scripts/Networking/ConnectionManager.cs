@@ -17,8 +17,13 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     bool kickedForInactivity = false;
     Coroutine retryConnectionCoroutine = null;
 
+    const string START_ROOM_TIME_KEY = "START_TIME";
+
+    public static double roomCreatedTime = 0;
+
     void Start()
     {
+        roomCreatedTime = 0;
         i = this;
         lastActiveTime = Time.time;
 
@@ -73,6 +78,15 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
         ht["FOCUS"] = true;
         PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+
+
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(START_ROOM_TIME_KEY, out object o))
+        {
+            roomCreatedTime = (double)o;
+        }
+        else if (roomCreatedTime == 0) {
+            Debug.LogError("No room creation time found on joined room!, you better be the one who created the room..");
+        }
     }
 
 
@@ -105,6 +119,14 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
                 retryConnectionCoroutine = StartCoroutine(WaitABitAndTryToConnectAgain());
             }
         }
+    }
+
+    public override void OnCreatedRoom()
+    {
+        Debug.Log("Created room at time "+PhotonNetwork.Time);
+        ExitGames.Client.Photon.Hashtable rt = new ExitGames.Client.Photon.Hashtable();
+        rt[START_ROOM_TIME_KEY] = roomCreatedTime = PhotonNetwork.Time;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(rt);
     }
 
     IEnumerator WaitABitAndTryToConnectAgain()

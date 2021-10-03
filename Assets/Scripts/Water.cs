@@ -26,7 +26,7 @@ public class Water : MonoBehaviour
 
     public static float GetHeight(Vector3 pos)
     {
-        float time = (float)(PhotonNetwork.Time % PI2);
+        float time = (float)(PhotonNetwork.Time - ConnectionManager.roomCreatedTime);
 
         return Sin(time + pos.x * 1.1f) * 0.2f;
     }
@@ -35,9 +35,7 @@ public class Water : MonoBehaviour
     {
         if (PhotonNetwork.InRoom)
         {
-            // WARNING, I'm modding by 2 * PI because PhotonNetwork.Time can get very big, and the precision breaks on the shader.
-            // If we update the GetHeight function above to not be loopable on 2 * PI we should update the mod acordingly
-            Shader.SetGlobalFloat(NETWORK_TIME_ID, (float)(PhotonNetwork.Time % PI2));
+            Shader.SetGlobalFloat(NETWORK_TIME_ID, (float)(PhotonNetwork.Time - ConnectionManager.roomCreatedTime));
         }
         else
         {
