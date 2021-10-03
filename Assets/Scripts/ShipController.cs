@@ -26,7 +26,8 @@ public class ShipController : MonoBehaviour
         inputY = Input.GetAxis("Vertical");
         float inputR = Input.GetAxis("Roll");
 
-        mastAngle += inputR;
+        mastAngle += -inputR;
+        mastAngle = Mathf.Clamp(mastAngle, -90, 90);
 
         foreach (var rudder in rudders)
         {
