@@ -203,4 +203,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
             SetLayerRecursively(c, layer, m);
         }
     }
+
+    void OnDestroy() {
+        Destroy(localShip);
+        Destroy(remoteShip);
+    }
 }
