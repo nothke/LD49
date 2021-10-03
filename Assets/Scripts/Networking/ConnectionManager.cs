@@ -8,6 +8,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 {
     public static ConnectionManager i;
 
+    public bool wantOwnRoom = false;
     public string gameVersion = "0.1";
     public string roomName = "Adriatic";
 
@@ -68,7 +69,10 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        PhotonNetwork.JoinRandomRoom();
+        if (!wantOwnRoom)
+            PhotonNetwork.JoinRandomRoom();
+        else
+            PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 20 });
     }
 
     public override void OnJoinedRoom()

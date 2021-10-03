@@ -17,7 +17,7 @@ public class ShipInputCalculator : MonoBehaviourPun
         if (photonView.IsMine)
         {
             inputX = Input.GetAxis("Horizontal");
-            inputY = Input.GetAxis("Vertical");
+            inputY = 0;// Input.GetAxis("Vertical");
             inputR = Input.GetAxis("Roll");
         }
         else {

@@ -5,6 +5,7 @@ using Photon.Pun;
 
 public class ShipSync : MonoBehaviourPun, IPunObservable
 {
+    public int shipId = -1;
 
     public ShipController shipPrefab;
     public int physicsLayer = 6;
@@ -24,16 +25,23 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
         // Ideally we would want 2 simulations running, the local and the remote, and lerp the actual values from one to the other
         // In this case I'm trying to lerp the local towards the remote without keeping track of the "untouched/unlerped" local values
         // This might look a bit worse but might be simpler and enough
-
         
-        localShip = shipPrefab; // TODO instantiate ship instead of taking the already instantiated "prefab"
-        remoteShip = Instantiate(localShip.gameObject).GetComponent<ShipController>();
+        localShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
+        remoteShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
 
         SetLayerRecursively(remoteShip.gameObject.transform, physicsLayer, remoteMaterial);
 
         remoteShip.gameObject.SetActive(!photonView.IsMine);
 
         shipInput = GetComponent<ShipInputCalculator>();
+        GetComponent<ShipPlayArea>().areaCenter = localShip.playableArea;
+    }
+
+    [PunRPC]
+    void SetId(int id)
+    {
+        shipId = id;
+        RoomController.i.RegisterShip(this);
     }
 
     // Update is called once per frame

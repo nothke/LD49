@@ -14,6 +14,7 @@ public class ShipController : MonoBehaviour
     float maxRudderSteeringAngle = 30;
 
     public Transform mast;
+    public Transform playableArea;
 
     [System.NonSerialized]
     public float inputX;
