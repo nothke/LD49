@@ -223,6 +223,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: boat
       objectReference: {fileID: 0}
+    - target: {fileID: 2518364650054215991, guid: d56270e00b44ae047a0a621b607920c1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d56270e00b44ae047a0a621b607920c1, type: 3}
 --- !u!1 &555647343
@@ -552,14 +556,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2064394125500223815, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
-      propertyPath: width
-      value: 0.94
-      objectReference: {fileID: 0}
-    - target: {fileID: 2064394125500223815, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
-      propertyPath: height
-      value: 2.92
-      objectReference: {fileID: 0}
+    - target: {fileID: 2569049680600958382, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ee563fac08167a9418180fa616359d25, type: 2}
     - target: {fileID: 5577074632021696225, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -608,5 +608,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: catamaran
       objectReference: {fileID: 0}
+    - target: {fileID: 5577074632021696231, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
+      propertyPath: m_Mass
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7084641350371962285, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ee563fac08167a9418180fa616359d25, type: 2}
+    - target: {fileID: 8011351800568003230, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ee563fac08167a9418180fa616359d25, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}

@@ -13,6 +13,10 @@ public class Sail : MonoBehaviour
 
     Vector3 force;
 
+    public float bendForceForward = 0;
+
+    public Cloth cloth;
+
     private void Awake()
     {
         rb = GetComponentInParent<Rigidbody>();
@@ -34,7 +38,23 @@ public class Sail : MonoBehaviour
         float area = width * height;
 
         force = Vector3.Project(windVelocity, Normal) * area * forceMultiplier;
+
+        if (bendForceForward != 0)
+        {
+            //float bendAngle = Vector3.SignedAngle(force, transform.forward, transform.up) > 0 ? -bendForceForward : bendForceForward;
+            float bendAngle = bendForceForward;
+            force = Vector3.RotateTowards(force, rb.transform.forward, bendAngle, 0.0f);
+        }
+
         rb.AddForceAtPosition(force, sailPos);
+    }
+
+    private void Update()
+    {
+        if (cloth)
+        {
+            cloth.externalAcceleration = force * 10;
+        }
     }
 
     private void OnDrawGizmos()
