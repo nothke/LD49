@@ -24,6 +24,7 @@ Shader "Custom/WobblyWater"
 			struct Input
 			{
 				float2 uv_MainTex;
+				float3 worldPos;
 			};
 
 			float WaterHeight(float3 pos)
@@ -44,7 +45,7 @@ Shader "Custom/WobblyWater"
 				float h2 = WaterHeight(worldPos.xyz + float3(0, 0, -d));
 				float h3 = WaterHeight(worldPos.xyz + float3(0, 0, +d));
 
-				const float normalIntensity = 2;
+				const float normalIntensity = 1;
 				v.normal.x = (h1 - h0) * normalIntensity;
 				v.normal.z = (h3 - h2) * normalIntensity;
 
@@ -67,7 +68,7 @@ Shader "Custom/WobblyWater"
 			void surf(Input IN, inout SurfaceOutputStandard o)
 			{
 				// Albedo comes from a texture tinted by color
-				fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+				fixed4 c = tex2D(_MainTex, IN.worldPos.xz * 0.05) + _Color;
 				o.Albedo = c.rgb;
 				// Metallic and smoothness come from slider variables
 				o.Metallic = _Metallic;
