@@ -1,24 +1,9 @@
 fileFormatVersion: 2
-guid: 822e9aa989b990c43b27945ac350e319
+guid: 1feba58b6ad7c9449b28b27d9a46df56
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: catamaran_hull
-    second: {fileID: 2100000, guid: 5678cc8daa484b640b1b11ebd430a154, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: details
-    second: {fileID: 2100000, guid: 996ba4c68c1afd34899798bbb1cc4d14, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: net
-    second: {fileID: 2100000, guid: ec58b57dae66e784bb149c0935baa072, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

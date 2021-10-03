@@ -51,7 +51,7 @@ Shader "Custom/DoubleSided"
            
             if (IN.isFacing)
             {
-                o.Albedo = float4(0, 1, 0, 1);
+                //o.Albedo = float4(0, 1, 0, 1);
             }
 
             o.Normal *= IN.isFacing ? 1 : -1;

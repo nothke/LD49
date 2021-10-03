@@ -12,7 +12,7 @@ TODO:
 	- ✅ Leaning boat
 	- ✅ Buoyancy
 	- ✅ Water wave
-	- ⏹ Movement on the ship - Ferran
+	- ✅ Movement on the ship - Ferran
 	- ⏹ Drag from submerged things
 	- ⏹ Speedometer
 	- ⏹ Legs snapping to the deck (once simple characters are done)
@@ -20,8 +20,10 @@ TODO:
 
 # Art:
 
-- ⏹ Boat
-- ⏹ Sails
+- ✅ Boat
+	- ✅ Steering wheel
+	- ✅ Sail booms
+- ✅ Sails
 - ⏹ Characters
 - ⏹ Dock
 - ⏹ Rocks
