@@ -149,6 +149,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     #endregion photoncallbacks
 
+#if !UNITY_EDITOR
     void OnApplicationFocus(bool focus)
     {
         ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
@@ -205,4 +206,5 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             }
         }
     }
+#endif
 }

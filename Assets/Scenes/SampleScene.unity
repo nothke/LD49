@@ -1460,6 +1460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shipPrefab: {fileID: 1606969362}
   physicsLayer: 6
+  visualizeRemoteShip: 1
   remoteMaterial: {fileID: 2100000, guid: 3bcefcdf8a9971a4eaf1f8a3c5e9977f, type: 2}
 --- !u!114 &1342195207
 MonoBehaviour:
@@ -1863,6 +1864,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1778940236}
   - component: {fileID: 1778940237}
+  - component: {fileID: 1778940238}
   m_Layer: 0
   m_Name: water
   m_TagString: Untagged
@@ -1900,6 +1902,18 @@ MonoBehaviour:
   prefab: {fileID: 710054080}
   tileWidth: 40
   count: 10
+--- !u!114 &1778940238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1778940235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d2f6e2336e27a4bbe435d16079ba11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1820680331
 GameObject:
   m_ObjectHideFlags: 0

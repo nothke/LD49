@@ -11,7 +11,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
     ShipInputCalculator shipInput;
 
     [Header("Debug")]
+    public bool visualizeRemoteShip = true;
     public Material remoteMaterial;
+    List<Renderer> remoteRenderers = new List<Renderer>();
 
     ShipController localShip, remoteShip;
 
@@ -23,7 +25,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
         // In this case I'm trying to lerp the local towards the remote without keeping track of the "untouched/unlerped" local values
         // This might look a bit worse but might be simpler and enough
 
-        localShip = shipPrefab;
+        
+        localShip = shipPrefab; // TODO instantiate ship instead of taking the already instantiated "prefab"
         remoteShip = Instantiate(localShip.gameObject).GetComponent<ShipController>();
 
         SetLayerRecursively(remoteShip.gameObject.transform, physicsLayer, remoteMaterial);
@@ -36,12 +39,6 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        // calculate input locally based on input and other players
-        float inputX = Input.GetAxis("Horizontal");
-        float inputY = Input.GetAxis("Vertical");
-        float inputR = Input.GetAxis("Roll");
-
-
         if (photonView.IsMine)
         {
             shipInput.UpdateInput(ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
@@ -62,12 +59,19 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
                 if (remoteShip.gameObject.activeInHierarchy)
                 {
                     remoteShip.gameObject.SetActive(false);
+
+                    localShip.rb.MovePosition(remoteShip.rb.position);
+                    localShip.rb.MoveRotation(remoteShip.rb.rotation);
+                    localShip.rb.velocity = remoteShip.rb.velocity;
+                    localShip.rb.angularVelocity = remoteShip.rb.angularVelocity;
                 }
 
                 shipInput.UpdateInput(ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
+                stillFrames++;
             }
             else
             {
+                smoothFrames++;
                 shipInput.UpdateInput(ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
                 shipInput.UpdateInput(ref remoteShip.inputX, ref remoteShip.inputY, ref remoteShip.inputR);
 
@@ -76,14 +80,33 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
                 localShip.inputR = Mathf.Lerp(localShip.inputR, remoteShip.inputR, smoothFactor);
 
                 // Here we would want to simulate the movement of both local and remote, and then visually show an inbetween state.
-                // But we are just hoping the physics has simulated that for us and we lerp the local to the remote instead.
+                // But we are just hoping the physics will simulate that for us and we lerp the local to the remote instead.
+                
+                localShip.mastAngle = Mathf.Lerp(localShip.mastAngle, remoteShip.mastAngle, smoothFactor);
+                localShip.rudderAngle = Mathf.Lerp(localShip.rudderAngle, remoteShip.rudderAngle, smoothFactor);
+            }
 
+            // Debug remote viz
+            if (remoteRenderers[0].enabled != visualizeRemoteShip)
+            {
+                foreach (Renderer r in remoteRenderers)
+                    r.enabled = visualizeRemoteShip;
+            }
+        }
+
+    }
+
+    void FixedUpdate() {
+        if (!photonView.IsMine)
+        {
+            float smoothFactor = 1f - networkSmoothingTime / NETWORK_SMOOTH_TIME;
+
+            if (smoothFactor < 1f)
+            {
                 localShip.rb.MovePosition(Vector3.Lerp(localShip.rb.position, remoteShip.rb.position, smoothFactor));
                 localShip.rb.MoveRotation(Quaternion.Lerp(localShip.rb.rotation, remoteShip.rb.rotation, smoothFactor));
                 localShip.rb.velocity = Vector3.Lerp(localShip.rb.velocity, remoteShip.rb.velocity, smoothFactor);
                 localShip.rb.angularVelocity = Vector3.Lerp(localShip.rb.angularVelocity, remoteShip.rb.angularVelocity, smoothFactor);
-                localShip.mastAngle = Mathf.Lerp(localShip.mastAngle, remoteShip.mastAngle, smoothFactor);
-                localShip.rudderAngle = Mathf.Lerp(localShip.rudderAngle, remoteShip.rudderAngle, smoothFactor);
             }
         }
     }
@@ -93,8 +116,10 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
     Vector3 receivedVelocity;
     Vector3 receivedAngularVelocity;
 
-    private const float NETWORK_SMOOTH_TIME = 0.3f;
+    private const float NETWORK_SMOOTH_TIME = 0.2f;
     float networkSmoothingTime = 0;
+    int smoothFrames = 0;
+    int stillFrames = 0;
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -145,14 +170,25 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
 
 
             networkSmoothingTime = NETWORK_SMOOTH_TIME;
+
+
+            //Debug.Log(smoothFrames + " " + stillFrames);
+            smoothFrames = 0;
+            stillFrames = 0;
         }
     }
 
     void SetLayerRecursively(Transform t, int layer, Material m)
     {
         t.gameObject.layer = layer;
-        MeshRenderer r = GetComponent<MeshRenderer>();
-        if (r != null) r.material = m;
+        Renderer r = t.GetComponent<Renderer>();
+        if (r != null)
+        {
+            r.material = m;
+            remoteRenderers.Add(r);
+            if (!visualizeRemoteShip)
+                r.enabled = false;
+        }
 
         foreach (Transform c in t)
         {
