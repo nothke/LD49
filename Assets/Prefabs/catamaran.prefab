@@ -1404,6 +1404,8 @@ MonoBehaviour:
   rudders:
   - {fileID: 4656800637820288685}
   - {fileID: 96525398886373038}
+  rudderTurningSpeed: 45
+  mastTurningSpeed: 50
   mast: {fileID: 1957587829814945565}
   playableArea: {fileID: 239618941}
 --- !u!54 &5577074632021696231

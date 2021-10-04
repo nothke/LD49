@@ -5,7 +5,7 @@ using UnityEngine;
 public class SteeringWheel : MonoBehaviour
 {
     public ShipController controller;
-    public float steeringLockAngle = 360;
+    float steeringLockAngle = 20f;
 
     public float wheelRadius = 0.5f;
 
@@ -14,9 +14,9 @@ public class SteeringWheel : MonoBehaviour
 
     void Update()
     {
-        float targetAngle = -controller.inputX * steeringLockAngle;
-        smoothAngle = Mathf.SmoothDamp(smoothAngle, targetAngle, ref smoothAngleVelo, 1);
-        transform.localEulerAngles = new Vector3(0, 0, smoothAngle);
+        float targetAngle = controller.rudderAngle * steeringLockAngle;
+        //smoothAngle = Mathf.SmoothDamp(smoothAngle, targetAngle, ref smoothAngleVelo, 1);
+        transform.localEulerAngles = new Vector3(0, 0, targetAngle);
     }
 
     public Vector3 WheelPositionForAngle(float rad)

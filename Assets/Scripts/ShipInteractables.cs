@@ -9,6 +9,45 @@ public class ShipInteractables : MonoBehaviour
 
     public float interactionReach = 1f;
 
+    public enum InteractingThing
+    {
+        Rope,
+        LeftWheel,
+        RightWheel
+    }
+
+    public bool InInteractableReach(Vector3 pos, out InteractingThing thing, out float interactablePosition)
+    {
+        float distanceToLeftWheel = Vector3.Distance(leftWheel.transform.position, pos);
+        float distanceToRightWheel = Vector3.Distance(rightWheel.transform.position, pos);
+        float distanceToRope = rope.DistanceToRope(pos, out float closestRopeRelPoint);
+
+        if (distanceToLeftWheel < distanceToRightWheel)
+        {
+            if (distanceToLeftWheel < distanceToRope)
+            {
+                thing = InteractingThing.LeftWheel;
+                interactablePosition = Random.Range(Mathf.PI * 0.1f, Mathf.PI * 0.9f);
+
+                return distanceToLeftWheel <= interactionReach;
+            }
+        }
+
+        if (distanceToRightWheel < distanceToRope)
+        {
+            thing = InteractingThing.RightWheel;
+            interactablePosition = Random.Range(Mathf.PI * 0.1f, Mathf.PI * 0.9f);
+
+            return distanceToRightWheel <= interactionReach;
+        }
+        else {
+            thing = InteractingThing.Rope;
+            interactablePosition = closestRopeRelPoint;
+
+            return distanceToRope <= interactionReach;
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

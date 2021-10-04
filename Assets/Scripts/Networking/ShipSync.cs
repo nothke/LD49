@@ -53,7 +53,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
     {
         if (photonView.IsMine)
         {
-            shipInput.UpdateInput(ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
+            shipInput.UpdateInput(shipId, ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
+            localShip.UpdateWithCurrentInput(Time.deltaTime);
 
             if (remoteShip.gameObject.activeInHierarchy)
             {
@@ -78,24 +79,33 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
                     localShip.rb.angularVelocity = remoteShip.rb.angularVelocity;
                 }
 
-                shipInput.UpdateInput(ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
+                shipInput.UpdateInput(shipId, ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
                 stillFrames++;
             }
             else
             {
                 smoothFrames++;
-                shipInput.UpdateInput(ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
-                shipInput.UpdateInput(ref remoteShip.inputX, ref remoteShip.inputY, ref remoteShip.inputR);
 
-                localShip.inputX = Mathf.Lerp(localShip.inputX, remoteShip.inputX, smoothFactor);
-                localShip.inputY = Mathf.Lerp(localShip.inputY, remoteShip.inputY, smoothFactor);
-                localShip.inputR = Mathf.Lerp(localShip.inputR, remoteShip.inputR, smoothFactor);
+
+                localShip.mastAngle = Mathf.Lerp(localShip.mastAngle, remoteShip.mastAngle, smoothFactor);
+                localShip.rudderAngle = Mathf.Lerp(localShip.rudderAngle, remoteShip.rudderAngle, smoothFactor);
+
+                shipInput.UpdateInput(shipId, ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
+                localShip.UpdateWithCurrentInput(Time.deltaTime);
+
+                remoteShip.inputX = localShip.inputX;
+                remoteShip.inputY = localShip.inputY;
+                remoteShip.inputR = localShip.inputR;
+                //shipInput.UpdateInput(shipId, ref remoteShip.inputX, ref remoteShip.inputY, ref remoteShip.inputR);
+                remoteShip.UpdateWithCurrentInput(Time.deltaTime);
+
+                //localShip.inputX = Mathf.Lerp(localShip.inputX, remoteShip.inputX, smoothFactor);
+                //localShip.inputY = Mathf.Lerp(localShip.inputY, remoteShip.inputY, smoothFactor);
+                //localShip.inputR = Mathf.Lerp(localShip.inputR, remoteShip.inputR, smoothFactor);
 
                 // Here we would want to simulate the movement of both local and remote, and then visually show an inbetween state.
                 // But we are just hoping the physics will simulate that for us and we lerp the local to the remote instead.
                 
-                localShip.mastAngle = Mathf.Lerp(localShip.mastAngle, remoteShip.mastAngle, smoothFactor);
-                localShip.rudderAngle = Mathf.Lerp(localShip.rudderAngle, remoteShip.rudderAngle, smoothFactor);
             }
 
             // Debug remote viz
@@ -177,6 +187,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
             remoteShip.rb.MoveRotation(receivedRotation);
             remoteShip.rb.velocity = receivedVelocity;
             remoteShip.rb.angularVelocity = receivedAngularVelocity;
+
+            //shipInput.UpdateInput(shipId, ref remoteShip.inputX, ref remoteShip.inputY, ref remoteShip.inputR);
+            remoteShip.UpdateWithCurrentInput(deltaTime);
 
             remoteShip.gameObject.SetActive(true);
 

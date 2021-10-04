@@ -5,25 +5,44 @@ using Photon.Pun;
 
 public class ShipInputCalculator : MonoBehaviourPun
 {
+    public float singlePlayerStrength = 0.3f;
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    public void UpdateInput(ref float inputX, ref float inputY, ref float inputR)
+    public void UpdateInput(int shipIt, ref float inputX, ref float inputY, ref float inputR)
     {
-        // calculate input locally based on input and other players
-        if (photonView.IsMine)
+
+        inputY = 0f;
+
+        float instantInputR = 0;
+        float instantInputX = 0;
+
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayers[shipIt])
         {
-            inputX = Input.GetAxis("Horizontal");
-            inputY = 0;// Input.GetAxis("Vertical");
-            inputR = Input.GetAxis("Roll");
+            PlayerSync ps = RoomController.i.playerSyncs[p];
+
+            if (ps.IsInteracting())
+            {
+                float interactionAxis = ps.InteractingInput();
+                switch (ps.WhichInteractable()) {
+                    case ShipInteractables.InteractingThing.Rope:
+                        instantInputR += interactionAxis * singlePlayerStrength;
+                        break;
+                    case ShipInteractables.InteractingThing.LeftWheel:
+                        instantInputX += interactionAxis * singlePlayerStrength;
+                        break;
+                    case ShipInteractables.InteractingThing.RightWheel:
+                        instantInputX += interactionAxis * singlePlayerStrength;
+                        break;
+                }
+            }
         }
-        else {
-            inputX = Mathf.MoveTowards(inputX, 0, Time.deltaTime);
-            inputY = Mathf.MoveTowards(inputY, 0, Time.deltaTime);
-            inputR = Mathf.MoveTowards(inputR, 0, Time.deltaTime);
-        }
+        //inputX = Mathf.MoveTowards(inputX, instantInputR, Time.deltaTime);
+        //inputR = Mathf.MoveTowards(inputR, instantInputX, Time.deltaTime);
+        inputX = instantInputX;
+        inputR = instantInputR;
     }
 }

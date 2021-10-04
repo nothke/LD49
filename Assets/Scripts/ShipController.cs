@@ -13,6 +13,10 @@ public class ShipController : MonoBehaviour
     public Transform[] rudders;
     float maxRudderSteeringAngle = 30;
 
+    // angles per second
+    public float rudderTurningSpeed = 20f;
+    public float mastTurningSpeed = 25f;
+
     public Transform mast;
     public Transform playableArea;
 
@@ -28,14 +32,20 @@ public class ShipController : MonoBehaviour
     [System.NonSerialized]
     public float rudderAngle;
 
-    void Update()
+
+    public void UpdateWithCurrentInput(float dTime)
     {
-        mastAngle += -inputR;
+        mastAngle += -inputR * mastTurningSpeed * dTime;
         mastAngle = Mathf.Clamp(mastAngle, -90, 90);
 
-        // TODO maybe make the rudder angle be affected by the inputX rather than assigned to it
-        rudderAngle = -inputX * maxRudderSteeringAngle;
+        rudderAngle += -inputX * rudderTurningSpeed * dTime;
+        rudderAngle = Mathf.Clamp(rudderAngle, -maxRudderSteeringAngle, maxRudderSteeringAngle);
 
+        //Debug.Log("Input is " + inputX + " " + inputR);
+    }
+
+    void Update()
+    {
         foreach (var rudder in rudders)
         {
             rudder.localRotation = Quaternion.Euler(0, rudderAngle, 0);

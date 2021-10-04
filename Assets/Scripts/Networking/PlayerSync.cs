@@ -9,10 +9,19 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public int shipId = -1;
 
     ShipPlayArea playArea;
+    ShipInteractables interactables;
+
     Vector2 pos = Vector2.zero;
     public float collisionRadius = 0.5f;
     public float speed = 10f;
     public float pushSpeed = 5f;
+
+    bool interacting = false;
+    ShipInteractables.InteractingThing interactingThing = ShipInteractables.InteractingThing.Rope;
+    float interactingInput = 0;
+    float leftHandInteractingPos = 0f;
+    float rightHandInteractingPos = 0f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +52,65 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             {
                 float inputX = Input.GetAxis("Horizontal");
                 float inputY = Input.GetAxis("Vertical");
+                float inputInteract = Input.GetAxis("Submit");
 
-                pos.x += inputX * speed * Time.deltaTime;
-                pos.y += inputY * speed * Time.deltaTime;
+                if (inputInteract > 0 && !interacting)
+                {
+                    if (interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up, out ShipInteractables.InteractingThing thing, out float p))
+                    {
+                        interactingThing = thing;
+                        switch (thing)
+                        {
+                            case ShipInteractables.InteractingThing.LeftWheel:
+                                // These are the positions of the hands in radians in the wheel
+                                leftHandInteractingPos = p + Mathf.PI * 0.5f;
+                                rightHandInteractingPos = -p + Mathf.PI * 0.5f;
+                                break;
+                            case ShipInteractables.InteractingThing.RightWheel:
+                                // These are the positions of the hands in radians in the wheel
+                                leftHandInteractingPos = p + Mathf.PI * 0.5f;
+                                rightHandInteractingPos = -p + Mathf.PI * 0.5f;
+                                break;
+                            case ShipInteractables.InteractingThing.Rope:
+                                // Positions of hands in rope
+                                leftHandInteractingPos = Mathf.Clamp(p - 0.05f, -1f, 1f);
+                                rightHandInteractingPos = Mathf.Clamp(p + 0.05f, -1f, 1f);
+                                break;
+                        }
+                        interacting = true;
+                    }
+                }
+                else if (inputInteract <= 0.01f && interacting)
+                    interacting = false;
+
+                if (!interacting)
+                {
+                    pos.x += inputX * speed * Time.deltaTime;
+                    pos.y += inputY * speed * Time.deltaTime;
+                    interactingInput = 0;
+                }
+                else {
+                    Vector3 wantedInteractingPos = Vector3.zero;
+                    switch (interactingThing)
+                    {
+                        case ShipInteractables.InteractingThing.LeftWheel:
+                            wantedInteractingPos = interactables.leftWheel.transform.position - interactables.leftWheel.transform.forward * 0.5f;
+                            break;
+                        case ShipInteractables.InteractingThing.RightWheel:
+                            wantedInteractingPos = interactables.rightWheel.transform.position - interactables.rightWheel.transform.forward * 0.5f;
+                            break;
+                        case ShipInteractables.InteractingThing.Rope:
+                            wantedInteractingPos = interactables.rope.RopeRelativePointToWorld(Mathf.Lerp(leftHandInteractingPos, rightHandInteractingPos, 0.5f));
+                            break;
+                    }
+
+                    Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(wantedInteractingPos);
+
+                    pos = Vector3.MoveTowards(pos, wantedInteractingShipPos, speed * Time.deltaTime * 0.5f);
+
+                    // input
+                    interactingInput = inputX;
+                }
 
                 GetPushedByOtherPlayers(ref pos);
             }
@@ -62,6 +127,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
             transform.position = playArea.TransformPoint(pos);
             transform.rotation = Quaternion.identity;
+
+            // Body parts
+
         }
     }
 
@@ -94,6 +162,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public void PlaceOnShip(ShipSync s)
     {
         playArea = s.visualShip.GetComponent<ShipPlayArea>();
+        interactables = s.visualShip.GetComponent<ShipInteractables>();
 
         transform.SetParent(playArea.areaCenter);
 
@@ -115,10 +184,38 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(pos);
+            stream.SendNext(interacting);
+            if (interacting)
+            {
+                stream.SendNext(interactingThing);
+                stream.SendNext(interactingInput);
+                stream.SendNext(rightHandInteractingPos);
+                stream.SendNext(leftHandInteractingPos);
+            }
         }
         else
         {
             receivedPos = (Vector2)stream.ReceiveNext();
+            interacting = (bool)stream.ReceiveNext();
+            if (interacting)
+            {
+                interactingThing = (ShipInteractables.InteractingThing)stream.ReceiveNext();
+                interactingInput = (float)stream.ReceiveNext();
+                rightHandInteractingPos = (float)stream.ReceiveNext();
+                leftHandInteractingPos = (float)stream.ReceiveNext();
+            }
         }
+    }
+
+    public bool IsInteracting() {
+        return interacting;
+    }
+
+    public ShipInteractables.InteractingThing WhichInteractable() {
+        return interactingThing;
+    }
+
+    public float InteractingInput() {
+        return interactingInput;
     }
 }
