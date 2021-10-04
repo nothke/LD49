@@ -26,13 +26,14 @@ TODO:
 	- ⏹ Water reflection
 	- ⏹ Splash effects
 	- ⏹ Wake effect
-	- ⏹ Better wave function
+	- ⏹ Better wave function (see Gerstner wave)
 
 # Art:
 
 - ✅ Boat
 	- ✅ Steering wheel
 	- ✅ Sail booms
+	- ⏹ Net should be double sided
 - ✅ Sails
 - ⏹ Lighthouse
 - ⏹ Buoy
