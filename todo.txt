@@ -19,6 +19,7 @@ TODO:
 	- ⏹ Water reflection
 	- ⏹ Splash effects
 	- ⏹ Wake effect
+	- ⏹ Catamaran net double sided
 
 # Art:
 
