@@ -61,6 +61,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         if (photonView.IsMine)
         {
             Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = playArea.areaCenter.transform;
+
+            if (ShipUI.instance)
+                ShipUI.instance.ship = s.visualShip;
         }
     }
 
@@ -71,7 +74,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         {
             stream.SendNext(pos);
         }
-        else {
+        else
+        {
             pos = (Vector2)stream.ReceiveNext();
         }
     }

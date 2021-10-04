@@ -6,12 +6,18 @@ using TMPro;
 
 public class ShipUI : MonoBehaviour
 {
+    public static ShipUI instance;
+    void Awake() { instance = this; }
+
     public ShipController ship;
 
     public TMP_Text speedText;
 
     void Update()
     {
-        speedText.text = ((int)ship.SpeedKnots()).ToString();
+        if (!ship)
+            speedText.text = "-";
+        else
+            speedText.text = ((int)ship.SpeedKnots()).ToString();
     }
 }
