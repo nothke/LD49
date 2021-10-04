@@ -54,11 +54,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         restLeftHandPos = restLeftHand.position;
     }
 
-    float interactingTime = 0;
+    float interactingAnimationTime = 0;
     Vector2 lastFramePosition;
     Vector2 instantVelocityAverage;
     Vector2 lastFacingDirection = Vector2.up;
-    bool wasInteracting = false;
 
     // Update is called once per frame
     void Update()
@@ -101,12 +100,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         leftHandInteractingPos = Random.Range(-0.2f, 0.2f);
                     }
                     interacting = true;
-                    interactingTime = 0;
+                    interactingAnimationTime = 0;
                 }
                 else if (inputInteract <= 0.01f && interacting)
                 {
                     interacting = false;
-                    interactingTime = 0;
+                    interactingAnimationTime = 0;
                 }
 
                 if (!interacting || interactingThing == ShipInteractables.InteractingThing.Nothing)
@@ -146,7 +145,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
                     Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(wantedInteractingPos);
 
-                    float intFactor = Mathf.Clamp01(interactingTime / 2f);
+                    float intFactor = Mathf.Clamp01(interactingAnimationTime / 2f);
                     pos = Vector3.Lerp(pos, wantedInteractingShipPos, intFactor);
 
                     // input
@@ -219,9 +218,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         break;
                 }
             }
-            interactingTime += Time.deltaTime;
+            interactingAnimationTime += Time.deltaTime;
 
-            float interactingFinishFactor = Mathf.Clamp01(interactingTime / 1f);
+            float interactingFinishFactor = Mathf.Clamp01(interactingAnimationTime / 1f);
 
             leftHand.position = Vector3.Lerp(leftHand.position, wantedLeftHandPos, interactingFinishFactor);
             rightHand.position = Vector3.Lerp(rightHand.position, wantedRightHandPos, interactingFinishFactor);
@@ -273,6 +272,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     }
 
     Vector2 receivedPos;
+    bool wasInteracting = false;
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -298,6 +298,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 interactingInput = (float)stream.ReceiveNext();
                 rightHandInteractingPos = (float)stream.ReceiveNext();
                 leftHandInteractingPos = (float)stream.ReceiveNext();
+            }
+
+            if (wasInteracting != interacting)
+            {
+                wasInteracting = interacting;
+                interactingAnimationTime = 0f;
             }
         }
     }

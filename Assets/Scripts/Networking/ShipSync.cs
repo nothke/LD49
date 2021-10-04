@@ -16,7 +16,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
     public Material remoteMaterial;
     List<Renderer> remoteRenderers = new List<Renderer>();
 
-    ShipController localShip, remoteShip;
+    public ShipController localShip, remoteShip;
 
     public ShipController visualShip
     {
@@ -34,6 +34,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         localShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
         remoteShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
 
+        localShip.name = "Catamaran " + shipId;
+        remoteShip.name = "Catamaran (Physics only) " + shipId;
+
         SetLayerRecursively(remoteShip.gameObject.transform, physicsLayer, remoteMaterial);
 
         remoteShip.gameObject.SetActive(!photonView.IsMine);
@@ -46,6 +49,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         object[] instantiationData = info.photonView.InstantiationData;
         shipId = (int)instantiationData[0];
         RoomController.i.RegisterShip(this);
+
+        name = "NetworkedShip " + shipId;
     }
 
     // Update is called once per frame
@@ -73,13 +78,14 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
                 {
                     remoteShip.gameObject.SetActive(false);
 
-                    localShip.rb.MovePosition(remoteShip.rb.position);
-                    localShip.rb.MoveRotation(remoteShip.rb.rotation);
-                    localShip.rb.velocity = remoteShip.rb.velocity;
-                    localShip.rb.angularVelocity = remoteShip.rb.angularVelocity;
+                    //localShip.rb.MovePosition(remoteShip.rb.position);
+                    //localShip.rb.MoveRotation(remoteShip.rb.rotation);
+                    //localShip.rb.velocity = remoteShip.rb.velocity;
+                    //localShip.rb.angularVelocity = remoteShip.rb.angularVelocity;
                 }
 
                 shipInput.UpdateInput(shipId, ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
+                localShip.UpdateWithCurrentInput(Time.deltaTime);
                 stillFrames++;
             }
             else
