@@ -1,9 +1,64 @@
 fileFormatVersion: 2
-guid: 1feba58b6ad7c9449b28b27d9a46df56
+guid: 18ffe405753b54c4199cc1a1d24c5e68
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cat_ears
+    second: {fileID: 2100000, guid: b216bf6fd8cbafc4c86616f253820e83, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cat_eye_pupil
+    second: {fileID: 2100000, guid: 32e8ff887eaf66b42bdf8c1f581c2e54, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cat_eyes
+    second: {fileID: 2100000, guid: ae9d98eb8c7d8ef4da6c9208163bc3df, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cat_fur
+    second: {fileID: 2100000, guid: 7fc149bbf50f730468bbdcbbfcf0fb85, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cat_nose
+    second: {fileID: 2100000, guid: 0539720df22a5134c9760e41a5d7a987, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: jacket
+    second: {fileID: 2100000, guid: b7a8c00b747f1a24db1479f50fb86d31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lifejacket
+    second: {fileID: 2100000, guid: 574afe37cdb8ba543867e8fcb1e75f87, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lifejacket_edge
+    second: {fileID: 2100000, guid: 1e0c00cccd7c1f94598039b2330be962, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mouth
+    second: {fileID: 2100000, guid: 483bac3e602d7bc4abfb1f3c51bd2872, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pants
+    second: {fileID: 2100000, guid: 68ce316a4b8adff4e961e5271dccb4a5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: strap
+    second: {fileID: 2100000, guid: ecd08568b09a8e24c8edd8dda82885bb, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -23,7 +78,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -31,7 +86,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -88,13 +143,13 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 

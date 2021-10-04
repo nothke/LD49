@@ -25,6 +25,8 @@ public class ShipUI : MonoBehaviour
     public ShipInfoButton shipInfoPrefab;
     public Transform shipInfoPanel;
 
+    public UnityEngine.UI.Slider steeringWheelSlider;
+
     List<ShipInfoButton> shipInfos = new List<ShipInfoButton>();
 
     void Update()
@@ -46,6 +48,11 @@ public class ShipUI : MonoBehaviour
             }
 
             DisableInfosOver(count);
+        }
+
+        if (steeringWheelSlider.gameObject.activeInHierarchy)
+        {
+            steeringWheelSlider.value = -ship.RudderAngleNormalized;
         }
     }
 
@@ -74,6 +81,11 @@ public class ShipUI : MonoBehaviour
     public void SetInteractionText(string str)
     {
         interactionText.text = str;
+    }
+
+    public void EnableWheelSlider(bool b)
+    {
+        steeringWheelSlider.gameObject.SetActive(b);
     }
 
     public void LogConnectionInfo(string str)

@@ -17,6 +17,8 @@ public class Sail : MonoBehaviour
 
     public Cloth cloth;
 
+    public float maxForce;
+
     private void Awake()
     {
         rb = GetComponentInParent<Rigidbody>();
@@ -44,6 +46,11 @@ public class Sail : MonoBehaviour
             //float bendAngle = Vector3.SignedAngle(force, transform.forward, transform.up) > 0 ? -bendForceForward : bendForceForward;
             float bendAngle = bendForceForward;
             force = Vector3.RotateTowards(force, rb.transform.forward, bendAngle, 0.0f);
+        }
+
+        if (maxForce > 0)
+        {
+            force = Vector3.ClampMagnitude(force, maxForce);
         }
 
         rb.AddForceAtPosition(force, sailPos);

@@ -32,6 +32,8 @@ public class ShipController : MonoBehaviour
     [System.NonSerialized]
     public float rudderAngle;
 
+    public float RudderAngleNormalized => rudderAngle / maxRudderSteeringAngle;
+
     [Header("Interactables")]
     public GameObject interactableSteeringWheel;
 

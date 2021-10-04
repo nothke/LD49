@@ -94,11 +94,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                                 // These are the positions of the hands in radians in the wheel
                                 leftHandInteractingPos = p + Mathf.PI * 0.5f;
                                 rightHandInteractingPos = -p + Mathf.PI * 0.5f;
+                                ShipUI.instance.EnableWheelSlider(true);
                                 break;
                             case ShipInteractables.InteractingThing.RightWheel:
                                 // These are the positions of the hands in radians in the wheel
                                 leftHandInteractingPos = p + Mathf.PI * 0.5f;
                                 rightHandInteractingPos = -p + Mathf.PI * 0.5f;
+                                ShipUI.instance.EnableWheelSlider(true);
                                 break;
                             case ShipInteractables.InteractingThing.Rope:
                                 // Positions of hands in rope
@@ -111,6 +113,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                     {
                         interactingThing = ShipInteractables.InteractingThing.Nothing;
                         leftHandInteractingPos = Random.Range(-0.2f, 0.2f);
+                        ShipUI.instance.EnableWheelSlider(false);
                     }
                     interacting = true;
                     interactingAnimationTime = 0;

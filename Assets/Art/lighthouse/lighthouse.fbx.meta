@@ -1,9 +1,29 @@
 fileFormatVersion: 2
-guid: 1feba58b6ad7c9449b28b27d9a46df56
+guid: e012f81bcd735764a98d2694c24a7b43
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lighthouse_light
+    second: {fileID: 2100000, guid: d9f61d19420f0134b87fd4221e382d16, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lighthouse_metal
+    second: {fileID: 2100000, guid: 6dd0a210feb54a04a893322fc7dcc265, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lighthouse_red
+    second: {fileID: 2100000, guid: c45ecd547e22d84429fa1dc3e384e6ed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lighthouse_white
+    second: {fileID: 2100000, guid: e40366d589ba4934abb7fe37d62e363c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -31,7 +51,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
