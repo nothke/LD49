@@ -29,8 +29,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public Transform restRightHand, restLeftHand;
     Vector3 restRightHandPos, restLeftHandPos;
 
-    [Header("Feet")]
-    public Transform rightFoot, leftFoot;
+    //[Header("Feet")]
+    PlayerFeet feet;
 
 
     Vector3 gizmoDebugPos = Vector3.zero;
@@ -57,6 +57,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
         restRightHandPos = restRightHand.position;
         restLeftHandPos = restLeftHand.position;
+
+        feet = GetComponent<PlayerFeet>();
     }
 
     float interactingAnimationTime = 0;
@@ -128,8 +130,11 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                     camForward.y = 0;
                     camForward.Normalize();
 
-                    Vector3 camRelativeInput = camRight * inputX + camForward * inputY;
-                    Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput);
+                    Vector2 input = new Vector2(inputX, inputY);
+                    if (input.sqrMagnitude > 1f) input.Normalize();
+
+                    Vector3 camRelativeInput = camRight * input.x + camForward * input.y;
+                    Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
 
                     //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
 
@@ -259,6 +264,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             rightHand.position = Vector3.Lerp(rightHand.position, wantedRightHandPos, interactingFinishFactor);
 
             // Feet
+            feet.UpdateFeet(pos, facingDirection);
         }
     }
 
@@ -291,16 +297,18 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public void PlaceOnShip(ShipSync s)
     {
         playArea = s.visualShip.GetComponent<ShipPlayArea>();
+
+        if (feet == null) feet = GetComponent<PlayerFeet>();
+        feet.playArea = playArea;
         interactables = s.visualShip.GetComponent<ShipInteractables>();
 
         transform.SetParent(playArea.areaCenter);
 
-        rightFoot.SetParent(playArea.areaCenter);
-        leftFoot.SetParent(playArea.areaCenter);
-
         if (photonView.IsMine)
         {
             pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
+
+            feet.Init(pos, Vector2.up);
 
             Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = playArea.areaCenter.transform;
 
