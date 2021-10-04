@@ -14,13 +14,13 @@ TODO:
 	- ✅ Water wave
 	- ✅ Movement on the ship - Ferran
 	- ⏹ Drag from submerged things
-	- ⏹ Speedometer
+	- ✅ Speedometer
 	- ✅ Interaction with the boat and input calculation - Ferran
 	- ✅ Legs & body rotation snapping to the deck - Ferran
 	- ✅ Hands on interacting things - Ferran
 	- ✅ Sync buoys position and rotation - Ferran
-	- ⏹ Check Collision of ships and things - Ferran
-	- ⏹ UI choices on connected to room - Ferran
+	- ✅ Check Collision of ships and things - Ferran
+	- ✅ UI choices on connected to room - Ferran
 	- ⏹ Loopable world
 	- ⏹ Submerging the sail goes into space
 
@@ -29,7 +29,7 @@ TODO:
 	- ⏹ Wake effect
 	- ⏹ Better wave function (see Gerstner wave)
 
-	- ⏹ Display ship number (shipId) on ship
+	- ⏹ Display ship number (shipId) on actual ship
 
 # Art:
 

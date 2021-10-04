@@ -54,6 +54,7 @@ public class ShipUI : MonoBehaviour
         if (i >= shipInfos.Count)
         {
             ShipInfoButton newInfo = Instantiate(shipInfoPrefab.gameObject, shipInfoPanel).GetComponent<ShipInfoButton>();
+            newInfo.shipUi = this;
             shipInfos.Add(newInfo);
             return newInfo;
         }

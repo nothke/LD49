@@ -178,6 +178,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 13743030357952548, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_fontSize
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 13743030357952548, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 13743030357952548, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1060222766535452083, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
       propertyPath: m_Name
       value: HUD Canvas
@@ -265,6 +277,22 @@ PrefabInstance:
     - target: {fileID: 1060222766535452087, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4373465962012578786, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_fontSize
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4373465962012578786, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4373465962012578786, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247570032498328951, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 398
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
@@ -736,7 +764,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c2905e3219fae4485349f9c60cc1a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayersPerShip: 0
+  maxPlayersPerShip: 5
   shipPrefab: {fileID: 1969835584439724525, guid: 2a2a86a8d9a4b0941af032d83879e896, type: 3}
   playerPrefab: {fileID: 2302828771738319153, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
 --- !u!114 &970179865

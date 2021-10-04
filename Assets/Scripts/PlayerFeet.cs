@@ -52,6 +52,9 @@ public class PlayerFeet : MonoBehaviour
 
     public void UpdateFeet(Vector2 pos, Vector2 direction)
     {
+        if (direction.sqrMagnitude < 0.001f)
+            direction = Vector2.up;
+
         Vector2 playerRight = new Vector2(direction.y, -direction.x);
 
         bool justMoved = false;
