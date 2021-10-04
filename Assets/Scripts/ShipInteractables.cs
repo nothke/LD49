@@ -60,15 +60,19 @@ public class ShipInteractables : MonoBehaviour
         switch (thing)
         {
             case InteractingThing.Nothing:
+                ShipUI.instance.SetInteractionText("");
                 break;
             case InteractingThing.Rope:
                 Facepunch.Highlight.AddRenderer(visualRope);
+                ShipUI.instance.SetInteractionText("Hold ACTION and < >");
                 break;
             case InteractingThing.LeftWheel:
                 Facepunch.Highlight.AddRenderer(visualLeftWheel);
+                ShipUI.instance.SetInteractionText("Hold ACTION and < >");
                 break;
             case InteractingThing.RightWheel:
                 Facepunch.Highlight.AddRenderer(visualRightWheel);
+                ShipUI.instance.SetInteractionText("Hold ACTION and < >");
                 break;
         }
 

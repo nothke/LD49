@@ -13,11 +13,18 @@ public class ShipUI : MonoBehaviour
 
     public TMP_Text speedText;
 
+    public TMP_Text interactionText;
+
     void Update()
     {
         if (!ship)
             speedText.text = "-";
         else
             speedText.text = ((int)ship.SpeedKnots()).ToString();
+    }
+
+    public void SetInteractionText(string str)
+    {
+        interactionText.text = str;
     }
 }
