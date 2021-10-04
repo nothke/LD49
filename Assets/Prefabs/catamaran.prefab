@@ -2553,14 +2553,6 @@ PrefabInstance:
       value: catamaran_rudder
       objectReference: {fileID: 0}
     - target: {fileID: 2941529007749195495, guid: 0d60d3d5a6f5296439477e22973cb016, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2941529007749195495, guid: 0d60d3d5a6f5296439477e22973cb016, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2941529007749195495, guid: 0d60d3d5a6f5296439477e22973cb016, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.25
       objectReference: {fileID: 0}
@@ -2781,6 +2773,10 @@ PrefabInstance:
     - target: {fileID: 1688903041824322432, guid: 0d60d3d5a6f5296439477e22973cb016, type: 3}
       propertyPath: m_Name
       value: catamaran_rudder (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2941529007749195495, guid: 0d60d3d5a6f5296439477e22973cb016, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.68
       objectReference: {fileID: 0}
     - target: {fileID: 5490823092721162221, guid: 0d60d3d5a6f5296439477e22973cb016, type: 3}
       propertyPath: m_RootOrder

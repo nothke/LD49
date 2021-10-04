@@ -17,6 +17,8 @@ TODO:
 	- ⏹ Speedometer
 	- ⏹ Legs snapping to the deck (once simple characters are done)
 	- ⏹ Water reflection
+	- ⏹ Splash effects
+	- ⏹ Wake effect
 
 # Art:
 
@@ -24,7 +26,12 @@ TODO:
 	- ✅ Steering wheel
 	- ✅ Sail booms
 - ✅ Sails
+- ⏹ Lighthouse
 - ⏹ Buoy
 - ⏹ Rocks
 - ⏹ Dock
+
 - ⏹ Characters
+	- ⏹ Coat
+	- ⏹ Life jacket
+	- ⏹ Life jacket

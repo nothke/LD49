@@ -44,6 +44,12 @@ public class ShipController : MonoBehaviour
         mast.localRotation = Quaternion.Euler(0, mastAngle, 0);
     }
 
+    public float SpeedKnots()
+    {
+        const float MS2KNOTS = 1.94384f;
+        return rb.velocity.magnitude * MS2KNOTS;
+    }
+
     private void FixedUpdate()
     {
         //rb.AddRelativeTorque(Vector3.up * inputX * torqueMult, ForceMode.Acceleration);
