@@ -37,6 +37,8 @@ public class ShipInputCalculator : MonoBehaviourPun
                     case ShipInteractables.InteractingThing.RightWheel:
                         instantInputX += interactionAxis * singlePlayerStrength;
                         break;
+                    case ShipInteractables.InteractingThing.Nothing:
+                        break;
                 }
             }
         }

@@ -47,7 +47,7 @@ public class RopeHolder : MonoBehaviour
         }
         else
         {
-            closestRopeRelativePoint = dotLeft / leftRopeLength;
+            closestRopeRelativePoint = -dotLeft / leftRopeLength;
         }
 
 

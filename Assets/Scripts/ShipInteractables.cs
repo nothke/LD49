@@ -11,6 +11,7 @@ public class ShipInteractables : MonoBehaviour
 
     public enum InteractingThing
     {
+        Nothing,
         Rope,
         LeftWheel,
         RightWheel

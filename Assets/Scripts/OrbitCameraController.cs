@@ -42,7 +42,7 @@ namespace UnityGLTF.Examples
 
 		void LateUpdate()
 		{
-			if (target)
+			if (target && Application.isFocused)
 			{
 				x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.02f;
 				y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
