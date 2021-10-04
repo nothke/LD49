@@ -99,6 +99,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
         if (photonView.IsMine)
         {
+            pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
+
             Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = playArea.areaCenter.transform;
 
             if (ShipUI.instance)
