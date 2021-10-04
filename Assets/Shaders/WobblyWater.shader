@@ -7,12 +7,15 @@ Shader "Custom/WobblyWater"
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 	}
+
+
 		SubShader
 		{
 			Tags { "RenderType" = "Opaque" }
 			LOD 200
 
 			CGPROGRAM
+			#include "Waves.cginc"
 			// Physically based Standard lighting model, and enable shadows on all light types
 			#pragma surface surf Standard fullforwardshadows vertex:vert
 
@@ -26,14 +29,6 @@ Shader "Custom/WobblyWater"
 				float2 uv_MainTex;
 				float3 worldPos;
 			};
-
-			float _NetworkTime;
-
-			float WaterHeight(float3 pos)
-			{
-				float time = _NetworkTime;
-				return sin(time + pos.x * 1.1f) * 0.2f;
-			}
 
 			void vert(inout appdata_full v) {
 				float4 worldPos = mul(unity_ObjectToWorld, v.vertex);

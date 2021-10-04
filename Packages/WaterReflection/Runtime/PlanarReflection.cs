@@ -100,7 +100,7 @@ namespace IFL.Rendering.Water
         void CreateTextureFor(Camera cam, Camera reflectionCam)
         {
             int width = Mathf.FloorToInt(cam.pixelWidth * TEX_SCALE);
-            int height = Mathf.FloorToInt(cam.pixelWidth * TEX_SCALE);
+            int height = Mathf.FloorToInt(cam.pixelHeight * TEX_SCALE);
 
             Debug.Log("Created texture: w: " + width + ", h: " + height);
 
@@ -169,7 +169,7 @@ namespace IFL.Rendering.Water
 
             Matrix4x4 projection = cam.projectionMatrix;
             //projection = CalculateObliqueMatrix(projection, clipPlane);
-            //projection = cam.CalculateObliqueMatrix(clipPlane);
+            projection = cam.CalculateObliqueMatrix(clipPlane);
             reflectCamera.projectionMatrix = projection;
 
             reflectCamera.transform.position = newpos;

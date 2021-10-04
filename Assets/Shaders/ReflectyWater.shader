@@ -2,7 +2,7 @@
 
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
-Shader "FX/Water4" {
+Shader "Custom/ReflectyWater" {
 	Properties{
 		_ReflectionTex("Internal reflection", 2D) = "white" {}
 
@@ -44,6 +44,7 @@ Shader "FX/Water4" {
 
 #include "UnityCG.cginc"
 #include "WaterInclude.cginc"
+#include "Waves.cginc"
 
 			struct appdata
 		{
@@ -137,8 +138,25 @@ Shader "FX/Water4" {
 			half3 worldSpaceVertex = mul(unity_ObjectToWorld, (v.vertex)).xyz;
 			half3 vtxForAni = (worldSpaceVertex).xzz;
 
-			half3 nrml;
-			half3 offsets;
+			half3 nrml = half3(0, 1, 0);
+			half3 offsets = 0;
+
+			// From game
+			float3 worldPos = v.vertex.xyz;
+
+			offsets.y = WaterHeight(worldSpaceVertex);
+
+			float d = 0.2;
+			float h0 = WaterHeight(worldPos.xyz + float3(-d, 0, 0));
+			float h1 = WaterHeight(worldPos.xyz + float3(+d, 0, 0));
+			float h2 = WaterHeight(worldPos.xyz + float3(0, 0, -d));
+			float h3 = WaterHeight(worldPos.xyz + float3(0, 0, +d));
+
+			const float normalIntensity = 0.5;
+			nrml.x = (h1 - h0) * normalIntensity;
+			nrml.z = (h3 - h2) * normalIntensity;
+
+			/*
 			Gerstner(
 				offsets, nrml, v.vertex.xyz, vtxForAni,						// offsets, nrml will be written
 				_GAmplitude,												// amplitude
@@ -147,7 +165,7 @@ Shader "FX/Water4" {
 				_GSpeed,													// speed
 				_GDirectionAB,												// direction # 1, 2
 				_GDirectionCD												// direction # 3, 4
-			);
+			);*/
 
 			v.vertex.xyz += offsets;
 
@@ -366,34 +384,35 @@ Shader "FX/Water4" {
 
 			ENDCG
 
-			Subshader
+		Subshader
 		{
-			Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }
+			//Tags {"RenderType" = "Transparent" "Queue" = "Transparent"}
+			Tags{ "RenderType" = "Opaque" }
 
-				Lod 500
-				ColorMask RGB
+			Lod 500
+			ColorMask RGB
 
-				GrabPass{ "_RefractionTex" }
+			GrabPass{ "_RefractionTex" }
 
-				Pass{
-						Blend SrcAlpha OneMinusSrcAlpha
-						ZTest LEqual
-						ZWrite Off
-						Cull Off
+			Pass{
+				//Blend SrcAlpha OneMinusSrcAlpha
+				//ZTest LEqual
+				//ZWrite Off
+				//Cull Off
 
-						CGPROGRAM
+				CGPROGRAM
 
-						#pragma target 3.0
+				#pragma target 3.0
 
-						#pragma vertex vert
-						#pragma fragment frag
-						#pragma multi_compile_fog
+				#pragma vertex vert
+				#pragma fragment frag
+				#pragma multi_compile_fog
 
-						#pragma multi_compile WATER_VERTEX_DISPLACEMENT_ON WATER_VERTEX_DISPLACEMENT_OFF
-						#pragma multi_compile WATER_EDGEBLEND_ON WATER_EDGEBLEND_OFF
-						#pragma multi_compile WATER_REFLECTIVE WATER_SIMPLE
+				#pragma multi_compile WATER_VERTEX_DISPLACEMENT_ON WATER_VERTEX_DISPLACEMENT_OFF
+				#pragma multi_compile WATER_EDGEBLEND_ON WATER_EDGEBLEND_OFF
+				#pragma multi_compile WATER_REFLECTIVE WATER_SIMPLE
 
-						ENDCG
+				ENDCG
 			}
 		}
 
@@ -406,25 +425,25 @@ Shader "FX/Water4" {
 			ColorMask RGB
 
 			Pass {
-					//Blend SrcAlpha OneMinusSrcAlpha
-					//ZTest LEqual
-					//ZWrite Off
-					//Cull Off
+				//Blend SrcAlpha OneMinusSrcAlpha
+				//ZTest LEqual
+				//ZWrite Off
+				//Cull Off
 
-					CGPROGRAM
+				CGPROGRAM
 
-					#pragma target 3.0
+				#pragma target 3.0
 
-					#pragma vertex vert300
-					#pragma fragment frag300
-					#pragma multi_compile_fog
+				#pragma vertex vert300
+				#pragma fragment frag300
+				#pragma multi_compile_fog
 
-					#pragma multi_compile WATER_VERTEX_DISPLACEMENT_ON WATER_VERTEX_DISPLACEMENT_OFF
-					#pragma multi_compile WATER_EDGEBLEND_ON WATER_EDGEBLEND_OFF
-					#pragma multi_compile WATER_REFLECTIVE WATER_SIMPLE
+				#pragma multi_compile WATER_VERTEX_DISPLACEMENT_ON WATER_VERTEX_DISPLACEMENT_OFF
+				#pragma multi_compile WATER_EDGEBLEND_ON WATER_EDGEBLEND_OFF
+				#pragma multi_compile WATER_REFLECTIVE WATER_SIMPLE
 
-					ENDCG
-			}
+				ENDCG
+		}
 		}
 
 			Subshader
@@ -436,19 +455,19 @@ Shader "FX/Water4" {
 			ColorMask RGB
 
 			Pass {
-					//Blend SrcAlpha OneMinusSrcAlpha
-					//ZTest LEqual
-					//ZWrite Off
-					//Cull Off
+				//Blend SrcAlpha OneMinusSrcAlpha
+				//ZTest LEqual
+				//ZWrite Off
+				//Cull Off
 
-					CGPROGRAM
+				CGPROGRAM
 
-					#pragma vertex vert200
-					#pragma fragment frag200
-					#pragma multi_compile_fog
+				#pragma vertex vert200
+				#pragma fragment frag200
+				#pragma multi_compile_fog
 
-					ENDCG
-			}
+				ENDCG
+		}
 		}
 
 			Fallback "Transparent/Diffuse"
