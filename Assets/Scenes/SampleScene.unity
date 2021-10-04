@@ -266,6 +266,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7737521426400525181, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
 --- !u!1001 &89414333
@@ -708,7 +712,7 @@ MonoBehaviour:
   wantOwnRoom: 0
   gameVersion: 3
   roomName: Adriatic
-  kickAFKplayers: 0
+  kickAFKplayers: 1
   maxAFKtime: 90
 --- !u!4 &970179863
 Transform:
