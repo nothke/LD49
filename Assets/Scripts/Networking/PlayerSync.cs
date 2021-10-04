@@ -16,6 +16,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public float collisionRadius = 0.5f;
     public float speed = 10f;
     public float pushSpeed = 5f;
+    public float boatPushWeight = 10f;
 
     bool interacting = false;
     ShipInteractables.InteractingThing interactingThing = ShipInteractables.InteractingThing.Rope;

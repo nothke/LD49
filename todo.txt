@@ -22,6 +22,7 @@ TODO:
 	- ⏹ Check Collision of ships and things - Ferran
 	- ⏹ UI choices on connected to room - Ferran
 	- ⏹ Loopable world
+	- ⏹ Submerging the sail goes into space
 
 	- ⏹ Water reflection
 	- ⏹ Splash effects
