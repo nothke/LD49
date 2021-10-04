@@ -1171,6 +1171,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2302828771738319153, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
+      propertyPath: speed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2577367284397866528, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
       propertyPath: m_RootOrder
       value: 14

@@ -207,10 +207,10 @@ MonoBehaviour:
   pushSpeed: 5
   rightHand: {fileID: 7050027556850151534}
   leftHand: {fileID: 6164456812060876360}
-  rightFoot: {fileID: 8644262222647029801}
-  leftFoot: {fileID: 6028300066768592947}
   restRightHand: {fileID: 5286066015268068918}
   restLeftHand: {fileID: 1394722695817679717}
+  rightFoot: {fileID: 8644262222647029801}
+  leftFoot: {fileID: 6028300066768592947}
 --- !u!1 &2226041792567707403
 GameObject:
   m_ObjectHideFlags: 0
