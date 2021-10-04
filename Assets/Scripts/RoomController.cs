@@ -78,9 +78,8 @@ public class RoomController : MonoBehaviourPunCallbacks
             newShipId++;
         }
 
-        ShipSync newShip = PhotonNetwork.InstantiateRoomObject(shipPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<ShipSync>();
-
-        newShip.photonView.RPC("SetId", RpcTarget.AllBufferedViaServer, newShipId);
+        object[] instantiationData = new object[1] { newShipId };
+        ShipSync newShip = PhotonNetwork.InstantiateRoomObject(shipPrefab.name, Vector3.zero, Quaternion.identity, 0, instantiationData).GetComponent<ShipSync>();
 
         return newShipId;
     }

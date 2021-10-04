@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class ShipSync : MonoBehaviourPun, IPunObservable
+public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback
 {
     public int shipId = -1;
 
@@ -41,10 +41,10 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
         shipInput = GetComponent<ShipInputCalculator>();
     }
 
-    [PunRPC]
-    void SetId(int id)
+    void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        shipId = id;
+        object[] instantiationData = info.photonView.InstantiationData;
+        shipId = (int)instantiationData[0];
         RoomController.i.RegisterShip(this);
     }
 
