@@ -178,18 +178,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 13743030357952548, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_fontSize
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 13743030357952548, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 13743030357952548, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_enableAutoSizing
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1060222766535452083, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
       propertyPath: m_Name
       value: HUD Canvas
@@ -277,22 +265,6 @@ PrefabInstance:
     - target: {fileID: 1060222766535452087, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4373465962012578786, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_fontSize
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 4373465962012578786, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 4373465962012578786, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_enableAutoSizing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247570032498328951, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 398
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
