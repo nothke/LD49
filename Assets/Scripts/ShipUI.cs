@@ -22,12 +22,52 @@ public class ShipUI : MonoBehaviour
 
     public GameObject introPanel, ingamePanel, inRoomPanel;
 
+    public ShipInfoButton shipInfoPrefab;
+    public Transform shipInfoPanel;
+
+    List<ShipInfoButton> shipInfos = new List<ShipInfoButton>();
+
     void Update()
     {
         if (!ship)
             speedText.text = "-";
         else
             speedText.text = ((int)ship.SpeedKnots()).ToString();
+
+        if (inRoomPanel.activeInHierarchy)
+        {
+            int count = 0;
+            foreach (KeyValuePair<int, List<Photon.Realtime.Player>> kvp in RoomController.i.shipIdToPlayers)
+            {
+                ShipInfoButton inf = GetInfo(count);
+
+                inf.SetInfo(kvp.Key, kvp.Value.Count, RoomController.i.maxPlayersPerShip);
+                count++;
+            }
+
+            DisableInfosOver(count);
+        }
+    }
+
+    ShipInfoButton GetInfo(int i)
+    {
+        if (i > shipInfos.Count)
+        {
+            ShipInfoButton newInfo = Instantiate(shipInfoPrefab.gameObject, shipInfoPanel).GetComponent<ShipInfoButton>();
+            shipInfos.Add(newInfo);
+            return newInfo;
+        }
+        else {
+            ShipInfoButton info = shipInfos[i];
+            info.gameObject.SetActive(true);
+            return info;
+        }
+    }
+
+    void DisableInfosOver(int count)
+    {
+        for (int i = count; i < shipInfos.Count; ++i)
+            shipInfos[i].gameObject.SetActive(false);
     }
 
     public void SetInteractionText(string str)
@@ -67,15 +107,16 @@ public class ShipUI : MonoBehaviour
     }
 
     public void RandomShipPressed() {
-        
+        RoomController.i.JoinRandomShip();
+        Debug.Log("Random ship pressed");
     }
 
     public void NewShipPressed()
     {
-
+        RoomController.i.RequestAndJoinNewShip();
     }
     public void JoinVesselNumber(int id)
     {
-
+        RoomController.i.JoinSpecificShip(id);
     }
 }

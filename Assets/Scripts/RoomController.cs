@@ -6,7 +6,7 @@ using Photon.Realtime;
 
 public class RoomController : MonoBehaviourPunCallbacks
 {
-    public int playersPerShip;
+    public int maxPlayersPerShip = 5;
     public ShipSync shipPrefab;
     public PlayerSync playerPrefab;
 
@@ -24,17 +24,35 @@ public class RoomController : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        photonView.RPC("RequestShipForPlayer", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
+        //photonView.RPC("RequestShipForPlayer", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
+    }
+
+    public void JoinRandomShip()
+    {
+        photonView.RPC("RequestShipForPlayer", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber, false);
+    }
+
+    public void JoinSpecificShip(int id)
+    {
+
+        if (ships.ContainsKey(id))
+            PleaseJoinShip(id);
+        else Debug.LogError(string.Format("Cannot join specific ship {0}, it does not exist!", id));
+    }
+
+    public void RequestAndJoinNewShip()
+    {
+        photonView.RPC("RequestShipForPlayer", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber, true);
     }
 
     [PunRPC]
-    void RequestShipForPlayer(int actorNumber)
+    void RequestShipForPlayer(int actorNumber, bool wantsNew)
     {
         bool foundShip = false;
         int shipId = -1;
         foreach (KeyValuePair<int, ShipSync> kvp in ships)
         {
-            if (shipIdToPlayers[kvp.Key].Count < playersPerShip)
+            if (shipIdToPlayers[kvp.Key].Count < maxPlayersPerShip)
             {
                 shipId = kvp.Key;
                 foundShip = true;
@@ -42,7 +60,7 @@ public class RoomController : MonoBehaviourPunCallbacks
             }
         }
 
-        if (!foundShip)
+        if (!foundShip || wantsNew)
         {
             shipId = InstantiateNewShip();
         }

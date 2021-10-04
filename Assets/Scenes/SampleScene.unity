@@ -736,7 +736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c2905e3219fae4485349f9c60cc1a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersPerShip: 5
+  maxPlayersPerShip: 0
   shipPrefab: {fileID: 1969835584439724525, guid: 2a2a86a8d9a4b0941af032d83879e896, type: 3}
   playerPrefab: {fileID: 2302828771738319153, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
 --- !u!114 &970179865
