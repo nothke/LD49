@@ -15,9 +15,9 @@ TODO:
 	- ✅ Movement on the ship - Ferran
 	- ⏹ Drag from submerged things
 	- ⏹ Speedometer
-	- ⏹ Interaction with the boat and input calculation - Ferran
+	- ✅ Interaction with the boat and input calculation - Ferran
 	- ⏹ Legs snapping to the deck - Ferran
-	- ⏹ Hands on interacting things - Ferran S
+	- ✅ Hands on interacting things - Ferran
 	- ⏹ Sync buoys position and rotation - Ferran
 	- ⏹ Check Collision of ships and things - Ferran
 	- ⏹ UI choices on connected to room - Ferran
@@ -44,3 +44,6 @@ TODO:
 	- ⏹ Coat
 	- ⏹ Life jacket
 	- ⏹ Life jacket
+
+# Fixes:
+ - ✅ Fix input apeparing jaggy on remote players
