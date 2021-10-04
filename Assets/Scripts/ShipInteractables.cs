@@ -9,6 +9,10 @@ public class ShipInteractables : MonoBehaviour
 
     public float interactionReach = 1f;
 
+    public Renderer visualLeftWheel;
+    public Renderer visualRightWheel;
+    public Renderer visualRope;
+
     public enum InteractingThing
     {
         Nothing,
@@ -47,6 +51,28 @@ public class ShipInteractables : MonoBehaviour
 
             return distanceToRope <= interactionReach;
         }
+    }
+
+    public void Highlight(InteractingThing thing)
+    {
+        Facepunch.Highlight.ClearAll();
+
+        switch (thing)
+        {
+            case InteractingThing.Nothing:
+                break;
+            case InteractingThing.Rope:
+                Facepunch.Highlight.AddRenderer(visualRope);
+                break;
+            case InteractingThing.LeftWheel:
+                Facepunch.Highlight.AddRenderer(visualLeftWheel);
+                break;
+            case InteractingThing.RightWheel:
+                Facepunch.Highlight.AddRenderer(visualRightWheel);
+                break;
+        }
+
+        Facepunch.Highlight.Rebuild();
     }
 
     private void OnDrawGizmosSelected()

@@ -64,6 +64,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     Vector2 instantVelocityAverage;
     Vector2 lastFacingDirection = Vector2.up;
 
+    ShipInteractables.InteractingThing lastCloseTo;
+
     // Update is called once per frame
     void Update()
     {
@@ -75,9 +77,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 float inputY = Input.GetAxis("Vertical");
                 float inputInteract = Input.GetAxis("Submit");
 
+                bool inReach = interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up, 
+                    out ShipInteractables.InteractingThing thing, out float p);
+                
+                // On started interacting
                 if (inputInteract > 0 && !interacting)
                 {
-                    if (interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up, out ShipInteractables.InteractingThing thing, out float p))
+                    if (inReach)
                     {
                         interactingThing = thing;
                         switch (thing)
@@ -158,6 +164,20 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 }
 
                 GetPushedByOtherPlayers(ref pos);
+
+                // In reach detection
+
+                if (!inReach) 
+                    thing = ShipInteractables.InteractingThing.Nothing;
+
+                // On got close to
+                if (lastCloseTo != thing)
+                {
+                    //var ship = RoomController.i.ships[shipId];
+                    interactables.Highlight(thing);
+                }
+
+                lastCloseTo = thing;
             }
             else {
 
