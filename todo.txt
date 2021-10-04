@@ -15,11 +15,17 @@ TODO:
 	- ✅ Movement on the ship - Ferran
 	- ⏹ Drag from submerged things
 	- ⏹ Speedometer
-	- ⏹ Legs snapping to the deck (once simple characters are done)
+	- ⏹ Interaction with the boat and input calculation - Ferran
+	- ⏹ Legs snapping to the deck - Ferran
+	- ⏹ Hands on interacting things - Ferran 
+	- ⏹ Sync buoys position and rotation - Ferran
+	- ⏹ Collision of ships and things - Ferran
+	- ⏹ UI choices on connected to room - Ferran
+
 	- ⏹ Water reflection
 	- ⏹ Splash effects
 	- ⏹ Wake effect
-	- ⏹ Catamaran net double sided
+	- ⏹ Better wave function
 
 # Art:
 

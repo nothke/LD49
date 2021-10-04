@@ -135,9 +135,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     IEnumerator WaitABitAndTryToConnectAgain()
     {
-        Debug.Log("Retrying connection in 2 seconds..");
+        Debug.Log("Retrying connection in 1 seconds..");
 
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(1f);
 
         if (PhotonNetwork.IsConnected)
         {
