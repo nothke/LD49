@@ -107,7 +107,7 @@ Shader "Custom/ReflectyWater" {
 		uniform float4 _DistortParams;
 		uniform float _FresnelScale;
 		uniform float4 _BumpTiling;
-		uniform float4 _BumpDirection;
+		float4 _BumpDirection;
 
 		uniform float4 _GAmplitude;
 		uniform float4 _GFrequency;
