@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shipId: 0
-  shipPrefab: {fileID: 2518364650054215982, guid: d56270e00b44ae047a0a621b607920c1, type: 3}
+  shipPrefab: {fileID: 5577074632021696230, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
   physicsLayer: 6
   visualizeRemoteShip: 0
   remoteMaterial: {fileID: 2100000, guid: 3bcefcdf8a9971a4eaf1f8a3c5e9977f, type: 2}
