@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 8551c019f66009344a9e5fad53a4e42c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -68,7 +68,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FresnelScale: 1.04
+    - _FresnelScale: 2.31
     - _GerstnerIntensity: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -77,7 +77,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Shininess: 185
+    - _Shininess: 160
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -87,11 +87,12 @@ Material:
     m_Colors:
     - _AnimationDirection: {r: 1, g: 1, b: 1, a: 1}
     - _AnimationTiling: {r: 2.2, g: 2.2, b: -1.1, a: -1.1}
-    - _BaseColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 0.3764706}
-    - _BumpDirection: {r: 1, g: 1, b: -1, a: 1}
-    - _BumpTiling: {r: 1, g: 1, b: -2, a: 3}
+    - _BaseColor: {r: 0.10711995, g: 0.18910615, b: 0.3207547, a: 1}
+    - _BumpDirection: {r: 1100, g: 1000, b: 100, a: 1000}
+    - _BumpDirectionAndSpeed: {r: 10, g: -1, b: 12, a: 1}
+    - _BumpTiling: {r: 0.01, g: 0.01, b: 0.05, a: 0.05}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DistortParams: {r: 0, g: 0.36, b: 2, a: 1.15}
+    - _DistortParams: {r: 0.4, g: 0.28, b: 2.8, a: 0.23}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Foam: {r: 0.1, g: 0.375, b: 0, a: 0}
     - _GAmplitude: {r: 0.18, g: 0.1, b: 0.1, a: 0.1}
@@ -101,7 +102,7 @@ Material:
     - _GSpeed: {r: 1.2, g: 1.375, b: 1.1, a: 1.5}
     - _GSteepness: {r: 1, g: 1, b: 1, a: 1}
     - _InvFadeParemeter: {r: 0.15, g: 0.15, b: 0.5, a: 1}
-    - _ReflectionColor: {r: 0.2537558, g: 0.3052613, b: 0.31132078, a: 0.5}
-    - _SpecularColor: {r: 0.72, g: 0.72, b: 0.72, a: 1}
+    - _ReflectionColor: {r: 0.15286577, g: 0.17736101, b: 0.17924526, a: 0.43137255}
+    - _SpecularColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
     - _WorldLightDir: {r: 0, g: 0.1, b: -0.46, a: 0}
   m_BuildTextureStacks: []

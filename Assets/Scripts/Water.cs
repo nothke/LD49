@@ -28,6 +28,9 @@ public class Water : MonoBehaviour
     {
         float time = (float)(PhotonNetwork.Time - ConnectionManager.roomCreatedTime);
 
+        if (!PhotonNetwork.IsConnected)
+            time = Time.time;
+
         return Sin(time + pos.x * 1.1f) * 0.2f;
     }
 

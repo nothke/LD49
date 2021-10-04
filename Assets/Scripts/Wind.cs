@@ -13,9 +13,11 @@ public class Wind : MonoBehaviour
 
     int bumpDirectionId;
 
+    public Material waterShader;
+
     private void Start()
     {
-        bumpDirectionId = Shader.PropertyToID("_BumpDirection");
+        //bumpDirectionId = Shader.PropertyToID("_BumpDirectionAndSpeed");
     }
 
     private void Update()
@@ -23,9 +25,11 @@ public class Wind : MonoBehaviour
         Vector3 velo = Velocity;
 
         // Pack
-        Vector4 v = new Vector4(velo.x, velo.z, velo.x, velo.z);
+        Vector4 v = new Vector4(velo.x, velo.z, velo.x, velo.z) * 1000.0f;
+
+        v = new Vector3(100, 0, 0);
 
         //Debug.Log("Running water");
-        Shader.SetGlobalVector("_BumpDirection", v);
+        Shader.SetGlobalVector("_BumpDirectionAndSpeed", v);
     }
 }

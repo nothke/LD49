@@ -17,7 +17,7 @@ Shader "Custom/ReflectyWater" {
 		_AnimationDirection("Animation Direction (displacement)", Vector) = (1.0 ,1.0, 1.0, 1.0)
 
 		_BumpTiling("Bump Tiling", Vector) = (1.0 ,1.0, -2.0, 3.0)
-		_BumpDirection("Bump Direction & Speed", Vector) = (1.0 ,1.0, -1.0, 1.0)
+		_BumpDirectionAndSpeed("Bump Direction & Speed", Vector) = (1.0 ,1.0, -1.0, 1.0)
 
 		_FresnelScale("FresnelScale", Range(0.15, 4.0)) = 0.75
 
@@ -107,7 +107,7 @@ Shader "Custom/ReflectyWater" {
 		uniform float4 _DistortParams;
 		uniform float _FresnelScale;
 		uniform float4 _BumpTiling;
-		float4 _BumpDirection;
+		uniform float4 _BumpDirectionAndSpeed;
 
 		uniform float4 _GAmplitude;
 		uniform float4 _GFrequency;
@@ -172,7 +172,7 @@ Shader "Custom/ReflectyWater" {
 			// one can also use worldSpaceVertex.xz here (speed!), albeit it'll end up a little skewed
 			half2 tileableUv = mul(unity_ObjectToWorld, (v.vertex)).xz;
 
-			o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirection.xyzw) * _BumpTiling.xyzw;
+			o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirectionAndSpeed.xyzw) * _BumpTiling.xyzw;
 
 			o.viewInterpolator.xyz = worldSpaceVertex - _WorldSpaceCameraPos;
 
@@ -277,7 +277,7 @@ Shader "Custom/ReflectyWater" {
 
 			// one can also use worldSpaceVertex.xz here (speed!), albeit it'll end up a little skewed
 			half2 tileableUv = mul(unity_ObjectToWorld, v.vertex).xz;
-			o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirection.xyzw) * _BumpTiling.xyzw;
+			o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirectionAndSpeed.xyzw) * _BumpTiling.xyzw;
 
 			o.viewInterpolator.xyz = worldSpaceVertex - _WorldSpaceCameraPos;
 
@@ -347,7 +347,7 @@ Shader "Custom/ReflectyWater" {
 			half3 worldSpaceVertex = mul(unity_ObjectToWorld, v.vertex).xyz;
 			half2 tileableUv = worldSpaceVertex.xz;
 
-			o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirection.xyzw) * _BumpTiling.xyzw;
+			o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirectionAndSpeed.xyzw) * _BumpTiling.xyzw;
 
 			o.viewInterpolator.xyz = worldSpaceVertex - _WorldSpaceCameraPos;
 

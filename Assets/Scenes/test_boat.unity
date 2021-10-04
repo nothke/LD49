@@ -438,6 +438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  waterShader: {fileID: 0}
 --- !u!4 &1075777218
 Transform:
   m_ObjectHideFlags: 0
@@ -552,32 +553,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1820376745, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
   m_PrefabInstance: {fileID: 5577074631901598589}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1891335906 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1782257825063814887, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
-  m_PrefabInstance: {fileID: 1963199150}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1891335907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1891335906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3dcf0b67df4ecf49affd3d0709c1051, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waterMaterial: {fileID: 2100000, guid: 07b11283113080044ac15a0866892f04, type: 2}
-  reflectionMask:
-    serializedVersion: 2
-    m_Bits: 103
-  reflectSkybox: 1
-  clearColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  clipPlaneOffset: 0.07
-  mainCamera: {fileID: 555647345}
-  renderFromScript: 1
 --- !u!1001 &1963199150
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -585,14 +560,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1115291462994862588, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+    - target: {fileID: 1891335907, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
+      propertyPath: mainCamera
       value: 
-      objectReference: {fileID: 2100000, guid: 07b11283113080044ac15a0866892f04, type: 2}
-    - target: {fileID: 1475689589795061801, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
-      propertyPath: m_Layer
-      value: 4
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 555647345}
     - target: {fileID: 1782257825063814880, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -640,10 +611,6 @@ PrefabInstance:
     - target: {fileID: 1782257825063814887, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
       propertyPath: m_Name
       value: water
-      objectReference: {fileID: 0}
-    - target: {fileID: 1782257825063814887, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83a372686d96b3a458b952c577e9d330, type: 3}
