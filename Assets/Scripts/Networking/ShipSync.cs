@@ -30,7 +30,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         // Ideally we would want 2 simulations running, the local and the remote, and lerp the actual values from one to the other
         // In this case I'm trying to lerp the local towards the remote without keeping track of the "untouched/unlerped" local values
         // This might look a bit worse but might be simpler and enough
-        
+
         localShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
         remoteShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
 
@@ -66,8 +66,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
                 remoteShip.gameObject.SetActive(false);
             }
         }
-        else {
-
+        else
+        {
             networkSmoothingTime = Mathf.Max(0f, networkSmoothingTime - Time.deltaTime);
             float smoothFactor = 1f - networkSmoothingTime / NETWORK_SMOOTH_TIME;
 
@@ -111,7 +111,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
                 // Here we would want to simulate the movement of both local and remote, and then visually show an inbetween state.
                 // But we are just hoping the physics will simulate that for us and we lerp the local to the remote instead.
-                
+
             }
 
             // Debug remote viz
@@ -124,7 +124,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
     }
 
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
         if (!photonView.IsMine)
         {
             float smoothFactor = 1f - networkSmoothingTime / NETWORK_SMOOTH_TIME;
@@ -136,6 +137,16 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
                 localShip.rb.velocity = Vector3.Lerp(localShip.rb.velocity, remoteShip.rb.velocity, smoothFactor);
                 localShip.rb.angularVelocity = Vector3.Lerp(localShip.rb.angularVelocity, remoteShip.rb.angularVelocity, smoothFactor);
             }
+        }
+
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayers[shipId])
+        {
+            PlayerSync ps = RoomController.i.playerSyncs[p];
+            Vector3 playerPosition = ps.transform.position;
+            localShip.rb.AddForceAtPosition(Vector3.down * 10, playerPosition, ForceMode.Acceleration);
+
+            if (remoteShip.gameObject.activeSelf)
+                remoteShip.rb.AddForceAtPosition(Vector3.down * 10, playerPosition, ForceMode.Acceleration);
         }
     }
 
@@ -227,7 +238,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         }
     }
 
-    void OnDestroy() {
+    void OnDestroy()
+    {
         Destroy(localShip);
         Destroy(remoteShip);
     }
