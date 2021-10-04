@@ -46,4 +46,5 @@ TODO:
 	- ⏹ Life jacket
 
 # Fixes:
- - ✅ Fix input apeparing jaggy on remote players
+ - ⏹ Fix input apeparing jaggy on remote players
+ - ⏹ CRITICAL fix movement when ship is tilted input apeparing jaggy on remote players
