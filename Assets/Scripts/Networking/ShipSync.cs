@@ -18,6 +18,11 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
 
     ShipController localShip, remoteShip;
 
+    public ShipController visualShip
+    {
+        get { return localShip; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +39,6 @@ public class ShipSync : MonoBehaviourPun, IPunObservable
         remoteShip.gameObject.SetActive(!photonView.IsMine);
 
         shipInput = GetComponent<ShipInputCalculator>();
-        GetComponent<ShipPlayArea>().areaCenter = localShip.playableArea;
     }
 
     [PunRPC]

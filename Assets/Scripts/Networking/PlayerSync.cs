@@ -54,7 +54,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
     public void PlaceOnShip(ShipSync s)
     {
-        playArea = s.GetComponent<ShipPlayArea>();
+        playArea = s.visualShip.GetComponent<ShipPlayArea>();
 
         transform.SetParent(playArea.areaCenter);
 
