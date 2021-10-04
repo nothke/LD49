@@ -142,9 +142,9 @@ Shader "Custom/ReflectyWater" {
 			half3 offsets = 0;
 
 			// From game
-			float3 worldPos = v.vertex.xyz;
+			float3 worldPos = worldSpaceVertex;
 
-			offsets.y = WaterHeight(worldSpaceVertex);
+			offsets.y = WaterHeight(worldPos);
 
 			float d = 0.2;
 			float h0 = WaterHeight(worldPos.xyz + float3(-d, 0, 0));
