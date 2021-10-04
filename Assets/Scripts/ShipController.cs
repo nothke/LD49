@@ -32,6 +32,8 @@ public class ShipController : MonoBehaviour
     [System.NonSerialized]
     public float rudderAngle;
 
+    [Header("Interactables")]
+    public GameObject interactableSteeringWheel;
 
     public void UpdateWithCurrentInput(float dTime)
     {

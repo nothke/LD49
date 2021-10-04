@@ -206,6 +206,7 @@ MonoBehaviour:
   collisionRadius: 0.5
   speed: 5
   pushSpeed: 5
+  boatPushWeight: 10
   rightHand: {fileID: 7050027556850151534}
   leftHand: {fileID: 6164456812060876360}
   restRightHand: {fileID: 5286066015268068918}

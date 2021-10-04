@@ -105,6 +105,13 @@
       "dependencies": {},
       "hash": "bb3d5067e49e403d8b8ba15c036d313b4dd2c696"
     },
+    "facepunch.highlight": {
+      "version": "https://github.com/nothke/Facepunch.Highlight.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "041647bb84cf79a6c9303e4bf8e577f822aab764"
+    },
     "nothke.waterreflection": {
       "version": "file:WaterReflection",
       "depth": 0,

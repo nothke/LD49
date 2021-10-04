@@ -143,10 +143,10 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
             Vector3 playerPosition = ps.transform.position;
-            localShip.rb.AddForceAtPosition(Vector3.down * 10, playerPosition, ForceMode.Acceleration);
+            localShip.rb.AddForceAtPosition(Vector3.down * ps.boatPushWeight, playerPosition, ForceMode.Acceleration);
 
             if (remoteShip.gameObject.activeSelf)
-                remoteShip.rb.AddForceAtPosition(Vector3.down * 10, playerPosition, ForceMode.Acceleration);
+                remoteShip.rb.AddForceAtPosition(Vector3.down * ps.boatPushWeight, playerPosition, ForceMode.Acceleration);
         }
     }
 

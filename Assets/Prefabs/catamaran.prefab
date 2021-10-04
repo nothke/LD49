@@ -1408,6 +1408,7 @@ MonoBehaviour:
   mastTurningSpeed: 50
   mast: {fileID: 1957587829814945565}
   playableArea: {fileID: 239618941}
+  interactableSteeringWheel: {fileID: 0}
 --- !u!54 &5577074632021696231
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1455,6 +1456,9 @@ MonoBehaviour:
   rightWheel: {fileID: 3175213949093732759}
   rope: {fileID: 8930979907081860171}
   interactionReach: 1.18
+  visualLeftWheel: {fileID: 2773169813567459314}
+  visualRightWheel: {fileID: 6000994144462101577}
+  visualRope: {fileID: 4097851975556679490}
 --- !u!1 &7773270112022254349
 GameObject:
   m_ObjectHideFlags: 0
@@ -2823,11 +2827,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
---- !u!4 &5354969634238981264 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8218652017638711529, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
-  m_PrefabInstance: {fileID: 4061728949153449081}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6425290187718423084 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7022553929602053717, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
@@ -2839,6 +2838,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dc160635fd2024ba4821de07f515ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &5354969634238981264 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8218652017638711529, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
+  m_PrefabInstance: {fileID: 4061728949153449081}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2773169813567459314 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2171420794392939403, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
+  m_PrefabInstance: {fileID: 4061728949153449081}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5577074630896441282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2903,6 +2912,11 @@ PrefabInstance:
 --- !u!4 &4569811819229345579 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8218652017638711529, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
+  m_PrefabInstance: {fileID: 5577074630896441282}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6000994144462101577 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2171420794392939403, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
   m_PrefabInstance: {fileID: 5577074630896441282}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &3175213949093732759 stripped
