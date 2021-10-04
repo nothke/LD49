@@ -105,6 +105,12 @@
       "dependencies": {},
       "hash": "bb3d5067e49e403d8b8ba15c036d313b4dd2c696"
     },
+    "nothke.waterreflection": {
+      "version": "file:WaterReflection",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

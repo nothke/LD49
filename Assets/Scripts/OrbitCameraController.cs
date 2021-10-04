@@ -17,6 +17,8 @@ namespace UnityGLTF.Examples
 		public float distanceMin = .5f;
 		public float distanceMax = 15f;
 
+		public float scrollSpeed = 5;
+
 		private Rigidbody cameraRigidBody;
 
 		float x = 0.0f;
@@ -49,7 +51,7 @@ namespace UnityGLTF.Examples
 
 				Quaternion rotation = Quaternion.Euler(y, x, 0);
 
-				distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
+				distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * scrollSpeed, distanceMin, distanceMax);
 
 				/*
 				RaycastHit hit;
