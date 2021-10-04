@@ -210,8 +210,6 @@ MonoBehaviour:
   leftHand: {fileID: 6164456812060876360}
   restRightHand: {fileID: 5286066015268068918}
   restLeftHand: {fileID: 1394722695817679717}
-  rightFoot: {fileID: 8644262222647029801}
-  leftFoot: {fileID: 6028300066768592947}
 --- !u!114 &5030915964336270187
 MonoBehaviour:
   m_ObjectHideFlags: 0

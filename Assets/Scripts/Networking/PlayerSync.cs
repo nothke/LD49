@@ -28,8 +28,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public Transform restRightHand, restLeftHand;
     Vector3 restRightHandPos, restLeftHandPos;
 
-    [Header("Feet")]
-    public Transform rightFoot, leftFoot;
+    //[Header("Feet")]
     PlayerFeet feet;
 
 
@@ -283,9 +282,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         interactables = s.visualShip.GetComponent<ShipInteractables>();
 
         transform.SetParent(playArea.areaCenter);
-
-        rightFoot.SetParent(playArea.areaCenter);
-        leftFoot.SetParent(playArea.areaCenter);
 
         if (photonView.IsMine)
         {

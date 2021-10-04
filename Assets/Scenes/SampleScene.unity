@@ -688,7 +688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcd599fd5965de547bb81fd173a593dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wantOwnRoom: 1
+  wantOwnRoom: 0
   gameVersion: 3
   roomName: Adriatic
   kickAFKplayers: 0

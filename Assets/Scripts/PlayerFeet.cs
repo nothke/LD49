@@ -127,7 +127,7 @@ public class PlayerFeet : MonoBehaviour
                 Vector2 lerpedP = Vector2.Lerp(fromPosL, toPosL, Easing.Cubic.Out(moveFactor));
 
                 leftFeet.position = playArea.TransformPoint(lerpedP) + playArea.areaCenter.up * instantHeight;
-                leftFeet.localRotation = Quaternion.Lerp(fromRotR, toRotR, moveFactor);
+                leftFeet.localRotation = Quaternion.Lerp(fromRotL, toRotL, moveFactor);
 
                 if (moveFactor >= 1)
                 {
@@ -146,6 +146,16 @@ public class PlayerFeet : MonoBehaviour
                     rightFeetMoving = false;
                 }
             }
+        }
+
+        if (!rightFeetMoving)
+        {
+            rightFeet.position = playArea.TransformPoint(toPosR);
+            rightFeet.rotation = toRotR * playArea.areaCenter.rotation;
+        }
+        if (!leftFeetMoving) {
+            leftFeet.position = playArea.TransformPoint(toPosL);
+            leftFeet.rotation = toRotL * playArea.areaCenter.rotation;
         }
     }
 
