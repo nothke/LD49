@@ -12,6 +12,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     ShipInteractables interactables;
 
     Vector2 pos = Vector2.zero;
+    [Header("Player")]
     public float collisionRadius = 0.5f;
     public float speed = 10f;
     public float pushSpeed = 5f;
@@ -22,11 +23,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     float leftHandInteractingPos = 0f;
     float rightHandInteractingPos = 0f;
 
+    [Header("Hands")]
     public Transform rightHand, leftHand;
-    public Transform rightFoot, leftFoot;
-
     public Transform restRightHand, restLeftHand;
     Vector3 restRightHandPos, restLeftHandPos;
+
+    [Header("Feet")]
+    public Transform rightFoot, leftFoot;
+
 
     Vector3 gizmoDebugPos = Vector3.zero;
 
@@ -176,11 +180,18 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             Vector2 facingDirection = interacting && interactingThing != ShipInteractables.InteractingThing.Nothing?
                 Vector2.up : instantVelocityAverage.sqrMagnitude > 0.001f? instantVelocityAverage.normalized : lastFacingDirection;
 
+            facingDirection = Vector2.Lerp(lastFacingDirection, facingDirection, 20f * Time.deltaTime);
+            facingDirection.Normalize();
+
             lastFacingDirection = facingDirection;
 
             transform.rotation = Quaternion.LookRotation(playArea.TransformDirection(facingDirection), Vector3.up);
 
-            // Body parts
+            ////////////////
+            // Body parts //
+            ////////////////
+            
+            // Hands
             restRightHandPos = Vector3.Lerp(restRightHandPos, restRightHand.position, Time.deltaTime * 5f);
             restLeftHandPos = Vector3.Lerp(restLeftHandPos, restLeftHand.position, Time.deltaTime * 5f);
 
@@ -222,8 +233,11 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
             float interactingFinishFactor = Mathf.Clamp01(interactingAnimationTime / 1f);
 
+            // TODO add inertia instead of lerping
             leftHand.position = Vector3.Lerp(leftHand.position, wantedLeftHandPos, interactingFinishFactor);
             rightHand.position = Vector3.Lerp(rightHand.position, wantedRightHandPos, interactingFinishFactor);
+
+            // Feet
         }
     }
 
@@ -259,6 +273,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         interactables = s.visualShip.GetComponent<ShipInteractables>();
 
         transform.SetParent(playArea.areaCenter);
+
+        rightFoot.SetParent(playArea.areaCenter);
+        leftFoot.SetParent(playArea.areaCenter);
 
         if (photonView.IsMine)
         {
