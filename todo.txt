@@ -20,6 +20,7 @@ TODO:
 	- ⏹ Hands on interacting things - Ferran 
 	- ⏹ Sync buoys position and rotation - Ferran
 	- ⏹ Collision of ships and things - Ferran
+	- ⏹ UI choices on connected to room - Ferran
 
 	- ⏹ Water reflection
 	- ⏹ Splash effects
