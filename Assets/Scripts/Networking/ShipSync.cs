@@ -35,7 +35,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         remoteShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
 
         localShip.name = "Catamaran " + shipId;
-        remoteShip.name = "Catamaran (Physics only) " + shipId;
+        remoteShip.name = "Catamaran "+ shipId +"(Physics only)";
 
         SetLayerRecursively(remoteShip.gameObject.transform, physicsLayer, remoteMaterial);
 
@@ -240,7 +240,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
     void OnDestroy()
     {
-        Destroy(localShip);
-        Destroy(remoteShip);
+        Destroy(localShip.gameObject);
+        Destroy(remoteShip.gameObject);
+
+        RoomController.i.DeregisterShip(this);
     }
 }

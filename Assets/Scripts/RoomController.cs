@@ -126,6 +126,12 @@ public class RoomController : MonoBehaviourPunCallbacks
         }
     }
 
+    public void DeregisterShip(ShipSync s)
+    {
+        ships.Remove(s.shipId);
+        shipIdToPlayers.Remove(s.shipId);
+    }
+
     public void RegisterPlayer(PlayerSync p)
     {
         playerSyncs.Add(p.photonView.Owner, p);
@@ -141,21 +147,30 @@ public class RoomController : MonoBehaviourPunCallbacks
         if (ships.ContainsKey(p.shipId))
         {
             p.PlaceOnShip(ships[p.shipId]);
+            playerToShip.Add(p.photonView.Owner, ships[p.shipId]);
         }
 
         if (!shipIdToPlayers.ContainsKey(p.shipId))
             shipIdToPlayers.Add(p.shipId, new List<Player>());
 
         shipIdToPlayers[p.shipId].Add(p.photonView.Owner);
+
+        if (shipIdToPlayers[p.shipId].Count == 1 && ships[p.shipId].photonView.IsMine && !p.photonView.IsMine)
+        {
+            ships[p.shipId].photonView.TransferOwnership(p.photonView.Owner);
+        }
     }
 
     // Probably overcomplicated function that deals with disconnection of players and ship ownership
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Debug.Log("Player left room");
         if (playerSyncs.ContainsKey(otherPlayer))
         {
+            Debug.Log("playerSyncs had player");
             if (playerToShip.ContainsKey(otherPlayer))
             {
+                Debug.Log("playerToShip had player");
                 ShipSync s = playerToShip[otherPlayer];
                 shipIdToPlayers[s.shipId].Remove(otherPlayer);
 
@@ -163,11 +178,13 @@ public class RoomController : MonoBehaviourPunCallbacks
                 { // Check for ownership transfer or for removal
                     if (shipIdToPlayers[s.shipId].Count == 0)
                     {// Empty ship
-                        ships.Remove(s.shipId);
-                        shipIdToPlayers.Remove(s.shipId);
+
+                        Debug.Log("Destroying empty ship");
                         PhotonNetwork.Destroy(s.gameObject);
                     }
-                    else { // Give the ship to a player on that ship
+                    else
+                    { // Give the ship to a player on that ship
+                        Debug.Log("Giving ownership to playuer driving ship");
                         s.photonView.TransferOwnership(shipIdToPlayers[s.shipId][0]);
                     }
                 }
