@@ -16,7 +16,7 @@ TODO:
 	- ⏹ Drag from submerged things
 	- ⏹ Speedometer
 	- ✅ Interaction with the boat and input calculation - Ferran
-	- ⏹ Legs & body rotation snapping to the deck - Ferran
+	- ✅ Legs & body rotation snapping to the deck - Ferran
 	- ✅ Hands on interacting things - Ferran
 	- ✅ Sync buoys position and rotation - Ferran
 	- ⏹ Check Collision of ships and things - Ferran
@@ -28,6 +28,8 @@ TODO:
 	- ⏹ Splash effects
 	- ⏹ Wake effect
 	- ⏹ Better wave function (see Gerstner wave)
+
+	- ⏹ Display ship number (shipId) on ship
 
 # Art:
 

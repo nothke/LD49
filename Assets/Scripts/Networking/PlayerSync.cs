@@ -172,7 +172,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
                 // In reach detection
 
-                if (!inReach) 
+                if (!inReach || interacting) 
                     thing = ShipInteractables.InteractingThing.Nothing;
 
                 // On got close to
@@ -313,7 +313,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = playArea.areaCenter.transform;
 
             if (ShipUI.instance)
+            {
                 ShipUI.instance.ship = s.visualShip;
+                ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId);
+            }
         }
     }
 

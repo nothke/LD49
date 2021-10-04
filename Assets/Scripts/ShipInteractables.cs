@@ -64,15 +64,15 @@ public class ShipInteractables : MonoBehaviour
                 break;
             case InteractingThing.Rope:
                 Facepunch.Highlight.AddRenderer(visualRope);
-                ShipUI.instance.SetInteractionText("Hold ACTION and < >");
+                ShipUI.instance.SetInteractionText("Hold ACTION and < > to turn the mainsail");
                 break;
             case InteractingThing.LeftWheel:
                 Facepunch.Highlight.AddRenderer(visualLeftWheel);
-                ShipUI.instance.SetInteractionText("Hold ACTION and < >");
+                ShipUI.instance.SetInteractionText("Hold ACTION and < > to drive wheel");
                 break;
             case InteractingThing.RightWheel:
                 Facepunch.Highlight.AddRenderer(visualRightWheel);
-                ShipUI.instance.SetInteractionText("Hold ACTION and < >");
+                ShipUI.instance.SetInteractionText("Hold ACTION and < > to drive wheel");
                 break;
         }
 

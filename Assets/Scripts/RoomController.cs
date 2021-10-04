@@ -68,6 +68,8 @@ public class RoomController : MonoBehaviourPunCallbacks
         ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
         ht[PlayerSync.PLAYER_SHIP] = shipId;
         PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+
+        ShipUI.instance.ShowIngamePanel();
     }
 
     int InstantiateNewShip() {
