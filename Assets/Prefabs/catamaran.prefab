@@ -1417,7 +1417,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5577074632021696228}
   serializedVersion: 2
-  m_Mass: 20
+  m_Mass: 6
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -2670,24 +2670,44 @@ PrefabInstance:
       value: new_float
       objectReference: {fileID: 0}
     - target: {fileID: 2335344696956842956, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335344696956842956, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2516755574674534026, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 2516755574674534026, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148741278776161471, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 3148741278776161471, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3259199780537981467, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 3259199780537981467, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631410401840173873, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 3631410401840173873, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
@@ -3076,24 +3096,44 @@ PrefabInstance:
       value: new_float (1)
       objectReference: {fileID: 0}
     - target: {fileID: 2335344696956842956, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2335344696956842956, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2516755574674534026, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 2516755574674534026, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3148741278776161471, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 3148741278776161471, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3259199780537981467, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 3259199780537981467, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3631410401840173873, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
+      propertyPath: dampMult
+      value: 0.32
       objectReference: {fileID: 0}
     - target: {fileID: 3631410401840173873, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}
       propertyPath: forceMult
-      value: 12
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c21f2bf2a360dc7409bea17ed9b1d27f, type: 3}

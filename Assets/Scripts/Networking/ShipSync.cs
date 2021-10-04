@@ -240,9 +240,12 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
     void OnDestroy()
     {
-        Destroy(localShip.gameObject);
-        Destroy(remoteShip.gameObject);
+        if (Application.isPlaying)
+        {
+            Destroy(localShip.gameObject);
+            Destroy(remoteShip.gameObject);
 
-        RoomController.i.DeregisterShip(this);
+            RoomController.i.DeregisterShip(this);
+        }
     }
 }
