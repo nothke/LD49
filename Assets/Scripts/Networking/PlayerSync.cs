@@ -26,6 +26,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public Transform rightFoot, leftFoot;
 
     public Transform restRightHand, restLeftHand;
+    Vector3 restRightHandPos, restLeftHandPos;
 
     Vector3 gizmoDebugPos = Vector3.zero;
 
@@ -47,10 +48,18 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         }
         RoomController.i.RegisterPlayer(this);
 
-        receivedPos = pos;
+        lastFramePosition = receivedPos = pos;
+
+        restRightHandPos = restRightHand.position;
+        restLeftHandPos = restLeftHand.position;
     }
 
     float interactingTime = 0;
+    Vector2 lastFramePosition;
+    Vector2 instantVelocityAverage;
+    Vector2 lastFacingDirection = Vector2.up;
+    bool wasInteracting = false;
+
     // Update is called once per frame
     void Update()
     {
@@ -85,20 +94,37 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                                 rightHandInteractingPos = Mathf.Clamp(p + 0.05f, -1f, 1f);
                                 break;
                         }
-                        interacting = true;
                     }
-                    else {
+                    else
+                    {
                         interactingThing = ShipInteractables.InteractingThing.Nothing;
                         leftHandInteractingPos = Random.Range(-0.2f, 0.2f);
                     }
+                    interacting = true;
+                    interactingTime = 0;
                 }
                 else if (inputInteract <= 0.01f && interacting)
+                {
                     interacting = false;
+                    interactingTime = 0;
+                }
 
                 if (!interacting || interactingThing == ShipInteractables.InteractingThing.Nothing)
                 {
-                    pos.x += inputX * speed * Time.deltaTime;
-                    pos.y += inputY * speed * Time.deltaTime;
+                    Vector3 camRight = Camera.main.transform.right;
+                    camRight.y = 0;
+                    camRight.Normalize();
+                    Vector3 camForward = Camera.main.transform.forward;
+                    camForward.y = 0;
+                    camForward.Normalize();
+
+                    Vector3 camRelativeInput = camRight * inputX + camForward * inputY;
+                    Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput);
+
+                    //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
+
+                    pos += shipRelativeInput * speed * Time.deltaTime;
+
                     interactingInput = 0;
                 }
                 else {
@@ -141,14 +167,38 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
 
             transform.position = playArea.TransformPoint(pos);
-            transform.rotation = Quaternion.identity;
+
+            Vector2 deltaPos = pos - lastFramePosition;
+            lastFramePosition = pos;
+
+            Vector2 instantVelocity = deltaPos / Time.deltaTime;
+            instantVelocityAverage = instantVelocityAverage * 0.3f + instantVelocity * 0.7f;
+
+            Vector2 facingDirection = interacting && interactingThing != ShipInteractables.InteractingThing.Nothing?
+                Vector2.up : instantVelocityAverage.sqrMagnitude > 0.001f? instantVelocityAverage.normalized : lastFacingDirection;
+
+            lastFacingDirection = facingDirection;
+
+            transform.rotation = Quaternion.LookRotation(playArea.TransformDirection(facingDirection), Vector3.up);
 
             // Body parts
-            Vector3 wantedLeftHandPos = restLeftHand.position;
-            Vector3 wantedRightHandPos = restRightHand.position;
+            restRightHandPos = Vector3.Lerp(restRightHandPos, restRightHand.position, Time.deltaTime * 5f);
+            restLeftHandPos = Vector3.Lerp(restLeftHandPos, restLeftHand.position, Time.deltaTime * 5f);
+
+            float maxHandDistance = 0.5f;
+            if (Vector3.Distance(restRightHandPos, restRightHand.position) > maxHandDistance)
+            {
+                restRightHandPos = restRightHand.position + (restRightHandPos - restRightHand.position).normalized * maxHandDistance;
+            }
+            if (Vector3.Distance(restLeftHandPos, restLeftHand.position) > maxHandDistance)
+            {
+                restLeftHandPos = restLeftHand.position + (restLeftHandPos - restLeftHand.position).normalized * maxHandDistance;
+            }
+
+            Vector3 wantedLeftHandPos = restLeftHandPos;
+            Vector3 wantedRightHandPos = restRightHandPos;
             if (interacting)
             {
-                interactingTime += Time.deltaTime;
                 switch (interactingThing)
                 {
                     case ShipInteractables.InteractingThing.LeftWheel:
@@ -164,16 +214,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         wantedRightHandPos = interactables.rope.RopeRelativePointToWorld(rightHandInteractingPos);
                         break;
                     case ShipInteractables.InteractingThing.Nothing:
-                        wantedLeftHandPos.y += 0.3f + leftHandInteractingPos;
-                        wantedRightHandPos.y +=  0.3f - leftHandInteractingPos;
+                        wantedLeftHandPos.y += 0.5f + leftHandInteractingPos;
+                        wantedRightHandPos.y += 0.5f - leftHandInteractingPos;
                         break;
                 }
             }
-            else interactingTime = 0;
+            interactingTime += Time.deltaTime;
 
             float interactingFinishFactor = Mathf.Clamp01(interactingTime / 1f);
-            if (!interacting)
-                interactingFinishFactor = Time.deltaTime * 3f;
 
             leftHand.position = Vector3.Lerp(leftHand.position, wantedLeftHandPos, interactingFinishFactor);
             rightHand.position = Vector3.Lerp(rightHand.position, wantedRightHandPos, interactingFinishFactor);
