@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1820376745}
   m_Layer: 0
-  m_Name: camera_pivot
+  m_Name: camera_focus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 5015634050480965306}
   - component: {fileID: 3862105034863898299}
   m_Layer: 0
-  m_Name: b
+  m_Name: bp_sail_top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,7 +129,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454772570109277911}
-  m_LocalRotation: {x: -0.02493409, y: 1.9377682e-17, z: 1.1099814e-15, w: 0.9996891}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 10.483998, z: 1.6500769}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 2
   dampMult: 0.3
+  dragMult: 0.001
 --- !u!1 &1262013534810450198
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,6 +712,52 @@ Transform:
   m_Father: {fileID: 5577074632021696225}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3111539511449171648
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7756229849563978835}
+  - component: {fileID: 7726278524727155184}
+  m_Layer: 0
+  m_Name: bp_sail_jib
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7756229849563978835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111539511449171648}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.050767824, y: 0.8320638, z: 3.6157298}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7744088971191612879}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7726278524727155184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111539511449171648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a308874c269fd41934ce342faad323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceMult: 2
+  dampMult: 0.3
+  dragMult: 0.001
 --- !u!1 &3530347476376369663
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,7 +1058,7 @@ GameObject:
   - component: {fileID: 3275708152038043286}
   - component: {fileID: 2676611367573607888}
   m_Layer: 0
-  m_Name: b
+  m_Name: bp_sail_topf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1024,7 +1071,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4408401670262745279}
-  m_LocalRotation: {x: -0.02493409, y: 1.9377682e-17, z: 1.1099814e-15, w: 0.9996891}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 10.13, z: -0.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1045,6 +1092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 2
   dampMult: 0.3
+  dragMult: 0.001
 --- !u!1 &5048983355032384598
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,6 +1457,7 @@ MonoBehaviour:
   mastTurningSpeed: 50
   mast: {fileID: 1957587829814945565}
   playableArea: {fileID: 239618941}
+  cameraFocus: {fileID: 0}
   interactableSteeringWheel: {fileID: 0}
 --- !u!54 &5577074632021696231
 Rigidbody:
@@ -1460,6 +1509,52 @@ MonoBehaviour:
   visualLeftWheel: {fileID: 2773169813567459314}
   visualRightWheel: {fileID: 6000994144462101577}
   visualRope: {fileID: 4097851975556679490}
+--- !u!1 &6725941895386706523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 977282802339755881}
+  - component: {fileID: 106890417261238746}
+  m_Layer: 0
+  m_Name: bp_sail_mid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &977282802339755881
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6725941895386706523}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.00000034923647, y: 1.2478454, z: -2.1280026}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7744088971191612879}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &106890417261238746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6725941895386706523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3a308874c269fd41934ce342faad323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceMult: 2
+  dampMult: 0.3
+  dragMult: 0.001
 --- !u!1 &7773270112022254349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,6 +1719,8 @@ Transform:
   - {fileID: 5015634050480965306}
   - {fileID: 3275708152038043286}
   - {fileID: 4150427420523352440}
+  - {fileID: 977282802339755881}
+  - {fileID: 7756229849563978835}
   m_Father: {fileID: 1957587829814945565}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2582,7 +2679,7 @@ GameObject:
   - component: {fileID: 4150427420523352440}
   - component: {fileID: 8551388581418936951}
   m_Layer: 0
-  m_Name: b
+  m_Name: bp_sail_f
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2595,8 +2692,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9131433689510746528}
-  m_LocalRotation: {x: -0.02493409, y: 1.9377682e-17, z: 1.1099814e-15, w: 0.9996891}
-  m_LocalPosition: {x: 0, y: -7.69, z: -2.39}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.00000010491947, y: -7.6883197, z: -2.411802}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7744088971191612879}
@@ -2616,6 +2713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 2
   dampMult: 0.3
+  dragMult: 0.001
 --- !u!1001 &716081074901536439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2869,6 +2967,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
+--- !u!4 &5354969634238981264 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8218652017638711529, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
+  m_PrefabInstance: {fileID: 4061728949153449081}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2773169813567459314 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2171420794392939403, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
+  m_PrefabInstance: {fileID: 4061728949153449081}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6425290187718423084 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7022553929602053717, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
@@ -2880,16 +2988,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dc160635fd2024ba4821de07f515ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &5354969634238981264 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8218652017638711529, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
-  m_PrefabInstance: {fileID: 4061728949153449081}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &2773169813567459314 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 2171420794392939403, guid: f338fab23dc23d3429efef931dd19fff, type: 3}
-  m_PrefabInstance: {fileID: 4061728949153449081}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5577074630896441282
 PrefabInstance:
   m_ObjectHideFlags: 0

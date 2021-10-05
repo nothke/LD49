@@ -8,27 +8,39 @@ public class BuoyancyPoint : MonoBehaviour
 
     public float forceMult = 1;
     public float dampMult = 0.1f;
+    public float dragMult = 0.001f;
 
     private void Awake()
     {
         rb = GetComponentInParent<Rigidbody>();
     }
 
+    static readonly Vector3 up = Vector3.up;
+
     private void FixedUpdate()
     {
         Vector3 pos = transform.position;
         float waterHeight = Water.GetHeight(pos);
+        float diff = waterHeight - pos.y;
 
-        float spring = Mathf.Clamp(waterHeight - pos.y, 0, Mathf.Infinity) * forceMult;
+        float spring = Mathf.Clamp(diff, 0, Mathf.Infinity) * forceMult;
 
-        if (spring > 0)
+        if (diff > 0)
         {
             Vector3 velo = rb.GetPointVelocity(pos);
             float vertVelo = velo.y;
 
             float damp = -vertVelo * dampMult;
 
-            rb.AddForceAtPosition(Vector3.up * (spring + damp), transform.position, ForceMode.Acceleration);
+            Vector3 drag;
+            if (dragMult > 0)
+            {
+                drag = -velo.normalized * velo.sqrMagnitude * dragMult;
+                drag.y = 0;
+            }
+            else drag = default;
+
+            rb.AddForceAtPosition(up * (spring + damp) + drag, transform.position, ForceMode.Acceleration);
         }
     }
 

@@ -30,6 +30,8 @@ TODO:
 	- ⏹ Better wave function (see Gerstner wave)
 
 	- ⏹ Display ship number (shipId) on actual ship
+	- ⏹ Camera should be heighter
+	- ⏹ Tighten/loosen
 
 # Art:
 
