@@ -7,6 +7,7 @@ using Photon.Realtime;
 public class RoomController : MonoBehaviourPunCallbacks
 {
     public int maxPlayersPerShip = 5;
+    public float instantiationDistanceBetweenBoats = 15;
     public ShipSync shipPrefab;
     public PlayerSync playerPrefab;
 
@@ -99,12 +100,28 @@ public class RoomController : MonoBehaviourPunCallbacks
         }
 
         object[] instantiationData = new object[1] { newShipId };
-        ShipSync newShip = PhotonNetwork.InstantiateRoomObject(shipPrefab.name, Vector3.zero, Quaternion.identity, 0, instantiationData).GetComponent<ShipSync>();
+        Vector3 pos = Vector3.zero;
+        pos = CorrectPositionToSpawnShip(pos);
+        ShipSync newShip = PhotonNetwork.InstantiateRoomObject(shipPrefab.name, pos, Quaternion.identity, 0, instantiationData).GetComponent<ShipSync>();
 
         return newShipId;
     }
 
+    Vector3 CorrectPositionToSpawnShip(Vector3 wantedPos)
+    {
+        Vector2 wp = new Vector2(wantedPos.x, wantedPos.z);
+        foreach (KeyValuePair<int,ShipSync> kvp in ships)
+        {
+            Vector3 shipPos = kvp.Value.localShip.transform.position;
+            if (Vector2.Distance(wp, new Vector2(shipPos.x, shipPos.z)) < instantiationDistanceBetweenBoats)
+            {
+                Debug.Log("Found to want to spawn ship ontop of eachother, moving back..");
+                return CorrectPositionToSpawnShip(wantedPos - Vector3.forward * instantiationDistanceBetweenBoats - Vector3.right * instantiationDistanceBetweenBoats * 0.5f);
+            }
+        }
 
+        return wantedPos;
+    }
     public void RegisterShip(ShipSync s)
     {
         if (!ships.ContainsKey(s.shipId))

@@ -1273,7 +1273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wantOwnRoom: 0
-  gameVersion: 3
+  gameVersion: 0.2
   roomName: Adriatic
   kickAFKPlayers: 1
   maxAFKtime: 90
@@ -1304,6 +1304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxPlayersPerShip: 5
+  instantiationDistanceBetweenBoats: 15
   shipPrefab: {fileID: 1969835584439724525, guid: 2a2a86a8d9a4b0941af032d83879e896, type: 3}
   playerPrefab: {fileID: 2302828771738319153, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
 --- !u!114 &970179865

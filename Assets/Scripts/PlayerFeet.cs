@@ -15,8 +15,8 @@ public class PlayerFeet : MonoBehaviour
 
     bool rightFeetMoving = true;
     bool leftFeetMoving = true;
-    float moveDistance = 0f;
-    float moveTotalDistance = 0f;
+    float moveDistance = 1f;
+    float moveTotalDistance = 1f;
 
     public ShipPlayArea playArea;
 
@@ -33,6 +33,7 @@ public class PlayerFeet : MonoBehaviour
 
     }
 
+    bool initialized = false;
     public void Init(Vector2 pos, Vector2 direction)
     {
         Vector2 playerRight = new Vector2(direction.y, -direction.x);// Vector2.playArea.InverseTransformDirection(transform.right);
@@ -44,14 +45,17 @@ public class PlayerFeet : MonoBehaviour
         leftFeet.position = playArea.TransformPoint(fromPosL);
 
 
-        fromRotR = toRotR =  Quaternion.identity;
+        fromRotR = toRotR = Quaternion.identity;
         fromRotL = toRotL = Quaternion.identity;
         rightFeet.localRotation = fromRotR;
         leftFeet.localRotation = fromRotL;
+        initialized = true;
     }
 
     public void UpdateFeet(Vector2 pos, Vector2 direction)
     {
+        if (!initialized) return;
+
         if (direction.sqrMagnitude < 0.001f)
             direction = Vector2.up;
 

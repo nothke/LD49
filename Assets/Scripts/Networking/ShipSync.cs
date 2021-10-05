@@ -31,8 +31,11 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         // In this case I'm trying to lerp the local towards the remote without keeping track of the "untouched/unlerped" local values
         // This might look a bit worse but might be simpler and enough
 
-        localShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
-        remoteShip = Instantiate(shipPrefab.gameObject).GetComponent<ShipController>();
+        Vector3 spawnPos = transform.position;
+        spawnPos.y = shipPrefab.transform.position.y;
+
+        localShip = Instantiate(shipPrefab.gameObject, spawnPos, shipPrefab.transform.rotation).GetComponent<ShipController>();
+        remoteShip = Instantiate(shipPrefab.gameObject, spawnPos, shipPrefab.transform.rotation).GetComponent<ShipController>();
 
         localShip.name = "Catamaran " + shipId;
         remoteShip.name = "Catamaran "+ shipId +"(Physics only)";
@@ -122,6 +125,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
             }
         }
 
+        transform.position = localShip.transform.position;
     }
 
     void FixedUpdate()
