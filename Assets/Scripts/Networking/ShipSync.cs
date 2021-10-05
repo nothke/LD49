@@ -37,7 +37,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         localShip.name = "Catamaran " + shipId;
         remoteShip.name = "Catamaran "+ shipId +"(Physics only)";
 
-        SetLayerRecursively(remoteShip.gameObject.transform, physicsLayer, remoteMaterial);
+        PrepareRemoteShip(remoteShip.gameObject.transform, physicsLayer, remoteMaterial);
 
         remoteShip.gameObject.SetActive(!photonView.IsMine);
 
@@ -220,21 +220,29 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         }
     }
 
-    void SetLayerRecursively(Transform t, int layer, Material m)
+    void PrepareRemoteShip(Transform t, int layer, Material m)
     {
         t.gameObject.layer = layer;
-        Renderer r = t.GetComponent<Renderer>();
-        if (r != null)
+
+        ParticleSystem p = t.GetComponent<ParticleSystem>();
+        if (p != null)
         {
-            r.material = m;
-            remoteRenderers.Add(r);
-            if (!visualizeRemoteShip)
-                r.enabled = false;
+            t.gameObject.SetActive(false);
+        }
+        else {
+            Renderer r = t.GetComponent<Renderer>();
+            if (r != null)
+            {
+                r.material = m;
+                remoteRenderers.Add(r);
+                if (!visualizeRemoteShip)
+                    r.enabled = false;
+            }
         }
 
         foreach (Transform c in t)
         {
-            SetLayerRecursively(c, layer, m);
+            PrepareRemoteShip(c, layer, m);
         }
     }
 
