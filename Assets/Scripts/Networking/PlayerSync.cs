@@ -127,16 +127,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 if (!interacting || interactingThing == ShipInteractables.InteractingThing.Nothing)
                 {
                     Vector3 camRight = Camera.main.transform.right;
-                    camRight.y = 0;
-                    camRight.Normalize();
                     Vector3 camForward = Camera.main.transform.forward;
-                    camForward.y = 0;
-                    camForward.Normalize();
+                    //camForward.y = 0;
+                    //camForward.Normalize();
+                    Vector3 camUp = Camera.main.transform.up;
 
                     Vector2 input = new Vector2(inputX, inputY);
                     if (input.sqrMagnitude > 1f) input.Normalize();
 
-                    Vector3 camRelativeInput = camRight * input.x + camForward * input.y;
+                    Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
                     Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
 
                     //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
@@ -214,7 +213,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
             lastFacingDirection = facingDirection;
 
-            transform.rotation = Quaternion.LookRotation(playArea.TransformDirection(facingDirection), Vector3.up);
+            transform.rotation = Quaternion.LookRotation(playArea.TransformDirection(facingDirection), Vector3.Slerp(Vector3.up, playArea.areaCenter.up, 0.2f));
 
             ////////////////
             // Body parts //
