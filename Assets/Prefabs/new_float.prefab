@@ -28,14 +28,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3940503969565718114}
-  - {fileID: 6824399969921529865}
-  - {fileID: 1906277668638397653}
-  - {fileID: 2592513532465629426}
   - {fileID: 5880154305741376486}
   - {fileID: 3822909685147854135}
   - {fileID: 8889527582655433595}
-  - {fileID: 3409371605257543774}
+  - {fileID: 1906277668638397653}
   - {fileID: 2049301642368710662}
+  - {fileID: 6824399969921529865}
+  - {fileID: 3409371605257543774}
+  - {fileID: 2592513532465629426}
   - {fileID: 8527963261732501625}
   - {fileID: 4459813534668451166}
   m_Father: {fileID: 0}
@@ -70,7 +70,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1104240635286447208}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &8177521131024890001
 MonoBehaviour:
@@ -89,6 +89,7 @@ MonoBehaviour:
   forceMultiplier: 0.1
   bendForceForward: 0
   cloth: {fileID: 0}
+  maxForce: 0
 --- !u!1 &1999284176258122010
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,7 +101,7 @@ GameObject:
   - component: {fileID: 3409371605257543774}
   - component: {fileID: 2516755574674534026}
   m_Layer: 0
-  m_Name: b (3)
+  m_Name: bp_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,6 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 7
   dampMult: 0.3
+  dragMult: 0.0001
 --- !u!1 &2091790931408561350
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,7 +147,7 @@ GameObject:
   - component: {fileID: 6824399969921529865}
   - component: {fileID: 3259199780537981467}
   m_Layer: 0
-  m_Name: b
+  m_Name: bp_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,7 +165,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1104240635286447208}
-  m_RootOrder: 1
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3259199780537981467
 MonoBehaviour:
@@ -179,6 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 7
   dampMult: 0.3
+  dragMult: 0.0001
 --- !u!1 &2800505389953662241
 GameObject:
   m_ObjectHideFlags: 0
@@ -5012,7 +5015,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1104240635286447208}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &1875107969060711263
 MonoBehaviour:
@@ -5031,6 +5034,7 @@ MonoBehaviour:
   forceMultiplier: 0.1
   bendForceForward: 0
   cloth: {fileID: 0}
+  maxForce: 0
 --- !u!1 &5092289398448362384
 GameObject:
   m_ObjectHideFlags: 0
@@ -9847,7 +9851,7 @@ GameObject:
   - component: {fileID: 3148741278776161471}
   - component: {fileID: 7503398190014982921}
   m_Layer: 0
-  m_Name: b (2)
+  m_Name: bp_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9865,7 +9869,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1104240635286447208}
-  m_RootOrder: 3
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3148741278776161471
 MonoBehaviour:
@@ -9881,6 +9885,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 7
   dampMult: 0.3
+  dragMult: 0.0001
 --- !u!114 &7503398190014982921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9907,7 +9912,7 @@ GameObject:
   - component: {fileID: 2335344696956842956}
   - component: {fileID: 8290394789924903335}
   m_Layer: 0
-  m_Name: b (1)
+  m_Name: bp_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9925,7 +9930,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1104240635286447208}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2335344696956842956
 MonoBehaviour:
@@ -9941,6 +9946,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 7
   dampMult: 0.3
+  dragMult: 0.0001
 --- !u!114 &8290394789924903335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10038,7 +10044,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1104240635286447208}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &225236586070803550
 MonoBehaviour:
@@ -10057,6 +10063,7 @@ MonoBehaviour:
   forceMultiplier: 0.1
   bendForceForward: 0
   cloth: {fileID: 0}
+  maxForce: 0
 --- !u!1 &8477203796520051210
 GameObject:
   m_ObjectHideFlags: 0
@@ -10068,7 +10075,7 @@ GameObject:
   - component: {fileID: 2049301642368710662}
   - component: {fileID: 3631410401840173873}
   m_Layer: 0
-  m_Name: b (4)
+  m_Name: bp_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10086,7 +10093,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1104240635286447208}
-  m_RootOrder: 8
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3631410401840173873
 MonoBehaviour:
@@ -10102,3 +10109,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forceMult: 7
   dampMult: 0.3
+  dragMult: 0.0001

@@ -128,7 +128,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5577074632021696228, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
   m_PrefabInstance: {fileID: 5577074631901598589}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &99941733
+--- !u!114 &99941730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -868,6 +868,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 382424216, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 382424216, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 382424216, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 440618725, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 440618725, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1060222766535452083, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
       propertyPath: m_Name
       value: HUD Canvas
@@ -960,6 +980,14 @@ PrefabInstance:
       propertyPath: ship
       value: 
       objectReference: {fileID: 571374243}
+    - target: {fileID: 4549777218451625673, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9207748515380129888, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
 --- !u!1001 &5577074631901598589
@@ -969,10 +997,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5577074631560640783, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
-      propertyPath: m_StretchingStiffness
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5577074632021696225, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
       propertyPath: m_RootOrder
       value: 3
