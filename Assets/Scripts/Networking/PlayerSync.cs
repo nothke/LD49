@@ -253,8 +253,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         wantedRightHandPos = interactables.rope.RopeRelativePointToWorld(rightHandInteractingPos);
                         break;
                     case ShipInteractables.InteractingThing.Nothing:
-                        wantedLeftHandPos.y += 0.5f + leftHandInteractingPos;
-                        wantedRightHandPos.y += 0.5f - leftHandInteractingPos;
+                        wantedLeftHandPos = restLeftHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * leftHandInteractingPos) - transform.right * 0.3f;
+                        wantedRightHandPos = restRightHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * -leftHandInteractingPos) + transform.right * 0.3f;
                         break;
                 }
             }
