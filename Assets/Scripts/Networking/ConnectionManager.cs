@@ -12,7 +12,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public string gameVersion = "0.1";
     public string roomName = "Adriatic";
 
-    public bool kickAFKplayers = false;
+    public bool kickAFKPlayers = true;
     public float maxAFKtime = 90f;
     float lastActiveTime = 0f;
     bool kickedForInactivity = false;
@@ -45,7 +45,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (kickAFKplayers && PhotonNetwork.InRoom)
+        if (kickAFKPlayers && PhotonNetwork.InRoom)
         {
             if (Application.isFocused)
                 lastActiveTime = Time.time;
@@ -60,7 +60,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (!PhotonNetwork.InRoom && Input.GetMouseButtonDown(0) && retryConnectionCoroutine == null && Application.isFocused)
+        if (!PhotonNetwork.InRoom && (Input.GetMouseButtonDown(0) || Input.GetAxis("Submit") > 0) && retryConnectionCoroutine == null && Application.isFocused)
         {
             retryConnectionCoroutine = StartCoroutine(WaitABitAndTryToConnectAgain());
         }
@@ -76,7 +76,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        ShipUI.instance.LogConnectionInfo(string.Format("Joining random room.."));
+        ShipUI.instance.LogConnectionInfo(string.Format("Joining room.."));
         if (!wantOwnRoom)
             PhotonNetwork.JoinRandomRoom();
         else
@@ -120,6 +120,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
         else
         {
+            ShipUI.instance.LogConnectionInfo(string.Format("Nobody seems online, creating room.."));
             PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 20 });
         }
     }
@@ -184,6 +185,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         if (kickedForInactivity)
         {
             Debug.LogWarning("Kicked for inactivity");
+
+            ShipUI.instance.ShowIntroPanel();
+            ShipUI.instance.LogConnectionInfo(string.Format("Will try to reconnect on return\nKicked for inactivity after {0} seconds AFK", maxAFKtime));
             kickedForInactivity = false;
         }
         else if (cause != DisconnectCause.DisconnectByClientLogic)

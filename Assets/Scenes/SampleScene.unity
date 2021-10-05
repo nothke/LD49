@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18206675, g: 0.22439133, b: 0.28783965, a: 1}
+  m_IndirectSpecularColor: {r: 0.18206714, g: 0.22439162, b: 0.28784093, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1275,7 +1275,7 @@ MonoBehaviour:
   wantOwnRoom: 0
   gameVersion: 3
   roomName: Adriatic
-  kickAFKplayers: 1
+  kickAFKPlayers: 1
   maxAFKtime: 90
 --- !u!4 &970179863
 Transform:

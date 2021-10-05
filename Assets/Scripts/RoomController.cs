@@ -164,13 +164,13 @@ public class RoomController : MonoBehaviourPunCallbacks
     // Probably overcomplicated function that deals with disconnection of players and ship ownership
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.Log("Player left room");
+        //Debug.Log("Player left room");
         if (playerSyncs.ContainsKey(otherPlayer))
         {
-            Debug.Log("playerSyncs had player");
+            //Debug.Log("playerSyncs had player");
             if (playerToShip.ContainsKey(otherPlayer))
             {
-                Debug.Log("playerToShip had player");
+                //Debug.Log("playerToShip had player");
                 ShipSync s = playerToShip[otherPlayer];
                 shipIdToPlayers[s.shipId].Remove(otherPlayer);
 
@@ -184,7 +184,7 @@ public class RoomController : MonoBehaviourPunCallbacks
                     }
                     else
                     { // Give the ship to a player on that ship
-                        Debug.Log("Giving ownership to playuer driving ship");
+                        Debug.Log("Giving ownership to player driving ship");
                         s.photonView.TransferOwnership(shipIdToPlayers[s.shipId][0]);
                     }
                 }
@@ -198,5 +198,13 @@ public class RoomController : MonoBehaviourPunCallbacks
 
             playerSyncs.Remove(otherPlayer);
         }
+    }
+
+    public override void OnLeftRoom()
+    {
+        playerSyncs.Clear();
+        ships.Clear();
+        shipIdToPlayers.Clear();
+        playerToShip.Clear();
     }
 }

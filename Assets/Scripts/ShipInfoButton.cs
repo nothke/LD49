@@ -24,7 +24,7 @@ public class ShipInfoButton : MonoBehaviour
         capacity.text = string.Format("{0} / {1} Players", players, maxPlayers);
 
         button.interactable = players < maxPlayers;
-        Debug.Log(players + " /" + maxPlayers);
+        //Debug.Log(players + " /" + maxPlayers);
     }
 
     public void ButtonPressed() {

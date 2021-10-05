@@ -75,6 +75,9 @@ public class PlayerFeet : MonoBehaviour
                     //moveTotalDistance = Vector2.Distance(fromPosR, toPosR);
 
                     toRotR = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)) * Quaternion.AngleAxis(pointOutFeetAngle, Vector3.up);
+                    if (float.IsNaN(toRotR.x))
+                        toRotR = fromRotR;
+
                     justMoved = true;
                 }
                 else if (!leftFeetMoving)
@@ -96,6 +99,8 @@ public class PlayerFeet : MonoBehaviour
                 //moveTotalDistance = Vector2.Distance(fromPosL, toPosL);
 
                 toRotL = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)) * Quaternion.AngleAxis(-pointOutFeetAngle, Vector3.up);
+                if (float.IsNaN(toRotL.x))
+                    toRotL = fromRotL;
                 justMoved = true;
             }
             else if (!rightFeetMoving)
@@ -167,6 +172,8 @@ public class PlayerFeet : MonoBehaviour
         toPosR = pos + playerRight * distanceBetweenFeet * 0.5f + direction * forwardStep;
         fromRotR = toRotR;
         toRotR = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)) * Quaternion.AngleAxis(pointOutFeetAngle, Vector3.up);
+        if (float.IsNaN(toRotR.x))
+            toRotR = fromRotR;
 
         moveDistance = 0f;
         moveTotalDistance = Vector2.Distance(fromPosR, toPosR);
@@ -179,6 +186,8 @@ public class PlayerFeet : MonoBehaviour
         toPosL = pos - playerRight * distanceBetweenFeet * 0.5f + direction * forwardStep;
         fromRotL = toRotL;
         toRotL = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)) * Quaternion.AngleAxis(-pointOutFeetAngle, Vector3.up);
+        if (float.IsNaN(toRotL.x))
+            toRotL = fromRotL;
 
         moveDistance = 0f;
         moveTotalDistance = Vector2.Distance(fromPosL, toPosL);
