@@ -669,7 +669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95308c24e0e4d3c4fa1a0fbb7ed8aea8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 3
   waterShader: {fileID: 0}
 --- !u!4 &432481997
 Transform:
