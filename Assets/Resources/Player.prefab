@@ -1045,6 +1045,7 @@ MonoBehaviour:
   bendForceForward: 0
   cloth: {fileID: 0}
   maxForce: 1000
+  airOnly: 0
 --- !u!65 &7147421863713509139
 BoxCollider:
   m_ObjectHideFlags: 0

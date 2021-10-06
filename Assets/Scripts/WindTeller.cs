@@ -19,6 +19,7 @@ public class WindTeller : MonoBehaviour
         Vector3 endPos = Wind.Velocity - velocity;
         endPos = endPos.normalized * length;
 
+        endPos = transform.InverseTransformDirection(endPos);
 
         const int COUNT = 4;
         for (int i = 1; i < 4; i++)

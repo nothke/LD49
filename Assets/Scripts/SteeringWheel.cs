@@ -9,8 +9,8 @@ public class SteeringWheel : MonoBehaviour
 
     public float wheelRadius = 0.5f;
 
-    float smoothAngle = 0;
-    float smoothAngleVelo;
+    //float smoothAngle = 0;
+    //float smoothAngleVelo;
 
     void Update()
     {
