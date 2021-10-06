@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShipTestInput : MonoBehaviour
 {
-    ShipController _ship;
+    public ShipController _ship;
     ShipController ship { get { if (!_ship) _ship = GetComponent<ShipController>(); return _ship; } }
 
     void Update()

@@ -30,8 +30,12 @@ TODO:
 	- ⏹ Better wave function (see Gerstner wave)
 
 	- ⏹ Display ship number (shipId) on actual ship
-	- ⏹ Camera should be heighter
+	- ⏹ Camera focus should be higher
 	- ⏹ Tighten/loosen
+	- ⏹ Random sails skins
+	- ⏹ Splash particles should only activate after some minimum speed
+	- ⏹ Cat wire harness
+	- ⏹ Change wind speed and reballance everything
 
 # Art:
 

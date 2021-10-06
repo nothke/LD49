@@ -12,12 +12,17 @@ public class Sail : MonoBehaviour
     public Vector3 Normal => transform.forward;
 
     Vector3 force;
+    Vector3 windVelocity;
 
     public float bendForceForward = 0;
 
     public Cloth cloth;
 
     public float maxForce;
+
+    public bool airOnly;
+
+    static readonly Vector3 zero;
 
     private void Awake()
     {
@@ -32,10 +37,10 @@ public class Sail : MonoBehaviour
 
         Vector3 sailVelocity = rb.GetPointVelocity(sailPos);
 
-        Vector3 windVelocity =
+        windVelocity =
             underwater ?
-                -sailVelocity * Water.Density :
-                -sailVelocity * 0.1f + Wind.Velocity;
+                (!airOnly ? -sailVelocity * Water.Density : zero) :
+                -sailVelocity + Wind.Velocity; // * 0.1f
 
         float area = width * height;
 
@@ -92,6 +97,9 @@ public class Sail : MonoBehaviour
 
             Gizmos.color = Color.red;
             Gizmos.DrawRay(transform.position, force);
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(transform.position, windVelocity);
         }
     }
 }
