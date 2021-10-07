@@ -23,7 +23,6 @@ public class WheelInteractable : Interactable
         // These are the positions of the hands in radians in the wheel
         leftHand = handStartFactor + Mathf.PI * 0.5f;
         rightHand = -handStartFactor + Mathf.PI * 0.5f;
-        ShipUI.instance.EnableWheelSlider(true);
     }
 
     public override void GetHandPositions(out Vector3 leftHand, out Vector3 rightHand, float leftHandFactor, float rightHandFactor)
@@ -40,5 +39,16 @@ public class WheelInteractable : Interactable
     public override void OnHighlighted()
     {
         ShipUI.instance.SetInteractionText("Hold ACTION and < > to steer");
+    }
+
+    public override void OnStartedInteracting()
+    {
+        ShipUI.instance.SetInteractionText("");
+        ShipUI.instance.EnableWheelSlider(true);
+    }
+
+    public override void OnEndedInteracting()
+    {
+        ShipUI.instance.EnableWheelSlider(false);
     }
 }

@@ -20,11 +20,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public float pushSpeed = 5f;
     public float boatPushWeight = 10f;
 
-#if !NEW_INTERACTION
     bool interacting = false;
-#else
-    bool interacting = false;
-#endif
 
 #if !NEW_INTERACTION
     ShipInteractables.InteractingThing interactingThing = ShipInteractables.InteractingThing.Rope;
@@ -41,8 +37,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
     //[Header("Feet")]
     PlayerFeet feet;
-
-
+    
     Vector3 gizmoDebugPos = Vector3.zero;
 
     float interactingAnimationTime = 0;
@@ -96,10 +91,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 float inputY = Input.GetAxis("Vertical");
                 float inputInteract = Input.GetAxis("Submit");
 
-
 #if NEW_INTERACTION
                 {
-                    Interactable interactableInRange = 
+                    Interactable interactableInRange =
                         interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up);
 
                     bool startedInteracting = inputInteract > 0 && !interacting;
@@ -111,6 +105,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         {
                             interactable = interactableInRange;
                             interacting = true;
+                            interactable.OnStartedInteracting();
 
                             handStartFactor = interactable.GetHandStartFactor();
                             interactable.GetHandStartFactors(
@@ -133,11 +128,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                     {
                         interactingAnimationTime = 0;
 
+                        interactable.OnEndedInteracting();
                         interactable = null;
                         interacting = false;
                     }
 
-                    // During interaction
+                    // Body position handling
+
                     if (interactable && interacting)
                     {
                         Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition(leftHandHoldStartFactor, rightHandHoldStartFactor);
@@ -154,7 +151,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                     }
                     else
                     {
-                        // Handle player movement
+                        // Player movement
+
                         Vector3 camRight = Camera.main.transform.right;
                         Vector3 camForward = Camera.main.transform.forward;
                         //camForward.y = 0;
@@ -325,13 +323,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             instantVelocityAverage = instantVelocityAverage * 0.3f + instantVelocity * 0.7f;
 
 #if NEW_INTERACTION
-            bool _interacting = interacting;
+            bool _interacting = interacting && interactable;
 #else
             bool _interacting = interacting && interactingThing != ShipInteractables.InteractingThing.Nothing;
 #endif
 
             Vector2 facingDirection = _interacting ?
-                Vector2.up : instantVelocityAverage.sqrMagnitude > 0.001f? instantVelocityAverage.normalized : lastFacingDirection;
+                Vector2.up : instantVelocityAverage.sqrMagnitude > 0.001f ? instantVelocityAverage.normalized : lastFacingDirection;
 
             facingDirection = Vector2.Lerp(lastFacingDirection, facingDirection, 20f * Time.deltaTime);
             facingDirection.Normalize();
@@ -343,7 +341,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             ////////////////
             // Body parts //
             ////////////////
-            
+
             // Hands
             restRightHandPos = Vector3.Lerp(restRightHandPos, restRightHand.position, Time.deltaTime * 5f);
             restLeftHandPos = Vector3.Lerp(restLeftHandPos, restLeftHand.position, Time.deltaTime * 5f);
@@ -366,11 +364,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             if (interacting)
             {
                 if (interactable)
+                {
                     interactable.GetHandPositions(
                         out wantedLeftHandPos, out wantedRightHandPos,
                         leftHandHoldStartFactor, rightHandHoldStartFactor);
+                }
                 else
                 {
+                    // raise hands in the air
                     wantedLeftHandPos = restLeftHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * leftHandHoldStartFactor) - transform.right * 0.3f;
                     wantedRightHandPos = restRightHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * -leftHandHoldStartFactor) + transform.right * 0.3f;
                 }
@@ -454,7 +455,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         {
             pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
 
-            Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = playArea.areaCenter.transform;
+            Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = s.visualShip.cameraFocus;
 
             if (ShipUI.instance)
             {
@@ -512,7 +513,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public bool IsInteracting() {
+    public bool IsInteracting()
+    {
         return interacting;
     }
 
@@ -532,11 +534,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             Debug.LogError("Attempting to set an id that is out of range of interactables, you might be running a wrong version with a different number of interactables?");
     }
 
-    public float InteractingInput() {
+    public float InteractingInput()
+    {
         return interactingInput;
     }
 
-    void OnDrawGizmos() {
+    void OnDrawGizmos()
+    {
 #if NEW_INTERACTION
         bool _interacting = interacting;
 #else

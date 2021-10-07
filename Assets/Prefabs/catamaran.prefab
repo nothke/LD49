@@ -1475,7 +1475,7 @@ MonoBehaviour:
   mastTurningSpeed: 50
   mast: {fileID: 1957587829814945565}
   playableArea: {fileID: 239618941}
-  cameraFocus: {fileID: 0}
+  cameraFocus: {fileID: 1820376745}
   interactableSteeringWheel: {fileID: 0}
 --- !u!54 &5577074632021696231
 Rigidbody:

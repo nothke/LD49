@@ -44,5 +44,4 @@ public class MainSailAngleInteractable : Interactable
     {
         ShipUI.instance.SetInteractionText("Hold ACTION and < > to turn the sail");
     }
-
 }

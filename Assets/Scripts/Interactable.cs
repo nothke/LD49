@@ -21,6 +21,9 @@ public abstract class Interactable : MonoBehaviour
 
     public virtual void OnHighlighted() { }
 
+    public virtual void OnStartedInteracting() { }
+    public virtual void OnEndedInteracting() { }
+
     public void Highlight()
     {
         Facepunch.Highlight.ClearAll();
