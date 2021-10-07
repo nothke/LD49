@@ -140,7 +140,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                     // During interaction
                     if (interactable && interacting)
                     {
-                        Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition();
+                        Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition(leftHandHoldStartFactor, rightHandHoldStartFactor);
 
                         gizmoDebugPos = desiredBodyPosition;
 
@@ -362,10 +362,19 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             Vector3 wantedRightHandPos = restRightHandPos;
 
 #if NEW_INTERACTION
-            if (interactable && interacting)
-                interactable.GetHandPositions(
-                    out wantedLeftHandPos, out wantedRightHandPos,
-                    leftHandHoldStartFactor, rightHandHoldStartFactor);
+            // Hand positions
+            if (interacting)
+            {
+                if (interactable)
+                    interactable.GetHandPositions(
+                        out wantedLeftHandPos, out wantedRightHandPos,
+                        leftHandHoldStartFactor, rightHandHoldStartFactor);
+                else
+                {
+                    wantedLeftHandPos = restLeftHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * leftHandHoldStartFactor) - transform.right * 0.3f;
+                    wantedRightHandPos = restRightHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * -leftHandHoldStartFactor) + transform.right * 0.3f;
+                }
+            }
 #else
 
             if (interacting)

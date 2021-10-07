@@ -32,7 +32,7 @@ public class WheelInteractable : Interactable
         rightHand = wheel.WheelPositionForAngle(rightHandFactor);
     }
 
-    public override Vector3 GetTargetBodyPosition()
+    public override Vector3 GetTargetBodyPosition(float leftHandStartFactor, float rightHandStartFactor)
     {
         return wheel.transform.position - wheel.transform.forward * 0.5f;
 
