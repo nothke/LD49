@@ -68,8 +68,8 @@ RectTransform:
   m_Father: {fileID: 618433313}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -180,7 +180,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -275,7 +275,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &799767775
 RectTransform:
   m_ObjectHideFlags: 0
@@ -727,6 +727,7 @@ GameObject:
   - component: {fileID: 1060222766535452081}
   - component: {fileID: 1060222766535452080}
   - component: {fileID: 3491401481597473417}
+  - component: {fileID: 1164869465}
   m_Layer: 5
   m_Name: HUD Canvas
   m_TagString: Untagged
@@ -863,13 +864,31 @@ MonoBehaviour:
   speedText: {fileID: 1060222766042546611}
   shipIdText: {fileID: 1211194726847613608}
   interactionText: {fileID: 7512130976171705713}
+  steeringWheelSlider: {fileID: 799767776}
   connectionInfo: {fileID: 1473041756160381688}
   introPanel: {fileID: 9207748515380129888}
   ingamePanel: {fileID: 3592105542678314614}
   inRoomPanel: {fileID: 4549777218451625673}
   shipInfoPrefab: {fileID: 8422089378145883441, guid: 0744adc3c05f50045a96e1b5f0bcb933, type: 3}
   shipInfoPanel: {fileID: 3385429877866766482}
-  steeringWheelSlider: {fileID: 799767776}
+--- !u!114 &1164869465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060222766535452083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b5c39de5686dc3478f54a5e9051449b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectionInfo: {fileID: 1473041756160381688}
+  introPanel: {fileID: 9207748515380129888}
+  ingamePanel: {fileID: 3592105542678314614}
+  inRoomPanel: {fileID: 4549777218451625673}
+  shipInfoPrefab: {fileID: 8422089378145883441, guid: 0744adc3c05f50045a96e1b5f0bcb933, type: 3}
+  shipInfoPanel: {fileID: 3385429877866766482}
 --- !u!1 &1060222766745475082
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,8 +1278,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3491401481597473417}
-        m_TargetAssemblyTypeName: ShipUI, Assembly-CSharp
+      - m_Target: {fileID: 1164869465}
+        m_TargetAssemblyTypeName: ConnectionUI, Assembly-CSharp
         m_MethodName: RandomShipPressed
         m_Mode: 1
         m_Arguments:
@@ -2890,8 +2909,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3491401481597473417}
-        m_TargetAssemblyTypeName: ShipUI, Assembly-CSharp
+      - m_Target: {fileID: 1164869465}
+        m_TargetAssemblyTypeName: ConnectionUI, Assembly-CSharp
         m_MethodName: NewShipPressed
         m_Mode: 1
         m_Arguments:

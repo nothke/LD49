@@ -37,8 +37,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     void Connect()
     {
-        ShipUI.instance.ShowIntroPanel();
-        ShipUI.instance.LogConnectionInfo(string.Format("Game Version {0}, connecting to server..", gameVersion));
+        ConnectionUI.instance.ShowIntroPanel();
+        ConnectionUI.instance.LogConnectionInfo(string.Format("Game Version {0}, connecting to server..", gameVersion));
         PhotonNetwork.GameVersion = gameVersion;
         PhotonNetwork.ConnectUsingSettings();
     }
@@ -70,13 +70,13 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     #region photoncallbacks
     public override void OnConnectedToMaster()
     {
-        ShipUI.instance.LogConnectionInfo(string.Format("Connected to server, fetching rooms.."));
+        ConnectionUI.instance.LogConnectionInfo(string.Format("Connected to server, fetching rooms.."));
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
-        ShipUI.instance.LogConnectionInfo(string.Format("Joining room.."));
+        ConnectionUI.instance.LogConnectionInfo(string.Format("Joining room.."));
         if (!wantOwnRoom)
             PhotonNetwork.JoinRandomRoom();
         else
@@ -85,7 +85,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        ShipUI.instance.LogConnectionInfo(string.Format("Connected to room!"));
+        ConnectionUI.instance.LogConnectionInfo(string.Format("Connected to room!"));
         Debug.Log("Connected to room");
 
         ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
@@ -101,7 +101,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             Debug.LogError("No room creation time found on joined room!, you better be the one who created the room..");
         }
 
-        ShipUI.instance.ShowInRoomPanel();
+        ConnectionUI.instance.ShowInRoomPanel();
     }
 
 
@@ -111,7 +111,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             returnCode == Photon.Realtime.ErrorCode.ServerFull)
         {
             Debug.LogError(string.Format("Failed to join random room, server seems full :(, code: {0}, message: {1}", returnCode, message));
-            ShipUI.instance.LogConnectionInfo(string.Format("Failed to join random room, server seems full :(, code: {0}, message: {1}", returnCode, message));
+            ConnectionUI.instance.LogConnectionInfo(string.Format("Failed to join random room, server seems full :(, code: {0}, message: {1}", returnCode, message));
 
             if (retryConnectionCoroutine == null)
             {
@@ -120,7 +120,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            ShipUI.instance.LogConnectionInfo(string.Format("Nobody seems online, creating room.."));
+            ConnectionUI.instance.LogConnectionInfo(string.Format("Nobody seems online, creating room.."));
             PhotonNetwork.CreateRoom(roomName, new RoomOptions { MaxPlayers = 20 });
         }
     }
@@ -132,12 +132,12 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
             returnCode == Photon.Realtime.ErrorCode.ServerFull)
         {
             Debug.LogError(string.Format("Failed to create room, server seems full :(, code: {0}, message: {1}", returnCode, message));
-            ShipUI.instance.LogConnectionInfo(string.Format("Failed to create room, server seems full :(, code: {0}, message: {1}", returnCode, message));
+            ConnectionUI.instance.LogConnectionInfo(string.Format("Failed to create room, server seems full :(, code: {0}, message: {1}", returnCode, message));
         }
         else
         {
             Debug.LogError(string.Format("Failed to create room, code: {0}, message: {1}", returnCode, message));
-            ShipUI.instance.LogConnectionInfo(string.Format("Failed to create room, code: {0}, message: {1}", returnCode, message));
+            ConnectionUI.instance.LogConnectionInfo(string.Format("Failed to create room, code: {0}, message: {1}", returnCode, message));
 
             if (retryConnectionCoroutine == null)
             {
@@ -149,7 +149,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         Debug.Log("Created room at time "+PhotonNetwork.Time);
-        ShipUI.instance.LogConnectionInfo(string.Format("Created room!"));
+        ConnectionUI.instance.LogConnectionInfo(string.Format("Created room!"));
 
         ExitGames.Client.Photon.Hashtable rt = new ExitGames.Client.Photon.Hashtable();
         rt[START_ROOM_TIME_KEY] = roomCreatedTime = PhotonNetwork.Time;
@@ -159,7 +159,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     IEnumerator WaitABitAndTryToConnectAgain()
     {
         Debug.Log("Retrying connection in 2 seconds..");
-        ShipUI.instance.LogConnectionInfo("Retrying connection in 2 seconds..");
+        ConnectionUI.instance.LogConnectionInfo("Retrying connection in 2 seconds..");
 
         yield return new WaitForSecondsRealtime(2f);
 
@@ -181,19 +181,19 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        ShipUI.instance.ClearConnectionInfo();
+        ConnectionUI.instance.ClearConnectionInfo();
         if (kickedForInactivity)
         {
             Debug.LogWarning("Kicked for inactivity");
 
-            ShipUI.instance.ShowIntroPanel();
-            ShipUI.instance.LogConnectionInfo(string.Format("Will try to reconnect on return\nKicked for inactivity after {0} seconds AFK", maxAFKtime));
+            ConnectionUI.instance.ShowIntroPanel();
+            ConnectionUI.instance.LogConnectionInfo(string.Format("Will try to reconnect on return\nKicked for inactivity after {0} seconds AFK", maxAFKtime));
             kickedForInactivity = false;
         }
         else if (cause != DisconnectCause.DisconnectByClientLogic)
         {
             Debug.LogError(string.Format("Disconnected! cause: {0}, reconnecting..", cause));
-            ShipUI.instance.LogConnectionInfo(string.Format("Disconnected! cause: {0}, reconnecting..", cause));
+            ConnectionUI.instance.LogConnectionInfo(string.Format("Disconnected! cause: {0}, reconnecting..", cause));
 
             if (retryConnectionCoroutine == null)
             {

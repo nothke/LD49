@@ -10,7 +10,7 @@ public class ShipInfoButton : MonoBehaviour
     public TMP_Text buttonText;
     public TMP_Text capacity;
     public Button button;
-    public ShipUI shipUi;
+    public ConnectionUI shipUi;
     public LayoutElement layoutElement;
 
     int shipId;

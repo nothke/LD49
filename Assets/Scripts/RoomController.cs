@@ -88,7 +88,7 @@ public class RoomController : MonoBehaviourPunCallbacks
         ht[PlayerSync.PLAYER_SHIP] = shipId;
         PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
 
-        ShipUI.instance.ShowIngamePanel();
+        ConnectionUI.instance.ShowIngamePanel();
     }
 
     int InstantiateNewShip() {
