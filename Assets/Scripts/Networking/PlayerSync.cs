@@ -310,8 +310,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         {
             pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
 
-            feet.Init(pos, Vector2.up);
-
             Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = playArea.areaCenter.transform;
 
             if (ShipUI.instance)
@@ -320,6 +318,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId);
             }
         }
+
+        feet.Init(pos, Vector2.up);
     }
 
     Vector2 receivedPos;
