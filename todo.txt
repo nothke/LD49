@@ -1,11 +1,11 @@
 LDJAM 49
-The multiplayer boat racing game!
+# Catamaran Cats
+- The multiplayer boat racing game!
 
 TODO: 
 
-# Implementation:
+# Jam:
 
-- Physics:
 	- ✅ Cube that turns around and pushed by force
 	- ✅ Sail and fins that work with velocity
 	- ✅ Wind that pushes the sail
@@ -13,7 +13,7 @@ TODO:
 	- ✅ Buoyancy
 	- ✅ Water wave
 	- ✅ Movement on the ship - Ferran
-	- ⏹ Drag from submerged things
+	- ✅ Drag from submerged things
 	- ✅ Speedometer
 	- ✅ Interaction with the boat and input calculation - Ferran
 	- ✅ Legs & body rotation snapping to the deck - Ferran
@@ -21,21 +21,29 @@ TODO:
 	- ✅ Sync buoys position and rotation - Ferran
 	- ✅ Check Collision of ships and things - Ferran
 	- ✅ UI choices on connected to room - Ferran
+	- ✅ Submerging the sail goes into space
+	- ✅ Water reflection
+	- ✅ Splash effects
+	- ✅ Wake effect
+
+# PostJam:
 	- ⏹ Loopable world
-	- ⏹ Submerging the sail goes into space
-
-	- ⏹ Water reflection
-	- ⏹ Splash effects
-	- ⏹ Wake effect
 	- ⏹ Better wave function (see Gerstner wave)
-
 	- ⏹ Display ship number (shipId) on actual ship
 	- ⏹ Camera focus should be higher
 	- ⏹ Tighten/loosen
+	- ⏹ Raising and lowering the sail
 	- ⏹ Random sails skins
 	- ⏹ Splash particles should only activate after some minimum speed
 	- ⏹ Cat wire harness
-	- ⏹ Change wind speed and reballance everything
+	- ⏹ Change wind speed and rebalance everything
+	- ⏹ Cat ducking below the sail boom
+	- ⏹ Move connection panel away from ShipUI
+	- ⏹ Improve the hood
+
+# Fixes:
+ - ⏹ Fix input apeparing jaggy on remote players
+ - ⏹ CRITICAL fix movement when ship is tilted input appearing jaggy on remote players
 
 # Art:
 
@@ -44,16 +52,12 @@ TODO:
 	- ✅ Sail booms
 	- ⏹ Net should be double sided
 - ✅ Sails
-- ⏹ Lighthouse
+- ✅ Lighthouse
 - ⏹ Buoy
-- ⏹ Rocks
+- ✅ Rocks
 - ⏹ Dock
 
-- ⏹ Characters
-	- ⏹ Coat
-	- ⏹ Life jacket
-	- ⏹ Life jacket
+- ✅ Characters
+	- ✅ Coat
+	- ✅ Life jacket
 
-# Fixes:
- - ⏹ Fix input apeparing jaggy on remote players
- - ⏹ CRITICAL fix movement when ship is tilted input apeparing jaggy on remote players

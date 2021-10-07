@@ -673,7 +673,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 2.22
   height: 7.91
-  forceMultiplier: 0.1
+  forceMultiplier: 0.2
   bendForceForward: 0
   cloth: {fileID: 5577074631560640783}
   maxForce: 0
@@ -1491,7 +1491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e4c853392150749b716fe90c421022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minMaxX: {x: -3.3, y: 3.3}
+  minMaxX: {x: -3.6, y: 3.6}
   minMaxZ: {x: -4.95, y: 2.83}
   areaCenter: {fileID: 239618941}
 --- !u!114 &7960303490634594586
@@ -2047,7 +2047,7 @@ GameObject:
   - component: {fileID: 3999334930501890014}
   - component: {fileID: 2064394125500223815}
   m_Layer: 0
-  m_Name: main_sail (1)
+  m_Name: jib_sail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

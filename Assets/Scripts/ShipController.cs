@@ -63,7 +63,11 @@ public class ShipController : MonoBehaviour
     public float SpeedKnots()
     {
         const float MS2KNOTS = 1.94384f;
-        return rb.velocity.magnitude * MS2KNOTS;
+
+        Vector3 horizontalVelo = rb.velocity;
+        horizontalVelo.y = 0;
+
+        return horizontalVelo.magnitude * MS2KNOTS;
     }
 
     private void FixedUpdate()
