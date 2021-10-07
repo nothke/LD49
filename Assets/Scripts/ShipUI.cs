@@ -38,9 +38,12 @@ public class ShipUI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float speed = ship.SpeedKnots();
-        acceleration = (speed - prevSpeed) / Time.deltaTime * acceleartionScale;
-        prevSpeed = speed;
+        if (ship)
+        {
+            float speed = ship.SpeedKnots();
+            acceleration = (speed - prevSpeed) / Time.deltaTime * acceleartionScale;
+            prevSpeed = speed;
+        }
     }
 
     void Update()

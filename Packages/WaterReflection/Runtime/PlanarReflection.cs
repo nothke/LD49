@@ -83,10 +83,7 @@ namespace IFL.Rendering.Water
             reflectCamera.depth = -1000;
 
             if (!reflectCamera.targetTexture)
-            {
-                Debug.Log("Camera texture");
                 CreateTextureFor(cam, reflectCamera);
-            }
 
             SetReflectionCameraSettings(reflectCamera);
 
@@ -102,7 +99,7 @@ namespace IFL.Rendering.Water
             int width = Mathf.FloorToInt(cam.pixelWidth * TEX_SCALE);
             int height = Mathf.FloorToInt(cam.pixelHeight * TEX_SCALE);
 
-            Debug.Log("Created texture: w: " + width + ", h: " + height);
+            //Debug.Log("Created texture: w: " + width + ", h: " + height);
 
             var colorFormat = cam.allowHDR ? RenderTextureFormat.ARGBFloat : RenderTextureFormat.Default;
 
