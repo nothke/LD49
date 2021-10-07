@@ -35,7 +35,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public Transform restRightHand, restLeftHand;
     Vector3 restRightHandPos, restLeftHandPos;
 
-    //[Header("Feet")]
     PlayerFeet feet;
     
     Vector3 gizmoDebugPos = Vector3.zero;
@@ -53,9 +52,11 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     Interactable interactable;
     float handStartFactor;
 
+    Vector2 receivedPos;
+    bool wasInteracting = false;
+    
     public Interactable CurrentlyInteractingWith => interactable;
 
-    // Start is called before the first frame update
     void Start()
     {
         if (!photonView.IsMine)
@@ -80,7 +81,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         feet = GetComponent<PlayerFeet>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (playArea != null)
@@ -466,9 +466,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
         feet.Init(pos, Vector2.up);
     }
-
-    Vector2 receivedPos;
-    bool wasInteracting = false;
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
