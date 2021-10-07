@@ -1,9 +1,24 @@
 fileFormatVersion: 2
-guid: 96e84d4f0fab67a47b2424cdb44418e9
+guid: e4b68b204a444ef47ba3da0e2edd555b
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buoy
+    second: {fileID: 2100000, guid: fc61041659ee3484895a2564483fee5d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buoy_light
+    second: {fileID: 2100000, guid: bc954ed38822c9542889e4e9a60adc45, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buoy_rust
+    second: {fileID: 2100000, guid: 508f65c1c973b3e418c1a9ef6f4e7d19, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -65,8 +80,8 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 26
-    normalImportMode: 1
+    normalSmoothAngle: 60
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
