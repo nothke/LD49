@@ -209,7 +209,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
             remoteShip.rb.velocity = receivedVelocity;
             remoteShip.rb.angularVelocity = receivedAngularVelocity;
 
-            //shipInput.UpdateInput(shipId, ref remoteShip.inputX, ref remoteShip.inputY, ref remoteShip.inputR);
+            shipInput.UpdateInput(shipId, ref remoteShip.inputX, ref remoteShip.inputY, ref remoteShip.inputR);
             remoteShip.UpdateWithCurrentInput(deltaTime);
 
             remoteShip.gameObject.SetActive(true);

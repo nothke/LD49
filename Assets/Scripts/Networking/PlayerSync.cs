@@ -142,7 +142,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
                     pos += shipRelativeInput * speed * Time.deltaTime;
 
-                    interactingInput = 0;
+                    interactingInput = Mathf.MoveTowards(interactingInput, 0, Time.deltaTime * 3f);
                 }
                 else {
                     Vector3 wantedInteractingPos = Vector3.zero;

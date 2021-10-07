@@ -31,7 +31,8 @@ public class Water : MonoBehaviour
         if (!PhotonNetwork.IsConnected)
             time = Time.time;
 
-        return Sin(time + pos.z * -1.1f) * 0.2f;
+        
+        return Sin(time + pos.z * -0.7f + Sin(time * 0.5f + pos.x * 0.2f)) * 0.23f + (Sin(time * 0.3f + pos.z * -0.07f) * Sin(time * 0.4f + pos.x * 0.08f)) * 0.7f;
     }
 
     private void Update()
