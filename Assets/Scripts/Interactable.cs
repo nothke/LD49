@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour
 {
+    public int id { get; set; } // index in interactables array, set automatically
+
     public Renderer[] highlightRenderers;
 
     public enum Type { NonSpecific, Rope, Wheel };

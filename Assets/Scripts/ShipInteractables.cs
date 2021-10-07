@@ -23,6 +23,14 @@ public class ShipInteractables : MonoBehaviour
         RightWheel
     }
 
+    private void Awake()
+    {
+        for (int i = 0; i < interactables.Length; i++)
+        {
+            interactables[i].id = i;
+        }
+    }
+
     public Interactable InInteractableReach(Vector3 pos)
     {
         float minDistance = Mathf.Infinity;

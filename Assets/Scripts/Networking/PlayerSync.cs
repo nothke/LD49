@@ -28,8 +28,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
 #if !NEW_INTERACTION
     ShipInteractables.InteractingThing interactingThing = ShipInteractables.InteractingThing.Rope;
-#else
-    int interactableId = -1;
 #endif
 
     float interactingInput = 0;
@@ -47,6 +45,20 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
     Vector3 gizmoDebugPos = Vector3.zero;
 
+    float interactingAnimationTime = 0;
+    Vector2 lastFramePosition;
+    Vector2 instantVelocityAverage;
+    Vector2 lastFacingDirection = Vector2.up;
+
+#if !NEW_INTERACTION
+    ShipInteractables.InteractingThing lastCloseTo;
+#endif
+
+    Interactable lastInteractableInRange;
+    Interactable interactable;
+    float handStartFactor;
+
+    public Interactable CurrentlyInteractingWith => interactable;
 
     // Start is called before the first frame update
     void Start()
@@ -72,19 +84,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
         feet = GetComponent<PlayerFeet>();
     }
-
-    float interactingAnimationTime = 0;
-    Vector2 lastFramePosition;
-    Vector2 instantVelocityAverage;
-    Vector2 lastFacingDirection = Vector2.up;
-
-    ShipInteractables.InteractingThing lastCloseTo;
-
-    Interactable lastInteractableInRange;
-    Interactable interactable;
-    float handStartFactor;
-
-    public Interactable CurrentlyInteractingWith => interactable;
 
     // Update is called once per frame
     void Update()
@@ -470,7 +469,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             if (interacting)
             {
 #if NEW_INTERACTION
-                stream.SendNext(interactableId);
+                stream.SendNext(interactable ? interactable.id : -1);
 #else
                 stream.SendNext(interactingThing);
 #endif
@@ -487,7 +486,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             if (interacting)
             {
 #if NEW_INTERACTION
-                interactableId = (int)stream.ReceiveNext();
+                SetInteractableFromId((int)stream.ReceiveNext());
 #else
                 interactingThing = (ShipInteractables.InteractingThing)stream.ReceiveNext();
 #endif
@@ -513,6 +512,16 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         return interactingThing;
     }
 #endif
+
+    void SetInteractableFromId(int id)
+    {
+        if (id < 0)
+            interactable = null;
+        else if (id < interactables.interactables.Length)
+            interactable = interactables.interactables[id];
+        else
+            Debug.LogError("Attempting to set an id that is out of range of interactables, you might be running a wrong version with a different number of interactables?");
+    }
 
     public float InteractingInput() {
         return interactingInput;
