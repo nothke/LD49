@@ -40,6 +40,9 @@ public class MainSailAngleInteractable : Interactable
         return bodyPos;
     }
 
-
+    public override void OnHighlighted()
+    {
+        ShipUI.instance.SetInteractionText("Hold ACTION and < > to turn the sail");
+    }
 
 }

@@ -19,6 +19,8 @@ public abstract class Interactable : MonoBehaviour
     public abstract Vector3 GetTargetBodyPosition(float leftHandStartFactor, float rightHandStartFactor);
     public abstract void GetHandPositions(out Vector3 leftHand, out Vector3 rightHand, float leftHandFactor, float rightHandFactor);
 
+    public virtual void OnHighlighted() { }
+
     public void Highlight()
     {
         Facepunch.Highlight.ClearAll();
@@ -29,5 +31,7 @@ public abstract class Interactable : MonoBehaviour
         }
 
         Facepunch.Highlight.Rebuild();
+
+        OnHighlighted();
     }
 }

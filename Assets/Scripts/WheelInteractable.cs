@@ -35,6 +35,10 @@ public class WheelInteractable : Interactable
     public override Vector3 GetTargetBodyPosition(float leftHandStartFactor, float rightHandStartFactor)
     {
         return wheel.transform.position - wheel.transform.forward * 0.5f;
+    }
 
+    public override void OnHighlighted()
+    {
+        ShipUI.instance.SetInteractionText("Hold ACTION and < > to steer");
     }
 }

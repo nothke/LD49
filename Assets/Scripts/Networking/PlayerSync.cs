@@ -179,13 +179,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                     // On got close to
                     if (interactableInRange != lastInteractableInRange)
                     {
-                        //var ship = RoomController.i.ships[shipId];
                         if (interactableInRange)
                             interactableInRange.Highlight();
                         else
                         {
                             Facepunch.Highlight.ClearAll();
                             Facepunch.Highlight.Rebuild();
+                            ShipUI.instance.SetInteractionText("");
                         }
                     }
 
