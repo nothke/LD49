@@ -7,3 +7,4 @@
 *.MP3 filter=lfs diff=lfs merge=lfs -text
 *terrain.asset filter=lfs diff=lfs merge=lfs -text
 *Terrain.asset filter=lfs diff=lfs merge=lfs -text
+Builds/Catamaran[[:space:]]Cats_mac_jambuild0.2.zip filter=lfs diff=lfs merge=lfs -text
