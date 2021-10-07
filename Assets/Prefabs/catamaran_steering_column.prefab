@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 485619434369761452}
   - component: {fileID: 2171420794392939403}
   - component: {fileID: 7022553929602053717}
+  - component: {fileID: 2689779933016590786}
   m_Layer: 0
   m_Name: catamaran_steering_wheel
   m_TagString: Untagged
@@ -95,9 +96,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  steeringLockAngle: 360
-  interactionRadius: 1.5
   wheelRadius: 0.41
+--- !u!114 &2689779933016590786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2818513518469439573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8e88e87b6a86d740bd126958db83c21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightRenderers:
+  - {fileID: 2171420794392939403}
+  - {fileID: 6165572679162144105}
+  wheel: {fileID: 7022553929602053717}
 --- !u!1 &5026323867048946994
 GameObject:
   m_ObjectHideFlags: 0

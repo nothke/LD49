@@ -30,12 +30,15 @@ public class ShipInteractables : MonoBehaviour
         foreach (var interactable in interactables)
         {
             interactable.GetClosestPoint(pos, out float distance);
-            if (minDistance > distance)
+            if (distance < minDistance)
             {
                 minDistance = distance;
                 closestInteractable = interactable;
             }
         }
+
+        if (minDistance > interactionReach)
+            return null;
 
         return closestInteractable;
     }

@@ -1,4 +1,4 @@
-//#define NEW_INTERACTION
+#define NEW_INTERACTION
 
 using System.Collections;
 using System.Collections.Generic;
@@ -20,8 +20,18 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     public float pushSpeed = 5f;
     public float boatPushWeight = 10f;
 
+#if !NEW_INTERACTION
     bool interacting = false;
+#else
+    bool interacting = false;
+#endif
+
+#if !NEW_INTERACTION
     ShipInteractables.InteractingThing interactingThing = ShipInteractables.InteractingThing.Rope;
+#else
+    int interactableId = -1;
+#endif
+
     float interactingInput = 0;
     float leftHandHoldStartFactor = 0f;
     float rightHandHoldStartFactor = 0f;
@@ -74,6 +84,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     Interactable interactable;
     float handStartFactor;
 
+    public Interactable CurrentlyInteractingWith => interactable;
+
     // Update is called once per frame
     void Update()
     {
@@ -88,7 +100,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
 #if NEW_INTERACTION
                 {
-                    Interactable interactableInRange = interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up);
+                    Interactable interactableInRange = 
+                        interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up);
 
                     bool startedInteracting = inputInteract > 0 && !interacting;
                     bool endedInteracting = inputInteract <= 0.01f && interacting;
@@ -98,12 +111,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         if (interactableInRange)
                         {
                             interactable = interactableInRange;
+                            interacting = true;
 
                             handStartFactor = interactable.GetHandStartFactor();
                             interactable.GetHandStartFactors(
                                 out leftHandHoldStartFactor,
                                 out rightHandHoldStartFactor,
                                 handStartFactor);
+
+                            Debug.Log("Started interacting with: " + interactable);
                         }
                         else // if no interactables in range
                         {
@@ -112,13 +128,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                             ShipUI.instance.EnableWheelSlider(false);
                         }
 
-                        interacting = true;
                         interactingAnimationTime = 0;
                     }
                     else if (endedInteracting)
                     {
-                        interacting = false;
                         interactingAnimationTime = 0;
+
+                        interactable = null;
+                        interacting = false;
                     }
 
                     // During interaction
@@ -157,21 +174,24 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
                         interactingInput = 0;
                     }
+
+                    GetPushedByOtherPlayers(ref pos);
+
+                    // On got close to
+                    if (interactableInRange != lastInteractableInRange)
+                    {
+                        //var ship = RoomController.i.ships[shipId];
+                        if (interactableInRange)
+                            interactableInRange.Highlight();
+                        else
+                        {
+                            Facepunch.Highlight.ClearAll();
+                            Facepunch.Highlight.Rebuild();
+                        }
+                    }
+
+                    lastInteractableInRange = interactableInRange;
                 }
-
-                GetPushedByOtherPlayers(ref pos);
-
-                // On got close to
-                if (interactable != lastInteractableInRange)
-                {
-                    //var ship = RoomController.i.ships[shipId];
-                    Facepunch.Highlight.ClearAll();
-
-                    if (interactable)
-                        interactable.Highlight();
-                }
-
-                lastInteractableInRange = interactable;
 #else
 
                 /// OLD
@@ -305,7 +325,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             Vector2 instantVelocity = deltaPos / Time.deltaTime;
             instantVelocityAverage = instantVelocityAverage * 0.3f + instantVelocity * 0.7f;
 
-            Vector2 facingDirection = interacting && interactingThing != ShipInteractables.InteractingThing.Nothing?
+#if NEW_INTERACTION
+            bool _interacting = interacting;
+#else
+            bool _interacting = interacting && interactingThing != ShipInteractables.InteractingThing.Nothing;
+#endif
+
+            Vector2 facingDirection = _interacting ?
                 Vector2.up : instantVelocityAverage.sqrMagnitude > 0.001f? instantVelocityAverage.normalized : lastFacingDirection;
 
             facingDirection = Vector2.Lerp(lastFacingDirection, facingDirection, 20f * Time.deltaTime);
@@ -443,19 +469,28 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             stream.SendNext(interacting);
             if (interacting)
             {
+#if NEW_INTERACTION
+                stream.SendNext(interactableId);
+#else
                 stream.SendNext(interactingThing);
+#endif
                 stream.SendNext(interactingInput);
                 stream.SendNext(rightHandHoldStartFactor);
                 stream.SendNext(leftHandHoldStartFactor);
             }
         }
-        else
+        else // if reading
         {
             receivedPos = (Vector2)stream.ReceiveNext();
+
             interacting = (bool)stream.ReceiveNext();
             if (interacting)
             {
+#if NEW_INTERACTION
+                interactableId = (int)stream.ReceiveNext();
+#else
                 interactingThing = (ShipInteractables.InteractingThing)stream.ReceiveNext();
+#endif
                 interactingInput = (float)stream.ReceiveNext();
                 rightHandHoldStartFactor = (float)stream.ReceiveNext();
                 leftHandHoldStartFactor = (float)stream.ReceiveNext();
@@ -473,16 +508,24 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         return interacting;
     }
 
+#if !NEW_INTERACTION
     public ShipInteractables.InteractingThing WhichInteractable() {
         return interactingThing;
     }
+#endif
 
     public float InteractingInput() {
         return interactingInput;
     }
 
     void OnDrawGizmos() {
-        if (interacting && interactingThing != ShipInteractables.InteractingThing.Nothing)
+#if NEW_INTERACTION
+        bool _interacting = interacting;
+#else
+        bool _interacting = interacting && interactingThing != ShipInteractables.InteractingThing.Nothing;
+#endif
+
+        if (_interacting)
         {
             Gizmos.color = Color.green;
 

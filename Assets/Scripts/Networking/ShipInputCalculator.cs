@@ -1,3 +1,5 @@
+#define NEW_INTERACTION
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +29,14 @@ public class ShipInputCalculator : MonoBehaviourPun
             if (ps.IsInteracting())
             {
                 float interactionAxis = ps.InteractingInput();
+
+#if NEW_INTERACTION
+                if (ps.CurrentlyInteractingWith is WheelInteractable)
+                    instantInputX += interactionAxis * singlePlayerStrength;
+                else
+                    instantInputR += interactionAxis * singlePlayerStrength;
+
+#else
                 switch (ps.WhichInteractable()) {
                     case ShipInteractables.InteractingThing.Rope:
                         instantInputR += interactionAxis * singlePlayerStrength;
@@ -40,6 +50,7 @@ public class ShipInputCalculator : MonoBehaviourPun
                     case ShipInteractables.InteractingThing.Nothing:
                         break;
                 }
+#endif
             }
         }
         //inputX = Mathf.MoveTowards(inputX, instantInputR, Time.deltaTime);

@@ -18,6 +18,8 @@ public abstract class Interactable : MonoBehaviour
 
     public void Highlight()
     {
+        Facepunch.Highlight.ClearAll();
+
         foreach (var renderer in highlightRenderers)
         {
             Facepunch.Highlight.AddRenderer(renderer);
