@@ -22,11 +22,7 @@ public class ShipUI : MonoBehaviour
 
     public TMP_Text interactionText;
 
-
-
     public UnityEngine.UI.Slider steeringWheelSlider;
-
-    
 
     float prevSpeed;
     float acceleration;

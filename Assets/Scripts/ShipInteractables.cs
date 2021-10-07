@@ -13,6 +13,8 @@ public class ShipInteractables : MonoBehaviour
     public Renderer visualRightWheel;
     public Renderer visualRope;
 
+    public Interactable[] interactables;
+
     public enum InteractingThing
     {
         Nothing,
@@ -21,6 +23,24 @@ public class ShipInteractables : MonoBehaviour
         RightWheel
     }
 
+    public Interactable InInteractableReach(Vector3 pos)
+    {
+        float minDistance = Mathf.Infinity;
+        Interactable closestInteractable = null;
+        foreach (var interactable in interactables)
+        {
+            interactable.GetClosestPoint(pos, out float distance);
+            if (minDistance > distance)
+            {
+                minDistance = distance;
+                closestInteractable = interactable;
+            }
+        }
+
+        return closestInteractable;
+    }
+
+    [System.Obsolete("Use Interactable.GetClosestPoint() instead")]
     public bool InInteractableReach(Vector3 pos, out InteractingThing thing, out float interactablePosition)
     {
         float distanceToLeftWheel = Vector3.Distance(leftWheel.transform.position, pos);
@@ -53,6 +73,7 @@ public class ShipInteractables : MonoBehaviour
         }
     }
 
+    [System.Obsolete("Use Interactable.Highlight() instead")]
     public void Highlight(InteractingThing thing)
     {
         Facepunch.Highlight.ClearAll();

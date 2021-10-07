@@ -1,3 +1,5 @@
+//#define NEW_INTERACTION
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,8 +23,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     bool interacting = false;
     ShipInteractables.InteractingThing interactingThing = ShipInteractables.InteractingThing.Rope;
     float interactingInput = 0;
-    float leftHandInteractingPos = 0f;
-    float rightHandInteractingPos = 0f;
+    float leftHandHoldStartFactor = 0f;
+    float rightHandHoldStartFactor = 0f;
 
     [Header("Hands")]
     public Transform rightHand, leftHand;
@@ -68,6 +70,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
     ShipInteractables.InteractingThing lastCloseTo;
 
+    Interactable lastInteractableInRange;
+    Interactable interactable;
+    float handStartFactor;
+
     // Update is called once per frame
     void Update()
     {
@@ -78,6 +84,97 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 float inputX = Input.GetAxis("Horizontal");
                 float inputY = Input.GetAxis("Vertical");
                 float inputInteract = Input.GetAxis("Submit");
+
+
+#if NEW_INTERACTION
+                {
+                    Interactable interactableInRange = interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up);
+
+                    bool startedInteracting = inputInteract > 0 && !interacting;
+                    bool endedInteracting = inputInteract <= 0.01f && interacting;
+
+                    if (startedInteracting)
+                    {
+                        if (interactableInRange)
+                        {
+                            interactable = interactableInRange;
+
+                            handStartFactor = interactable.GetHandStartFactor();
+                            interactable.GetHandStartFactors(
+                                out leftHandHoldStartFactor,
+                                out rightHandHoldStartFactor,
+                                handStartFactor);
+                        }
+                        else // if no interactables in range
+                        {
+                            // Raise hand in the air
+                            leftHandHoldStartFactor = Random.Range(-0.2f, 0.2f);
+                            ShipUI.instance.EnableWheelSlider(false);
+                        }
+
+                        interacting = true;
+                        interactingAnimationTime = 0;
+                    }
+                    else if (endedInteracting)
+                    {
+                        interacting = false;
+                        interactingAnimationTime = 0;
+                    }
+
+                    // During interaction
+                    if (interactable && interacting)
+                    {
+                        Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition();
+
+                        gizmoDebugPos = desiredBodyPosition;
+
+                        Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(desiredBodyPosition);
+
+                        float intFactor = Mathf.Clamp01(interactingAnimationTime / 2f);
+                        pos = Vector3.Lerp(pos, wantedInteractingShipPos, intFactor);
+
+                        // input
+                        interactingInput = inputX;
+                    }
+                    else
+                    {
+                        // Handle player movement
+                        Vector3 camRight = Camera.main.transform.right;
+                        Vector3 camForward = Camera.main.transform.forward;
+                        //camForward.y = 0;
+                        //camForward.Normalize();
+                        Vector3 camUp = Camera.main.transform.up;
+
+                        Vector2 input = new Vector2(inputX, inputY);
+                        if (input.sqrMagnitude > 1f) input.Normalize();
+
+                        Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
+                        Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
+
+                        //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
+
+                        pos += shipRelativeInput * speed * Time.deltaTime;
+
+                        interactingInput = 0;
+                    }
+                }
+
+                GetPushedByOtherPlayers(ref pos);
+
+                // On got close to
+                if (interactable != lastInteractableInRange)
+                {
+                    //var ship = RoomController.i.ships[shipId];
+                    Facepunch.Highlight.ClearAll();
+
+                    if (interactable)
+                        interactable.Highlight();
+                }
+
+                lastInteractableInRange = interactable;
+#else
+
+                /// OLD
 
                 bool inReach = interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up, 
                     out ShipInteractables.InteractingThing thing, out float p);
@@ -92,27 +189,28 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         {
                             case ShipInteractables.InteractingThing.LeftWheel:
                                 // These are the positions of the hands in radians in the wheel
-                                leftHandInteractingPos = p + Mathf.PI * 0.5f;
-                                rightHandInteractingPos = -p + Mathf.PI * 0.5f;
+                                leftHandHoldStartFactor = p + Mathf.PI * 0.5f;
+                                rightHandHoldStartFactor = -p + Mathf.PI * 0.5f;
                                 ShipUI.instance.EnableWheelSlider(true);
                                 break;
                             case ShipInteractables.InteractingThing.RightWheel:
                                 // These are the positions of the hands in radians in the wheel
-                                leftHandInteractingPos = p + Mathf.PI * 0.5f;
-                                rightHandInteractingPos = -p + Mathf.PI * 0.5f;
+                                leftHandHoldStartFactor = p + Mathf.PI * 0.5f;
+                                rightHandHoldStartFactor = -p + Mathf.PI * 0.5f;
                                 ShipUI.instance.EnableWheelSlider(true);
                                 break;
                             case ShipInteractables.InteractingThing.Rope:
                                 // Positions of hands in rope
-                                leftHandInteractingPos = Mathf.Clamp(p - 0.05f, -1f, 1f);
-                                rightHandInteractingPos = Mathf.Clamp(p + 0.05f, -1f, 1f);
+                                leftHandHoldStartFactor = Mathf.Clamp(p - 0.05f, -1f, 1f);
+                                rightHandHoldStartFactor = Mathf.Clamp(p + 0.05f, -1f, 1f);
                                 break;
                         }
                     }
                     else
                     {
                         interactingThing = ShipInteractables.InteractingThing.Nothing;
-                        leftHandInteractingPos = Random.Range(-0.2f, 0.2f);
+                        // Raise hand in the air
+                        leftHandHoldStartFactor = Random.Range(-0.2f, 0.2f);
                         ShipUI.instance.EnableWheelSlider(false);
                     }
                     interacting = true;
@@ -144,7 +242,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
                     interactingInput = 0;
                 }
-                else {
+                else // during interaction with an interactable
+                { 
                     Vector3 wantedInteractingPos = Vector3.zero;
                     switch (interactingThing)
                     {
@@ -155,7 +254,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                             wantedInteractingPos = interactables.rightWheel.transform.position - interactables.rightWheel.transform.forward * 0.5f;
                             break;
                         case ShipInteractables.InteractingThing.Rope:
-                            wantedInteractingPos = interactables.rope.RopeRelativePointToWorld(Mathf.Lerp(leftHandInteractingPos, rightHandInteractingPos, 0.5f));
+                            wantedInteractingPos = interactables.rope.RopeRelativePointToWorld(Mathf.Lerp(leftHandHoldStartFactor, rightHandHoldStartFactor, 0.5f));
                             wantedInteractingPos -= interactables.leftWheel.transform.forward * 0.5f;
                             break;
                     }
@@ -185,9 +284,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 }
 
                 lastCloseTo = thing;
+#endif
             }
-            else {
-
+            else // if not photonView.IsMine
+            {
                 GetPushedByOtherPlayers(ref receivedPos);
                 playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
 
@@ -235,28 +335,38 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
             Vector3 wantedLeftHandPos = restLeftHandPos;
             Vector3 wantedRightHandPos = restRightHandPos;
+
+#if NEW_INTERACTION
+            if (interactable && interacting)
+                interactable.GetHandPositions(
+                    out wantedLeftHandPos, out wantedRightHandPos,
+                    leftHandHoldStartFactor, rightHandHoldStartFactor);
+#else
+
             if (interacting)
             {
                 switch (interactingThing)
                 {
                     case ShipInteractables.InteractingThing.LeftWheel:
-                        wantedLeftHandPos = interactables.leftWheel.WheelPositionForAngle(leftHandInteractingPos);
-                        wantedRightHandPos = interactables.leftWheel.WheelPositionForAngle(rightHandInteractingPos);
+                        wantedLeftHandPos = interactables.leftWheel.WheelPositionForAngle(leftHandHoldStartFactor);
+                        wantedRightHandPos = interactables.leftWheel.WheelPositionForAngle(rightHandHoldStartFactor);
                         break;
                     case ShipInteractables.InteractingThing.RightWheel:
-                        wantedLeftHandPos = interactables.rightWheel.WheelPositionForAngle(leftHandInteractingPos);
-                        wantedRightHandPos = interactables.rightWheel.WheelPositionForAngle(rightHandInteractingPos);
+                        wantedLeftHandPos = interactables.rightWheel.WheelPositionForAngle(leftHandHoldStartFactor);
+                        wantedRightHandPos = interactables.rightWheel.WheelPositionForAngle(rightHandHoldStartFactor);
                         break;
                     case ShipInteractables.InteractingThing.Rope:
-                        wantedLeftHandPos = interactables.rope.RopeRelativePointToWorld(leftHandInteractingPos);
-                        wantedRightHandPos = interactables.rope.RopeRelativePointToWorld(rightHandInteractingPos);
+                        wantedLeftHandPos = interactables.rope.RopeRelativePointToWorld(leftHandHoldStartFactor);
+                        wantedRightHandPos = interactables.rope.RopeRelativePointToWorld(rightHandHoldStartFactor);
                         break;
                     case ShipInteractables.InteractingThing.Nothing:
-                        wantedLeftHandPos = restLeftHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * leftHandInteractingPos) - transform.right * 0.3f;
-                        wantedRightHandPos = restRightHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * -leftHandInteractingPos) + transform.right * 0.3f;
+                        wantedLeftHandPos = restLeftHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * leftHandHoldStartFactor) - transform.right * 0.3f;
+                        wantedRightHandPos = restRightHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * -leftHandHoldStartFactor) + transform.right * 0.3f;
                         break;
                 }
             }
+#endif
+
             interactingAnimationTime += Time.deltaTime;
 
             float interactingFinishFactor = Mathf.Clamp01(interactingAnimationTime / 1f);
@@ -335,8 +445,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             {
                 stream.SendNext(interactingThing);
                 stream.SendNext(interactingInput);
-                stream.SendNext(rightHandInteractingPos);
-                stream.SendNext(leftHandInteractingPos);
+                stream.SendNext(rightHandHoldStartFactor);
+                stream.SendNext(leftHandHoldStartFactor);
             }
         }
         else
@@ -347,8 +457,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
             {
                 interactingThing = (ShipInteractables.InteractingThing)stream.ReceiveNext();
                 interactingInput = (float)stream.ReceiveNext();
-                rightHandInteractingPos = (float)stream.ReceiveNext();
-                leftHandInteractingPos = (float)stream.ReceiveNext();
+                rightHandHoldStartFactor = (float)stream.ReceiveNext();
+                leftHandHoldStartFactor = (float)stream.ReceiveNext();
             }
 
             if (wasInteracting != interacting)
