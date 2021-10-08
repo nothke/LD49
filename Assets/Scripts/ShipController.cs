@@ -20,7 +20,8 @@ public class ShipController : MonoBehaviour
     public Transform mast;
     public Transform playableArea;
 
-    public Transform cameraFocus;
+    public Transform cameraFocusBottom;
+    public Transform cameraFocusTop;
 
     [System.NonSerialized]
     public float inputX;

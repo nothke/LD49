@@ -36,7 +36,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
     Vector3 restRightHandPos, restLeftHandPos;
 
     PlayerFeet feet;
-    
+
     Vector3 gizmoDebugPos = Vector3.zero;
 
     float interactingAnimationTime = 0;
@@ -54,7 +54,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
     Vector2 receivedPos;
     bool wasInteracting = false;
-    
+
     public Interactable CurrentlyInteractingWith => interactable;
 
     void Start()
@@ -455,7 +455,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
         {
             pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
 
-            Camera.main.GetComponent<UnityGLTF.Examples.OrbitCameraController>().target = s.visualShip.cameraFocus;
+            Camera.main.GetComponent<OrbitCam>()
+                .SetLerpByDistanceTargets(s.visualShip.cameraFocusBottom, s.visualShip.cameraFocusTop);
 
             if (ShipUI.instance)
             {
