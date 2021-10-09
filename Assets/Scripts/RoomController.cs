@@ -81,8 +81,9 @@ public class RoomController : MonoBehaviourPunCallbacks
     [PunRPC]
     void PleaseJoinShip(int shipId)
     {
-        PlayerSync newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<PlayerSync>();
-        newPlayer.shipId = shipId;
+        object[] instantiationData = new object[1] { shipId };
+        PlayerSync newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity, 0, instantiationData).GetComponent<PlayerSync>();
+        //newPlayer.shipId = shipId;
 
         ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
         ht[PlayerSync.PLAYER_SHIP] = shipId;

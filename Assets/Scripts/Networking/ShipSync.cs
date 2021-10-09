@@ -23,14 +23,19 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         get { return localShip; }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
     {
+        object[] instantiationData = info.photonView.InstantiationData;
+        shipId = (int)instantiationData[0];
+
+        name = "NetworkedShip " + shipId;
+
+        // old Start()
+
         // Setup remote ship simulation.
         // Ideally we would want 2 simulations running, the local and the remote, and lerp the actual values from one to the other
         // In this case I'm trying to lerp the local towards the remote without keeping track of the "untouched/unlerped" local values
         // This might look a bit worse but might be simpler and enough
-
         Vector3 spawnPos = transform.position;
         spawnPos.y = shipPrefab.transform.position.y;
 
@@ -38,22 +43,17 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         remoteShip = Instantiate(shipPrefab.gameObject, spawnPos, shipPrefab.transform.rotation).GetComponent<ShipController>();
 
         localShip.name = "Catamaran " + shipId;
-        remoteShip.name = "Catamaran "+ shipId +"(Physics only)";
+        remoteShip.name = "Catamaran " + shipId + "(Physics only)";
 
         PrepareRemoteShip(remoteShip.gameObject.transform, physicsLayer, remoteMaterial);
 
         remoteShip.gameObject.SetActive(!photonView.IsMine);
 
         shipInput = GetComponent<ShipInputCalculator>();
-    }
 
-    void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
-    {
-        object[] instantiationData = info.photonView.InstantiationData;
-        shipId = (int)instantiationData[0];
+        //
+
         RoomController.i.RegisterShip(this);
-
-        name = "NetworkedShip " + shipId;
     }
 
     // Update is called once per frame

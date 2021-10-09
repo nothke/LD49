@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerSync : MonoBehaviourPun, IPunObservable
+public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback
 {
     public const string PLAYER_SHIP = "PLAYER_SHIP";
     public int shipId = -1;
@@ -59,7 +59,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
 
     void Start()
     {
-        if (!photonView.IsMine)
+        /*if (!photonView.IsMine)
         {
             if (photonView.Owner.CustomProperties.TryGetValue(PlayerSync.PLAYER_SHIP, out object o))
             {
@@ -71,14 +71,24 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                 return;
             }
         }
-        RoomController.i.RegisterPlayer(this);
+        RoomController.i.RegisterPlayer(this);*/
+    }
 
+    void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        object[] instantiationData = info.photonView.InstantiationData;
+        shipId = (int)instantiationData[0];
+
+        // Old Start
         lastFramePosition = receivedPos = pos;
 
         restRightHandPos = restRightHand.position;
         restLeftHandPos = restLeftHand.position;
 
         feet = GetComponent<PlayerFeet>();
+        //
+
+        RoomController.i.RegisterPlayer(this);
     }
 
     void Update()
@@ -118,7 +128,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable
                         else // if no interactables in range
                         {
                             // Raise hand in the air
-                            leftHandHoldStartFactor = Random.Range(-0.2f, 0.2f);
+                            leftHandHoldStartFactor = Random.Range(-0.2f, 0.2f); // used for raised-hand positioning
                             ShipUI.instance.EnableWheelSlider(false);
                         }
 
