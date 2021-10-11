@@ -26,6 +26,7 @@ public class RoomController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         //photonView.RPC("RequestShipForPlayer", RpcTarget.MasterClient, PhotonNetwork.LocalPlayer.ActorNumber);
+        Debug.Log("Game version is " + PhotonNetwork.AppVersion);
     }
 
     public void JoinRandomShip()

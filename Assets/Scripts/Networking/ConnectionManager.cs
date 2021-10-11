@@ -39,7 +39,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     {
         ConnectionUI.instance.ShowIntroPanel();
         ConnectionUI.instance.LogConnectionInfo(string.Format("Game Version {0}, connecting to server..", gameVersion));
-        PhotonNetwork.GameVersion = gameVersion;
+        PhotonNetwork.PhotonServerSettings.AppSettings.AppVersion = gameVersion;
         PhotonNetwork.ConnectUsingSettings();
     }
 
