@@ -21,6 +21,8 @@ public class RoomController : MonoBehaviourPunCallbacks
     private void Awake()
     {
         i = this;
+
+        InvokeRepeating("ShipOwnershipPeriodicCheckup", 5f, 5f); // very much a patch
     }
 
     public override void OnJoinedRoom()
@@ -216,6 +218,36 @@ public class RoomController : MonoBehaviourPunCallbacks
                 shipIdToPlayers[playerSyncs[otherPlayer].shipId].Remove(otherPlayer);
 
             playerSyncs.Remove(otherPlayer);
+        }
+    }
+
+    public void ShipOwnershipPeriodicCheckup()
+    {
+        if (!PhotonNetwork.InRoom) return;
+
+        foreach (var kvp in ships)
+        {
+            ShipSync s = kvp.Value;
+            if (!s.photonView.IsMine || shipIdToPlayers[s.shipId].Count == 0)
+                continue;
+
+            Player owner = s.photonView.Owner; // This is always going to be me because of prev condition
+
+            bool ownedByPlayerDriving = false;
+            foreach (var player in shipIdToPlayers[kvp.Value.shipId])
+            {
+                if (owner == player)
+                {
+                    ownedByPlayerDriving = true;
+                    break;
+                }
+            }
+
+            if (!ownedByPlayerDriving)
+            {
+                s.photonView.TransferOwnership(shipIdToPlayers[s.shipId][0]);
+                Debug.Log("Giving ownership to player driving ship");
+            }
         }
     }
 
