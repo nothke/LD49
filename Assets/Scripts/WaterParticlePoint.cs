@@ -9,6 +9,7 @@ public class WaterParticlePoint : MonoBehaviour
     Rigidbody rb;
 
     public bool influencesStartSpeed;
+    public bool influencesSize = false;
 
     private void Awake()
     {
@@ -38,6 +39,17 @@ public class WaterParticlePoint : MonoBehaviour
             Vector3 velo = rb.velocity;
             float horizontalSpeed = new Vector2(velo.x, velo.z).magnitude;
             main.startSpeed = horizontalSpeed;
+        }
+
+        if (influencesSize)
+        {
+            var main = particles.main;
+
+            Vector3 velo = rb.velocity;
+            float horizontalSpeed = new Vector2(velo.x, velo.z).magnitude;
+
+            float speedFactor = Mathf.Clamp01((horizontalSpeed - 3f) / 5f);
+            main.startSizeMultiplier = speedFactor;
         }
     }
 }
