@@ -10,6 +10,7 @@ public class RoomController : MonoBehaviourPunCallbacks
     public float instantiationDistanceBetweenBoats = 15;
     public ShipSync shipPrefab;
     public PlayerSync playerPrefab;
+    public CatColors catColors;
 
     public static RoomController i;
 
@@ -84,8 +85,14 @@ public class RoomController : MonoBehaviourPunCallbacks
     [PunRPC]
     void PleaseJoinShip(int shipId)
     {
-        object[] instantiationData = new object[1] { shipId };
-        PlayerSync newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity, 0, instantiationData).GetComponent<PlayerSync>();
+        object[] playerInstantiationData = new object[5] {
+            shipId,
+            Random.Range(0, catColors.eyeColors.Length),
+            Random.Range(0, catColors.furColors.Length),
+            Random.Range(0, catColors.pantsColors.Length),
+            Random.Range(0, catColors.jacketColors.Length)
+        };
+        PlayerSync newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity, 0, playerInstantiationData).GetComponent<PlayerSync>();
         //newPlayer.shipId = shipId;
 
         ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();

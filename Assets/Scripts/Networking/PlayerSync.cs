@@ -80,6 +80,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         object[] instantiationData = info.photonView.InstantiationData;
         shipId = (int)instantiationData[0];
 
+        PlayerColors colorManager = GetComponent<PlayerColors>();
+        if (colorManager)
+        {
+            colorManager.SetColors((int)instantiationData[1], (int)instantiationData[2], (int)instantiationData[3], (int)instantiationData[4]);
+        }
+
         // Old Start
         lastFramePosition = receivedPos = pos;
 
