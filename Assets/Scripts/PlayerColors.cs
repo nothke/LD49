@@ -15,16 +15,16 @@ public class PlayerColors : MonoBehaviour
     {
         MaterialPropertyBlock block = new MaterialPropertyBlock();
 
-        block.SetColor("_Color", colors.eyeColors[eyeColorIt]);
+        block.SetColor("_Color", colors.eyeColors[eyeColorIt % colors.eyeColors.Length]);
         eyeRenderer.SetPropertyBlock(block, eyeMaterialIndex);
 
-        block.SetColor("_Color", colors.furColors[furColorIt]);
+        block.SetColor("_Color", colors.furColors[furColorIt % colors.furColors.Length]);
         bodyRenderer.SetPropertyBlock(block, furMaterialIndex);
 
-        block.SetColor("_Color", colors.pantsColors[pantsColorIt]);
+        block.SetColor("_Color", colors.pantsColors[pantsColorIt % colors.pantsColors.Length]);
         bodyRenderer.SetPropertyBlock(block, pantsMaterialIndex);
 
-        block.SetColor("_Color", colors.jacketColors[jacketColorIt]);
+        block.SetColor("_Color", colors.jacketColors[jacketColorIt % colors.jacketColors.Length]);
         bodyRenderer.SetPropertyBlock(block, jacketMaterialIndex);
     }
 }
