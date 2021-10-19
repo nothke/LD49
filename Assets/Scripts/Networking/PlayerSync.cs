@@ -54,6 +54,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     Vector2 receivedPos;
     bool wasInteracting = false;
+    Interactable highlightedInteractable;
 
     public Interactable CurrentlyInteractingWith => interactable;
 
@@ -184,17 +185,32 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
                     GetPushedByOtherPlayers(ref pos);
 
-                    // On got close to
-                    if (interactableInRange != lastInteractableInRange)
+                    // Highligting should only happen if not interacting
+                    if (!interacting)
                     {
-                        if (interactableInRange)
-                            interactableInRange.Highlight();
-                        else
+                        // On got close to
+                        if (interactableInRange != lastInteractableInRange || endedInteracting)
                         {
-                            Facepunch.Highlight.ClearAll();
-                            Facepunch.Highlight.Rebuild();
-                            ShipUI.instance.SetInteractionText("");
+                            if (interactableInRange)
+                            {
+                                interactableInRange.Highlight();
+                                highlightedInteractable = interactableInRange;
+                            }
+                            else if (highlightedInteractable)
+                            {
+                                Facepunch.Highlight.ClearAll();
+                                Facepunch.Highlight.Rebuild();
+                                ShipUI.instance.SetInteractionText("");
+                                highlightedInteractable = null;
+                            }
                         }
+                    }
+                    else if (highlightedInteractable)
+                    {
+                        Facepunch.Highlight.ClearAll();
+                        Facepunch.Highlight.Rebuild();
+                        ShipUI.instance.SetInteractionText("");
+                        highlightedInteractable = null;
                     }
 
                     lastInteractableInRange = interactableInRange;
