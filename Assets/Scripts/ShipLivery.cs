@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ShipLivery : MonoBehaviour
 {
-    public Renderer[] liveryRenderers;
+    [UnityEngine.Serialization.FormerlySerializedAs("bodyRenderers")]
+    public Renderer[] hullRenderers;
+    public Renderer[] sailRenderers;
     public CatColors colors;
 
     [HideInInspector]
@@ -16,14 +18,17 @@ public class ShipLivery : MonoBehaviour
 
     // Start is called before the first frame update
 
-    public void ApplyLivery(int which)
+    public void ApplyLivery(int colorCombination, int sail, int hull)
     {
-        int w = which % colors.liveries.Length; // in case
-        CatColors.LiveryCombination livery = colors.liveries[w];
-        ApplyColors(livery.accent, livery.baseColor, livery.detail);
+        colorCombination = colorCombination % colors.liveryColorCombinations.Length; // in case
+        sail = sail % colors.sailLiveryTextures.Length; // in case
+        hull = hull % colors.hullLiveryTextures.Length; // in case
+
+        CatColors.LiveryCombination liveryColor = colors.liveryColorCombinations[colorCombination];
+        AssignLivery(liveryColor.accent, liveryColor.baseColor, liveryColor.detail, colors.hullLiveryTextures[hull], colors.sailLiveryTextures[sail]);
     }
 
-    void ApplyColors(Color r, Color g, Color b)
+    void AssignLivery(Color r, Color g, Color b, Texture2D hull, Texture2D sail)
     {
         red = r;
         green = g;
@@ -33,7 +38,14 @@ public class ShipLivery : MonoBehaviour
         block.SetColor("_ColorR", r);
         block.SetColor("_ColorG", g);
         block.SetColor("_ColorB", b);
-        foreach (Renderer rend in liveryRenderers)
+
+        block.SetTexture("_MainTex", sail);
+        foreach (Renderer rend in sailRenderers)
+        {
+            rend.SetPropertyBlock(block);
+        }
+        block.SetTexture("_MainTex", hull);
+        foreach (Renderer rend in hullRenderers)
         {
             rend.SetPropertyBlock(block);
         }

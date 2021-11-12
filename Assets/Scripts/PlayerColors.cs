@@ -31,7 +31,7 @@ public class PlayerColors : MonoBehaviour
     public void SetShipColor(int shipLivery)
     {
         MaterialPropertyBlock block = new MaterialPropertyBlock();
-        block.SetColor("_Color", colors.liveries[shipLivery].accent);
+        block.SetColor("_Color", colors.liveryColorCombinations[shipLivery].accent);
         bodyRenderer.SetPropertyBlock(block, liveVestIndex);
     }
 }

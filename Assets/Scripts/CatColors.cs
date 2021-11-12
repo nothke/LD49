@@ -17,5 +17,10 @@ public class CatColors : ScriptableObject
         public Color detail = Color.blue;
     }
 
-    public LiveryCombination[] liveries;
+    [UnityEngine.Serialization.FormerlySerializedAs("liveries")]
+    public LiveryCombination[] liveryColorCombinations;
+
+    public Texture2D[] sailLiveryTextures;
+    [UnityEngine.Serialization.FormerlySerializedAs("bodyLiveryTextures")]
+    public Texture2D[] hullLiveryTextures;
 }

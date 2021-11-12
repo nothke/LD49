@@ -499,7 +499,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
         feet.Init(pos, Vector2.up);
 
-        GetComponent<PlayerColors>().SetShipColor(s.shipLivery);
+        GetComponent<PlayerColors>().SetShipColor(s.shipLiveryColorCombination);
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

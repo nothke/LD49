@@ -24,7 +24,9 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         i = this;
 
-        liveryUsage = new int[colors.liveries.Length];
+        liveryColorUsage = new int[colors.liveryColorCombinations.Length];
+        liverySailUsage = new int[colors.sailLiveryTextures.Length];
+        liveryHullUsage = new int[colors.hullLiveryTextures.Length];
         //for (int i = 0; i < liveryUsage.Length; ++i)
         //    liveryUsage[i] = 0;
 
@@ -115,8 +117,8 @@ public class RoomController : MonoBehaviourPunCallbacks
             newShipId++;
         }
 
-        int livery = GetNewLivery();
-        object[] instantiationData = new object[2] { newShipId, livery };
+        GetNewLivery(out int colorCombination, out int sail, out int hull);
+        object[] instantiationData = new object[4] { newShipId, colorCombination, sail, hull };
         Vector3 pos = Vector3.zero;
         pos = CorrectPositionToSpawnShip(pos);
         ShipSync newShip = PhotonNetwork.InstantiateRoomObject(shipPrefab.name, pos, Quaternion.identity, 0, instantiationData).GetComponent<ShipSync>();
@@ -140,27 +142,38 @@ public class RoomController : MonoBehaviourPunCallbacks
         return wantedPos;
     }
 
-    int GetNewLivery() {
-        List<int> options = new List<int>(liveryUsage.Length);
+    void GetNewLivery(out int col, out int sail, out int hull)
+    {
+        col = GetRandomLowestUsage(liveryColorUsage);
+        sail = GetRandomLowestUsage(liverySailUsage);
+        hull = GetRandomLowestUsage(liveryHullUsage);
+    }
+
+    int GetRandomLowestUsage(int[] usageArray)
+    {
+        // In usage array, value is amount of uses, iterator is the wanted returned value
+        List<int> options = new List<int>(usageArray.Length);
 
         int leastUsed = 100000; // pretend it's INT.MAX
 
-        for (int i = 0; i < liveryUsage.Length; ++i)
+        for (int i = 0; i < usageArray.Length; ++i)
         {
-            if (liveryUsage[i] < leastUsed)
+            if (usageArray[i] < leastUsed)
             {
                 options.Clear();
                 options.Add(i);
-                leastUsed = liveryUsage[i];
+                leastUsed = usageArray[i];
             }
-            else if (liveryUsage[i] == leastUsed)
+            else if (usageArray[i] == leastUsed)
                 options.Add(i);
         }
 
         return options[Random.Range(0, options.Count)];
     }
 
-    int[] liveryUsage;
+    int[] liveryColorUsage;
+    int[] liverySailUsage;
+    int[] liveryHullUsage;
     public void RegisterShip(ShipSync s)
     {
         if (!ships.ContainsKey(s.shipId))
@@ -177,7 +190,9 @@ public class RoomController : MonoBehaviourPunCallbacks
             }
             else shipIdToPlayers[s.shipId] = new List<Player>();
 
-            liveryUsage[s.shipLivery]++;
+            liveryColorUsage[s.shipLiveryColorCombination]++;
+            liverySailUsage[s.shipLiverySailTexture]++;
+            liveryHullUsage[s.shipLiveryBodyTexture]++;
         }
         else {
             Debug.LogError(string.Format("Trying to register ship {0} that is already registered!", s.shipId), this);
@@ -188,7 +203,9 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         ships.Remove(s.shipId);
         shipIdToPlayers.Remove(s.shipId);
-        liveryUsage[s.shipLivery]--;
+        liveryColorUsage[s.shipLiveryColorCombination]--;
+        liverySailUsage[s.shipLiverySailTexture]--;
+        liveryHullUsage[s.shipLiveryBodyTexture]--;
     }
 
     public void RegisterPlayer(PlayerSync p)

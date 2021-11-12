@@ -1568,6 +1568,15 @@ MonoBehaviour:
   - {fileID: 2569049680600958382}
   - {fileID: 7912450002505851152}
   - {fileID: 1798410126898295467}
+  bodyRenderers:
+  - {fileID: 8011351800568003230}
+  - {fileID: 7084641350371962285}
+  - {fileID: 2569049680600958382}
+  - {fileID: 7912450002505851152}
+  - {fileID: 1798410126898295467}
+  sailRenderers:
+  - {fileID: 8380304683877281036}
+  - {fileID: 5577074631560640782}
   colors: {fileID: 11400000, guid: ef68c2de1f9b9eb42983836a0936a56e, type: 2}
   red: {r: 0, g: 0, b: 0, a: 0}
   green: {r: 0, g: 0, b: 0, a: 0}
