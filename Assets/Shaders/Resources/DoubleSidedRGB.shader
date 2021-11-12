@@ -46,10 +46,19 @@ Shader "Custom/DoubleSidedRGB"
 
 
 
-        void surf (Input IN, inout SurfaceOutputStandard o)
+            void surf(Input IN, inout SurfaceOutputStandard o)
         {
             // Albedo comes from a texture tinted by color
-            fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
+            fixed4 c;
+
+            if (IN.isFacing)
+                c = tex2D(_MainTex, IN.uv_MainTex);
+            else
+            {
+                fixed2 uv = IN.uv_MainTex;
+                uv.x = 1 - uv.x;
+                c = tex2D(_MainTex, uv);
+            }
 
             float total = c.r + c.g + c.b;
 
@@ -60,10 +69,8 @@ Shader "Custom/DoubleSidedRGB"
            
             o.Albedo = colorMix;
            
-            if (IN.isFacing)
-            {
+            //if (IN.isFacing)
                 //o.Albedo = float4(0, 1, 0, 1);
-            }
 
             o.Normal *= IN.isFacing ? 1 : -1;
             // Metallic and smoothness come from slider variables
