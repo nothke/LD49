@@ -69,7 +69,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shipId: 0
-  shipLivery: -1
+  shipLiveryColorCombination: -1
+  shipLiveryBodyTexture: -1
+  shipLiverySailTexture: -1
   shipPrefab: {fileID: 5577074632021696230, guid: 1f55a47a5a0784c4c83b0cf5c2ca7c06, type: 3}
   physicsLayer: 6
   visualizeRemoteShip: 0

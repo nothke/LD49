@@ -32,7 +32,7 @@ MonoBehaviour:
   - {r: 0.9056604, g: 0.78805786, b: 0.029903898, a: 1}
   - {r: 0.72300005, g: 0.25233552, b: 0.17496601, a: 1}
   - {r: 0.18504898, g: 0.2512323, b: 0.709, a: 1}
-  liveries:
+  liveryColorCombinations:
   - accent: {r: 0.79215693, g: 0.078431375, b: 0.41960788, a: 1}
     baseColor: {r: 0.25882354, g: 0.20784315, b: 0.23529413, a: 1}
     detail: {r: 0.16078432, g: 0.9058824, b: 0.85098046, a: 1}
@@ -42,3 +42,7 @@ MonoBehaviour:
   - accent: {r: 1, g: 0.57254905, b: 0, a: 1}
     baseColor: {r: 0, g: 0, b: 0, a: 1}
     detail: {r: 0.54901963, g: 0.12941177, b: 0.77254903, a: 1}
+  sailLiveryTextures:
+  - {fileID: 2800000, guid: 6a95be485c7315241ae99d66e53c3874, type: 3}
+  hullLiveryTextures:
+  - {fileID: 2800000, guid: 76b192351dc97cd4395d5a2c14b7f808, type: 3}
