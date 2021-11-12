@@ -24,6 +24,8 @@ public class ShipLivery : MonoBehaviour
     public Vector2[] sailTextPositions;
     public float sailTextScale = 0.1f;
 
+    public string textToWrite = "001";
+
     public void ApplyLivery(int colorCombination, int sail, int hull)
     {
         colorCombination = colorCombination % colors.liveryColorCombinations.Length; // in case
@@ -47,6 +49,9 @@ public class ShipLivery : MonoBehaviour
             var rt = RenderTexture.GetTemporary(sail.width, sail.height);
             RenderTexture.active = rt;
             Graphics.Blit(sail, rt);
+
+            printableTemplateText.text = textToWrite;
+            printableTemplateText.ForceMeshUpdate(true, true);
 
             rt.BeginOrthoRendering();
             for (int i = 0; i < sailTextPositions.Length; i++)

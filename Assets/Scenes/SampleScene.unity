@@ -835,15 +835,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 001
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9f59cd66e3cc2a44fbd512648c966f07, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 24948f3ce9e6115478c6f1446356d3bc, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6655cc27ce5763045a3af44dc172629f, type: 2}
+  m_sharedMaterial: {fileID: -2884630589785758794, guid: 6655cc27ce5763045a3af44dc172629f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278979596
+  m_fontColor: {r: 0.047169805, g: 0.047169805, b: 0.047169805, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -924,7 +924,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 24948f3ce9e6115478c6f1446356d3bc, type: 2}
+  - {fileID: -2884630589785758794, guid: 6655cc27ce5763045a3af44dc172629f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -963,7 +963,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 75.16, y: 37.4}
-  m_SizeDelta: {x: 78.12, y: 69.28}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1001 &573741567
 PrefabInstance:

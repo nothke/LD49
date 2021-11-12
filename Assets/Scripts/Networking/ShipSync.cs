@@ -59,6 +59,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
         var livery = localShip.gameObject.GetComponent<ShipLivery>();
         livery.printableTemplateText = RoomController.i.printableTextTemplate;
+        livery.textToWrite = (shipId + 1).ToString().PadLeft(3, '0');
         livery.ApplyLivery(shipLiveryColorCombination, shipLiverySailTexture, shipLiveryBodyTexture);
 
         //
