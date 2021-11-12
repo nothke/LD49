@@ -9,7 +9,7 @@ public class PlayerColors : MonoBehaviour
     public MeshRenderer eyeRenderer;
     public SkinnedMeshRenderer bodyRenderer;
 
-    public int eyeMaterialIndex, furMaterialIndex, pantsMaterialIndex, jacketMaterialIndex;
+    public int eyeMaterialIndex, furMaterialIndex, pantsMaterialIndex, jacketMaterialIndex, liveVestIndex;
 
     public void SetColors(int eyeColorIt, int furColorIt, int pantsColorIt, int jacketColorIt)
     {
@@ -26,5 +26,12 @@ public class PlayerColors : MonoBehaviour
 
         block.SetColor("_Color", colors.jacketColors[jacketColorIt % colors.jacketColors.Length]);
         bodyRenderer.SetPropertyBlock(block, jacketMaterialIndex);
+    }
+
+    public void SetShipColor(int shipLivery)
+    {
+        MaterialPropertyBlock block = new MaterialPropertyBlock();
+        block.SetColor("_Color", colors.liveries[shipLivery].accent);
+        bodyRenderer.SetPropertyBlock(block, liveVestIndex);
     }
 }

@@ -10,7 +10,8 @@ public class RoomController : MonoBehaviourPunCallbacks
     public float instantiationDistanceBetweenBoats = 15;
     public ShipSync shipPrefab;
     public PlayerSync playerPrefab;
-    public CatColors catColors;
+    [UnityEngine.Serialization.FormerlySerializedAs("catColors")]
+    public CatColors colors;
 
     public static RoomController i;
 
@@ -22,6 +23,8 @@ public class RoomController : MonoBehaviourPunCallbacks
     private void Awake()
     {
         i = this;
+
+        liveryUsage = new int[colors.liveries.Length];
 
         InvokeRepeating("ShipOwnershipPeriodicCheckup", 5f, 5f); // very much a patch
     }
@@ -87,10 +90,10 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         object[] playerInstantiationData = new object[5] {
             shipId,
-            Random.Range(0, catColors.eyeColors.Length),
-            Random.Range(0, catColors.furColors.Length),
-            Random.Range(0, catColors.pantsColors.Length),
-            Random.Range(0, catColors.jacketColors.Length)
+            Random.Range(0, colors.eyeColors.Length),
+            Random.Range(0, colors.furColors.Length),
+            Random.Range(0, colors.pantsColors.Length),
+            Random.Range(0, colors.jacketColors.Length)
         };
         PlayerSync newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity, 0, playerInstantiationData).GetComponent<PlayerSync>();
         //newPlayer.shipId = shipId;
@@ -110,7 +113,8 @@ public class RoomController : MonoBehaviourPunCallbacks
             newShipId++;
         }
 
-        object[] instantiationData = new object[1] { newShipId };
+        int livery = GetNewLivery();
+        object[] instantiationData = new object[2] { newShipId, livery };
         Vector3 pos = Vector3.zero;
         pos = CorrectPositionToSpawnShip(pos);
         ShipSync newShip = PhotonNetwork.InstantiateRoomObject(shipPrefab.name, pos, Quaternion.identity, 0, instantiationData).GetComponent<ShipSync>();
@@ -133,6 +137,27 @@ public class RoomController : MonoBehaviourPunCallbacks
 
         return wantedPos;
     }
+
+    int GetNewLivery() {
+        List<int> options = new List<int>(liveryUsage.Length);
+
+        int leastUsed = 100000; // pretend it's INT.MAX
+
+        for (int i = 0; i < liveryUsage.Length; ++i)
+        {
+            if (liveryUsage[i] < leastUsed)
+            {
+                options.Clear();
+                options.Add(i);
+            }
+            else if (liveryUsage[i] == leastUsed)
+                options.Add(i);
+        }
+
+        return options[Random.Range(0, options.Count)];
+    }
+
+    int[] liveryUsage;
     public void RegisterShip(ShipSync s)
     {
         if (!ships.ContainsKey(s.shipId))
@@ -148,6 +173,8 @@ public class RoomController : MonoBehaviourPunCallbacks
                 }
             }
             else shipIdToPlayers[s.shipId] = new List<Player>();
+
+            liveryUsage[s.shipLivery]++;
         }
         else {
             Debug.LogError(string.Format("Trying to register ship {0} that is already registered!", s.shipId), this);

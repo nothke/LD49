@@ -9,4 +9,13 @@ public class CatColors : ScriptableObject
     public Color[] furColors;
     public Color[] pantsColors;
     public Color[] jacketColors;
+
+    [System.Serializable]
+    public class LiveryCombination {
+        public Color accent = Color.red;
+        public Color baseColor = Color.green;
+        public Color detail = Color.blue;
+    }
+
+    public LiveryCombination[] liveries;
 }

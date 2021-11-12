@@ -1417,7 +1417,7 @@ MonoBehaviour:
   instantiationDistanceBetweenBoats: 15
   shipPrefab: {fileID: 1969835584439724525, guid: 2a2a86a8d9a4b0941af032d83879e896, type: 3}
   playerPrefab: {fileID: 2302828771738319153, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
-  catColors: {fileID: 11400000, guid: ef68c2de1f9b9eb42983836a0936a56e, type: 2}
+  colors: {fileID: 11400000, guid: ef68c2de1f9b9eb42983836a0936a56e, type: 2}
 --- !u!114 &970179865
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using Photon.Pun;
 public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback
 {
     public int shipId = -1;
+    public int shipLivery = -1;
 
     public ShipController shipPrefab;
     public int physicsLayer = 6;
@@ -27,6 +28,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
     {
         object[] instantiationData = info.photonView.InstantiationData;
         shipId = (int)instantiationData[0];
+        shipLivery = (int)instantiationData[1];
 
         name = "NetworkedShip " + shipId;
 
@@ -50,6 +52,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         remoteShip.gameObject.SetActive(!photonView.IsMine);
 
         shipInput = GetComponent<ShipInputCalculator>();
+
+        localShip.gameObject.GetComponent<ShipLivery>().ApplyLivery(shipLivery);
 
         //
 

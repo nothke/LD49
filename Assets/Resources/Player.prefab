@@ -254,6 +254,7 @@ MonoBehaviour:
   furMaterialIndex: 4
   pantsMaterialIndex: 1
   jacketMaterialIndex: 2
+  liveVestIndex: 5
 --- !u!54 &7919865080945279051
 Rigidbody:
   m_ObjectHideFlags: 0
