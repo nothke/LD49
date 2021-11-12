@@ -1560,15 +1560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 477a557dd807b1a4e9b7ed30ef1edf45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  liveryRenderers:
-  - {fileID: 8011351800568003230}
-  - {fileID: 8380304683877281036}
-  - {fileID: 5577074631560640782}
-  - {fileID: 7084641350371962285}
-  - {fileID: 2569049680600958382}
-  - {fileID: 7912450002505851152}
-  - {fileID: 1798410126898295467}
-  bodyRenderers:
+  hullRenderers:
   - {fileID: 8011351800568003230}
   - {fileID: 7084641350371962285}
   - {fileID: 2569049680600958382}
@@ -1581,6 +1573,12 @@ MonoBehaviour:
   red: {r: 0, g: 0, b: 0, a: 0}
   green: {r: 0, g: 0, b: 0, a: 0}
   blue: {r: 0, g: 0, b: 0, a: 0}
+  texture: {fileID: 0}
+  printableTemplateText: {fileID: 0}
+  sailTextPositions:
+  - {x: 0.15, y: 0.2}
+  - {x: 0.75, y: 0.2}
+  sailTextScale: 0.1
 --- !u!1 &5729977581524548434
 GameObject:
   m_ObjectHideFlags: 0
@@ -2188,8 +2186,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 0}
   m_AABB:
-    m_Center: {x: -0.0032436969, y: 1.0518417, z: 0.011864901}
-    m_Extent: {x: 0.0032442845, y: 9.321526, z: 2.4236672}
+    m_Center: {x: -0.0035906585, y: 1.0518417, z: 0.011864901}
+    m_Extent: {x: 0.0035912462, y: 9.321526, z: 2.4236672}
   m_DirtyAABB: 0
 --- !u!1 &7946600714014091032
 GameObject:

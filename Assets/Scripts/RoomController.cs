@@ -15,6 +15,8 @@ public class RoomController : MonoBehaviourPunCallbacks
 
     public static RoomController i;
 
+    public TMPro.TMP_Text printableTextTemplate;
+
     public Dictionary<Player, PlayerSync> playerSyncs = new Dictionary<Player, PlayerSync>();
     public Dictionary<int, ShipSync> ships = new Dictionary<int, ShipSync>();
     public Dictionary<int, List<Player>> shipIdToPlayers = new Dictionary<int, List<Player>>();

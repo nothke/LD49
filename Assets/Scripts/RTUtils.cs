@@ -321,6 +321,19 @@ namespace Nothke.Utils
             return tex;
         }
 
+        public static RenderTexture ConvertToRenderTexture(this Texture2D tex)
+        {
+            RenderTexture prevActive = RenderTexture.active;
+
+            RenderTexture rt = new RenderTexture(tex.width, tex.height, 0);
+            RenderTexture.active = rt;
+            Graphics.Blit(tex, rt);
+
+            RenderTexture.active = prevActive;
+
+            return rt;
+        }
+
         public static void DrawTextureGUI(Texture texture)
         {
             GUI.DrawTexture(new Rect(0, 0, texture.width, texture.height), texture);

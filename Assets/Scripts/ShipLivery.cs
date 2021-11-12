@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Nothke.Utils;
+
 public class ShipLivery : MonoBehaviour
 {
     [UnityEngine.Serialization.FormerlySerializedAs("bodyRenderers")]
@@ -16,7 +18,11 @@ public class ShipLivery : MonoBehaviour
     [HideInInspector]
     public Color blue;
 
-    // Start is called before the first frame update
+    public Texture texture;
+    public TMPro.TMP_Text printableTemplateText;
+
+    public Vector2[] sailTextPositions;
+    public float sailTextScale = 0.1f;
 
     public void ApplyLivery(int colorCombination, int sail, int hull)
     {
@@ -34,12 +40,36 @@ public class ShipLivery : MonoBehaviour
         green = g;
         blue = b;
 
+        {
+            Debug.Assert(printableTemplateText, "Template text not set", this);
+
+            RenderTexture prevActive = RenderTexture.active;
+            var rt = RenderTexture.GetTemporary(sail.width, sail.height);
+            RenderTexture.active = rt;
+            Graphics.Blit(sail, rt);
+
+            rt.BeginOrthoRendering();
+            for (int i = 0; i < sailTextPositions.Length; i++)
+            {
+                rt.DrawTMPText(printableTemplateText, sailTextPositions[i], sailTextScale);
+            }
+
+            rt.EndRendering();
+
+            texture = rt.ConvertToTexture2D();
+            texture.name = "SAIL-clone";
+            Debug.Log("Set tex");
+
+            RenderTexture.ReleaseTemporary(rt);
+            RenderTexture.active = prevActive;
+        }
+
         MaterialPropertyBlock block = new MaterialPropertyBlock();
         block.SetColor("_ColorR", r);
         block.SetColor("_ColorG", g);
         block.SetColor("_ColorB", b);
 
-        block.SetTexture("_MainTex", sail);
+        block.SetTexture("_MainTex", texture);
         foreach (Renderer rend in sailRenderers)
         {
             rend.SetPropertyBlock(block);
@@ -49,5 +79,12 @@ public class ShipLivery : MonoBehaviour
         {
             rend.SetPropertyBlock(block);
         }
+    }
+
+    private void OnDestroy()
+    {
+        // The texture is an asset so it won't be automatically disposed
+        if (texture)
+            Destroy(texture);
     }
 }

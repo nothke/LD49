@@ -57,7 +57,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
         shipInput = GetComponent<ShipInputCalculator>();
 
-        localShip.gameObject.GetComponent<ShipLivery>().ApplyLivery(shipLiveryColorCombination, shipLiverySailTexture, shipLiveryBodyTexture);
+        var livery = localShip.gameObject.GetComponent<ShipLivery>();
+        livery.printableTemplateText = RoomController.i.printableTextTemplate;
+        livery.ApplyLivery(shipLiveryColorCombination, shipLiverySailTexture, shipLiveryBodyTexture);
 
         //
 
@@ -241,7 +243,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         {
             t.gameObject.SetActive(false);
         }
-        else {
+        else
+        {
             Renderer r = t.GetComponent<Renderer>();
             if (r != null)
             {
