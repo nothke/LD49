@@ -25,6 +25,8 @@ public class RoomController : MonoBehaviourPunCallbacks
         i = this;
 
         liveryUsage = new int[colors.liveries.Length];
+        //for (int i = 0; i < liveryUsage.Length; ++i)
+        //    liveryUsage[i] = 0;
 
         InvokeRepeating("ShipOwnershipPeriodicCheckup", 5f, 5f); // very much a patch
     }
@@ -149,6 +151,7 @@ public class RoomController : MonoBehaviourPunCallbacks
             {
                 options.Clear();
                 options.Add(i);
+                leastUsed = liveryUsage[i];
             }
             else if (liveryUsage[i] == leastUsed)
                 options.Add(i);
@@ -185,6 +188,7 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         ships.Remove(s.shipId);
         shipIdToPlayers.Remove(s.shipId);
+        liveryUsage[s.shipLivery]--;
     }
 
     public void RegisterPlayer(PlayerSync p)
