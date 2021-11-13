@@ -22,9 +22,9 @@ public class TestLivery : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            int combo = Random.Range(0, colors.liveryColorCombinations.Length);
-            int sail = Random.Range(0, colors.sailLiveries.Length);
-            int hull = Random.Range(0, colors.hullLiveryTextures.Length);
+            combo = Random.Range(0, colors.liveryColorCombinations.Length);
+            sail = Random.Range(0, colors.sailLiveries.Length);
+            hull = Random.Range(0, colors.hullLiveryTextures.Length);
 
             SetLivery();
         }
