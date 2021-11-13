@@ -46,7 +46,7 @@ MonoBehaviour:
   - name: classic
     sailTexture: {fileID: 2800000, guid: 6a95be485c7315241ae99d66e53c3874, type: 3}
     numberPosition: {x: 0.15, y: 0.2}
-    numberColor: 3
+    numberColor: 1
   - name: stripes
     sailTexture: {fileID: 2800000, guid: 031b372bf63676b409dbae7642bb3950, type: 3}
     numberPosition: {x: 0.15, y: 0.66}
@@ -62,11 +62,11 @@ MonoBehaviour:
   - name: simple
     sailTexture: {fileID: 2800000, guid: 48234ceaf27f92047b139274cfa9381b, type: 3}
     numberPosition: {x: 0.12, y: 0.2}
-    numberColor: 3
+    numberColor: 1
   - name: triangles
     sailTexture: {fileID: 2800000, guid: 5b647632190cf164ca242b275f6f1cc3, type: 3}
     numberPosition: {x: 0.15, y: 0.4}
-    numberColor: 3
+    numberColor: 0
   - name: waves
     sailTexture: {fileID: 2800000, guid: a17ca1c4c511fc4488ade7a9cd62c4a7, type: 3}
     numberPosition: {x: 0.15, y: 0.4}
