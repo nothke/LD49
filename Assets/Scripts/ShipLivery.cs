@@ -37,10 +37,13 @@ public class ShipLivery : MonoBehaviour
         AssignLivery(
             liveryColor.accent, liveryColor.baseColor, liveryColor.detail, 
             colors.hullLiveryTextures[hull], colors.sailLiveries[sail].sailTexture,
-            colors.sailLiveries[sail].numberPosition);
+            colors.sailLiveries[sail].numberPosition,
+            colors.sailLiveries[sail].numberColor == CatColors.Livery.ColorKind.black? Color.black :
+            (colors.sailLiveries[sail].numberColor == CatColors.Livery.ColorKind.baseColor? Color.red :
+            (colors.sailLiveries[sail].numberColor == CatColors.Livery.ColorKind.accent? Color.green : Color.blue)));
     }
 
-    void AssignLivery(Color r, Color g, Color b, Texture2D hull, Texture2D sail, Vector3 numberPosition)
+    void AssignLivery(Color r, Color g, Color b, Texture2D hull, Texture2D sail, Vector3 numberPosition, Color numberColor)
     {
         red = r;
         green = g;
@@ -56,6 +59,7 @@ public class ShipLivery : MonoBehaviour
             Graphics.Blit(sail, rt);
 
             printableTemplateText.text = textToWrite;
+            printableTemplateText.color = numberColor;
             printableTemplateText.ForceMeshUpdate(true, true);
 
             rt.BeginOrthoRendering();
@@ -73,7 +77,7 @@ public class ShipLivery : MonoBehaviour
 
             texture = rt.ConvertToTexture2D();
             texture.name = "SAIL-clone";
-            Debug.Log("Set tex");
+            //Debug.Log("Set tex");
 
             RenderTexture.ReleaseTemporary(rt);
             RenderTexture.active = prevActive;

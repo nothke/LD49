@@ -26,6 +26,10 @@ public class CatColors : ScriptableObject
         public string name;
         public Texture2D sailTexture;
         public Vector2 numberPosition = new Vector2(0.15f, 0.4f);
+        public enum ColorKind {
+            baseColor, accent, detail, black
+        }
+        public ColorKind numberColor = ColorKind.black;
     }
 
     public Livery[] sailLiveries;

@@ -46,23 +46,30 @@ MonoBehaviour:
   - name: classic
     sailTexture: {fileID: 2800000, guid: 6a95be485c7315241ae99d66e53c3874, type: 3}
     numberPosition: {x: 0.15, y: 0.2}
+    numberColor: 3
   - name: stripes
     sailTexture: {fileID: 2800000, guid: 031b372bf63676b409dbae7642bb3950, type: 3}
     numberPosition: {x: 0.15, y: 0.66}
+    numberColor: 2
   - name: gradient
     sailTexture: {fileID: 2800000, guid: 1a9a4941729a5614da82e1533e6b8071, type: 3}
     numberPosition: {x: 0.15, y: 0.4}
+    numberColor: 2
   - name: serrations
     sailTexture: {fileID: 2800000, guid: 6cc577a14f3f96846a64a6e86304d0de, type: 3}
     numberPosition: {x: 0.11, y: 0.08}
+    numberColor: 2
   - name: simple
     sailTexture: {fileID: 2800000, guid: 48234ceaf27f92047b139274cfa9381b, type: 3}
     numberPosition: {x: 0.12, y: 0.2}
+    numberColor: 3
   - name: triangles
     sailTexture: {fileID: 2800000, guid: 5b647632190cf164ca242b275f6f1cc3, type: 3}
     numberPosition: {x: 0.15, y: 0.4}
+    numberColor: 3
   - name: waves
     sailTexture: {fileID: 2800000, guid: a17ca1c4c511fc4488ade7a9cd62c4a7, type: 3}
     numberPosition: {x: 0.15, y: 0.4}
+    numberColor: 2
   hullLiveryTextures:
   - {fileID: 2800000, guid: 76b192351dc97cd4395d5a2c14b7f808, type: 3}
