@@ -42,6 +42,9 @@ MonoBehaviour:
   - accent: {r: 1, g: 0.57254905, b: 0, a: 1}
     baseColor: {r: 0, g: 0, b: 0, a: 1}
     detail: {r: 0.54901963, g: 0.12941177, b: 0.77254903, a: 1}
+  - accent: {r: 0, g: 0, b: 0, a: 1}
+    baseColor: {r: 0.23803692, g: 0.73800004, b: 0.20442598, a: 1}
+    detail: {r: 0.71599996, g: 1, b: 0.7452783, a: 1}
   sailLiveries:
   - name: classic
     sailTexture: {fileID: 2800000, guid: 6a95be485c7315241ae99d66e53c3874, type: 3}
@@ -73,3 +76,8 @@ MonoBehaviour:
     numberColor: 2
   hullLiveryTextures:
   - {fileID: 2800000, guid: 76b192351dc97cd4395d5a2c14b7f808, type: 3}
+  - {fileID: 2800000, guid: c27ddde2143e1384890e7afd6da6fe7b, type: 3}
+  - {fileID: 2800000, guid: 6341c1a205326f6479b3e76bd0546abf, type: 3}
+  - {fileID: 2800000, guid: 1e8192334f5c1c141bfbbfad1b54ab87, type: 3}
+  - {fileID: 2800000, guid: 0da09b09a6912424886ca2ba37dd84d2, type: 3}
+  - {fileID: 2800000, guid: fc877d5d886eb2b46a6ce77ab5a38ddc, type: 3}
