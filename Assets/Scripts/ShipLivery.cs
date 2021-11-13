@@ -42,6 +42,7 @@ public class ShipLivery : MonoBehaviour
         green = g;
         blue = b;
 
+        // Print text on the texture
         {
             Debug.Assert(printableTemplateText, "Template text not set", this);
 
