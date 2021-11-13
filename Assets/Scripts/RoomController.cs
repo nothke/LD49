@@ -27,7 +27,7 @@ public class RoomController : MonoBehaviourPunCallbacks
         i = this;
 
         liveryColorUsage = new int[colors.liveryColorCombinations.Length];
-        liverySailUsage = new int[colors.sailLiveryTextures.Length];
+        liverySailUsage = new int[colors.sailLiveries.Length];
         liveryHullUsage = new int[colors.hullLiveryTextures.Length];
         //for (int i = 0; i < liveryUsage.Length; ++i)
         //    liveryUsage[i] = 0;

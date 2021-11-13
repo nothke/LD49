@@ -1576,9 +1576,10 @@ MonoBehaviour:
   texture: {fileID: 0}
   printableTemplateText: {fileID: 0}
   sailTextPositions:
-  - {x: 0.15, y: 0.2}
-  - {x: 0.85, y: 0.2}
+  - {x: 0.15, y: 0.4}
+  - {x: 0.85, y: 0.4}
   sailTextScale: 0.1
+  textToWrite: 
 --- !u!1 &5729977581524548434
 GameObject:
   m_ObjectHideFlags: 0

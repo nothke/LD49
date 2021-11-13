@@ -20,7 +20,17 @@ public class CatColors : ScriptableObject
     [UnityEngine.Serialization.FormerlySerializedAs("liveries")]
     public LiveryCombination[] liveryColorCombinations;
 
-    public Texture2D[] sailLiveryTextures;
+    [System.Serializable]
+    public class Livery
+    {
+        public string name;
+        public Texture2D sailTexture;
+        public Vector2 numberPosition = new Vector2(0.15f, 0.4f);
+    }
+
+    public Livery[] sailLiveries;
+
+    //public Texture2D[] sailLiveryTextures;
     [UnityEngine.Serialization.FormerlySerializedAs("bodyLiveryTextures")]
     public Texture2D[] hullLiveryTextures;
 }

@@ -29,14 +29,18 @@ public class ShipLivery : MonoBehaviour
     public void ApplyLivery(int colorCombination, int sail, int hull)
     {
         colorCombination = colorCombination % colors.liveryColorCombinations.Length; // in case
-        sail = sail % colors.sailLiveryTextures.Length; // in case
+        sail = sail % colors.sailLiveries.Length; // in case
         hull = hull % colors.hullLiveryTextures.Length; // in case
 
         CatColors.LiveryCombination liveryColor = colors.liveryColorCombinations[colorCombination];
-        AssignLivery(liveryColor.accent, liveryColor.baseColor, liveryColor.detail, colors.hullLiveryTextures[hull], colors.sailLiveryTextures[sail]);
+
+        AssignLivery(
+            liveryColor.accent, liveryColor.baseColor, liveryColor.detail, 
+            colors.hullLiveryTextures[hull], colors.sailLiveries[sail].sailTexture,
+            colors.sailLiveries[sail].numberPosition);
     }
 
-    void AssignLivery(Color r, Color g, Color b, Texture2D hull, Texture2D sail)
+    void AssignLivery(Color r, Color g, Color b, Texture2D hull, Texture2D sail, Vector3 numberPosition)
     {
         red = r;
         green = g;
@@ -55,6 +59,11 @@ public class ShipLivery : MonoBehaviour
             printableTemplateText.ForceMeshUpdate(true, true);
 
             rt.BeginOrthoRendering();
+
+            sailTextPositions[0] = numberPosition;
+            numberPosition.x = 1 - numberPosition.x;
+            sailTextPositions[1] = numberPosition;
+
             for (int i = 0; i < sailTextPositions.Length; i++)
             {
                 rt.DrawTMPText(printableTemplateText, sailTextPositions[i], sailTextScale);
