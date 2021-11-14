@@ -121,7 +121,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                         if (interactableInRange)
                         {
                             interactable = interactableInRange;
-                            interacting = true;
                             interactable.OnStartedInteracting();
 
                             handStartFactor = interactable.GetHandStartFactor();
@@ -139,13 +138,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                             ShipUI.instance.EnableWheelSlider(false);
                         }
 
+                        interacting = true;
                         interactingAnimationTime = 0;
                     }
                     else if (endedInteracting)
                     {
                         interactingAnimationTime = 0;
 
-                        interactable.OnEndedInteracting();
+                        if (interactable) interactable.OnEndedInteracting();
                         interactable = null;
                         interacting = false;
                     }
@@ -346,7 +346,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             playArea.EnsureCircleInsideArea(ref pos, collisionRadius);
 
 
-            transform.position = playArea.TransformPoint(pos);
+            transform.position = playArea.TransformPoint(pos) - Vector3.up * 0.15f;
 
             Vector2 deltaPos = pos - lastFramePosition;
             lastFramePosition = pos;
@@ -378,7 +378,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             restRightHandPos = Vector3.Lerp(restRightHandPos, restRightHand.position, Time.deltaTime * 5f);
             restLeftHandPos = Vector3.Lerp(restLeftHandPos, restLeftHand.position, Time.deltaTime * 5f);
 
-            float maxHandDistance = 0.5f;
+            float maxHandDistance = 0.2f;
             if (Vector3.Distance(restRightHandPos, restRightHand.position) > maxHandDistance)
             {
                 restRightHandPos = restRightHand.position + (restRightHandPos - restRightHand.position).normalized * maxHandDistance;
@@ -404,8 +404,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 else
                 {
                     // raise hands in the air
-                    wantedLeftHandPos = restLeftHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * leftHandHoldStartFactor) - transform.right * 0.3f;
-                    wantedRightHandPos = restRightHand.position + transform.forward * 0.3f + transform.up * (0.6f + 0.4f * -leftHandHoldStartFactor) + transform.right * 0.3f;
+                    wantedLeftHandPos = restLeftHand.position + transform.forward * 0.2f + transform.up * (0.6f + 0.4f * leftHandHoldStartFactor) - transform.right * 0.4f;
+                    wantedRightHandPos = restRightHand.position + transform.forward * 0.2f + transform.up * (0.6f + 0.4f * -leftHandHoldStartFactor) + transform.right * 0.4f;
                 }
             }
 #else
