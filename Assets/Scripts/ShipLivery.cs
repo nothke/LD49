@@ -9,6 +9,7 @@ public class ShipLivery : MonoBehaviour
     [UnityEngine.Serialization.FormerlySerializedAs("bodyRenderers")]
     public Renderer[] hullRenderers;
     public Renderer[] sailRenderers;
+    public Renderer[] mastRenderers;
     public CatColors colors;
 
     [HideInInspector]
@@ -97,6 +98,13 @@ public class ShipLivery : MonoBehaviour
         foreach (Renderer rend in hullRenderers)
         {
             rend.SetPropertyBlock(block);
+        }
+
+        MaterialPropertyBlock mastBlock = new MaterialPropertyBlock();
+        mastBlock.SetColor("_Color", Color.white);
+        foreach (Renderer rend in mastRenderers)
+        {
+            rend.SetPropertyBlock(mastBlock);
         }
     }
 
