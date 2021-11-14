@@ -19,8 +19,8 @@ public class ShipInfoButton : MonoBehaviour
     {
         this.shipId = shipId;
 
-        title.text = string.Format("Vessel #{0}", shipId);
-        buttonText.text = string.Format("Join Vessel #{0}", shipId);
+        title.text = string.Format("Vessel #{0}", shipId + 1);
+        buttonText.text = string.Format("Join Vessel #{0}", shipId + 1);
         capacity.text = string.Format("{0} / {1} Players", players, maxPlayers);
 
         button.interactable = players < maxPlayers;

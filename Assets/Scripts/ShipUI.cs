@@ -25,6 +25,7 @@ public class ShipUI : MonoBehaviour
     public TMP_Text interactionText;
 
     public Slider steeringWheelSlider;
+    public RectTransform steeringRudder;
 
     float prevSpeed;
     float acceleration;
@@ -69,6 +70,7 @@ public class ShipUI : MonoBehaviour
         if (steeringWheelSlider.gameObject.activeInHierarchy)
         {
             steeringWheelSlider.value = -ship.RudderAngleNormalized;
+            steeringRudder.rotation = Quaternion.AngleAxis(-ship.rudderAngle, Vector3.forward);
         }
     }
 

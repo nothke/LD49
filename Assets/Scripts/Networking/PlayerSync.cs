@@ -493,7 +493,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             if (ShipUI.instance)
             {
                 ShipUI.instance.ship = s.visualShip;
-                ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId);
+                ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId+1);
             }
         }
 
