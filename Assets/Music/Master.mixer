@@ -33,6 +33,39 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!244 &-5750786924346269456
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 1fac30cfafcfc4687b3bdfc8365cb133
+  m_EffectName: Attenuation
+  m_MixLevel: da6aa55a4566c4d599c03d597faff622
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!243 &-178931964656480675
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ClashSounds
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 073af77c050704540a144d516234ef65
+  m_Children: []
+  m_Volume: ac9eaab72ba1749d9815687103892ed7
+  m_Pitch: 0faa4b7093b1e4662bdb52c0cb37cc4e
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -5750786924346269456}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -54,6 +87,7 @@ AudioMixerController:
     - 882833135cc0e954f8078a62a96ec2a6
     - 3019fbd3f706c244b8043879780b01c0
     - ee53aa060f34a4823b3a15cce319f637
+    - 073af77c050704540a144d516234ef65
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -69,6 +103,7 @@ AudioMixerGroupController:
   m_Children:
   - {fileID: 4231095548248113208}
   - {fileID: -7515177212974867218}
+  - {fileID: -178931964656480675}
   m_Volume: 5afc3acc70674a544bd470a2865e4af7
   m_Pitch: 56a8701405303de4da395bb2a5b293cc
   m_Send: 00000000000000000000000000000000
@@ -109,6 +144,7 @@ AudioMixerSnapshotController:
     33cc9425a2fabb743a4fe6325b45c990: 1.95
     8847cc75dcc31f24eaafe7625e49f2d1: 0
     9f7f3a7659a90c54483f7d94216a66ae: 1532
+    ac9eaab72ba1749d9815687103892ed7: 0
     76472039600d50b46a5d705cc0ca5f1c: 0.161
     f94888a9df3ae094a8bfa5e432b226ce: -10000
     df088cc91220cd04394c2b12efed96db: 1

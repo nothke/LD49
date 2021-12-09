@@ -1886,6 +1886,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95066ffe3878549d6b409af6f1388b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundPrefab: {fileID: 3095283988263972198, guid: 430bd9cd70e5944158db8abe63ef57f9, type: 3}
+  poolSize: 64
+  minTimeBetweenCollisionSounds: 0.21
+  shipCrashClips:
+  - {fileID: 8300000, guid: 4cbdbc0fa25e24df2aa4cf7cce14f8e8, type: 3}
+  - {fileID: 8300000, guid: ee9bd9c07a8b743ed83ab9fffbc11f20, type: 3}
+  - {fileID: 8300000, guid: 430608c9d542b412794f53ee82d2b6b7, type: 3}
+  - {fileID: 8300000, guid: b6050d7a5f4b1457294227d184d40113, type: 3}
   stationary: {fileID: 1318583987767594451}
   frontMoving: {fileID: 4014135546354260794}
   backMoving: {fileID: 4980305724751486874}
