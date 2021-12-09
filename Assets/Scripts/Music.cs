@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Music : MonoBehaviour
 {
+    public bool muted = false;
+
     [System.Serializable]
     public class Chord {
         public AudioClip[] clips;
@@ -50,9 +52,27 @@ public class Music : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(bpm);
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            muted = !muted;
+            if (muted)
+            {
+                foreach (AudioSource s in musicSources)
+                    if (s.isPlaying) s.Stop();
+            }
+            else {
+
+            }
+        }
 
         timeSinceLastBeat += Time.deltaTime;
+
+        if (muted)
+        {
+            return;
+        }
+        //Debug.Log(bpm);
+
         if (timeSinceLastBeat >= SecondsPerBeat * lastChordBeatDuration)
         {
             timeSinceLastBeat = 0;// timeSinceLastBeat % SecondsPerBeat;
