@@ -47,13 +47,32 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-742862293725350487
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CrashWaves
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: c364dfa025c0b46088cd55aa7f596040
+  m_Children: []
+  m_Volume: 31607935062b042feba4c5aa47e5227b
+  m_Pitch: ca4c936c7ae7a4d9e9f703012e389714
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 5240573909103392861}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &-178931964656480675
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ClashSounds
+  m_Name: CrashSounds
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 073af77c050704540a144d516234ef65
   m_Children: []
@@ -88,6 +107,8 @@ AudioMixerController:
     - 3019fbd3f706c244b8043879780b01c0
     - ee53aa060f34a4823b3a15cce319f637
     - 073af77c050704540a144d516234ef65
+    - eb6e4a9614353470b9b9b999cc5639d1
+    - c364dfa025c0b46088cd55aa7f596040
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -104,6 +125,8 @@ AudioMixerGroupController:
   - {fileID: 4231095548248113208}
   - {fileID: -7515177212974867218}
   - {fileID: -178931964656480675}
+  - {fileID: 4332953325064332293}
+  - {fileID: -742862293725350487}
   m_Volume: 5afc3acc70674a544bd470a2865e4af7
   m_Pitch: 56a8701405303de4da395bb2a5b293cc
   m_Send: 00000000000000000000000000000000
@@ -154,7 +177,22 @@ AudioMixerSnapshotController:
     92599abe200d14d85806a32f3f49172a: 20
     0f5d1bcec928fbe40981c3f57ecafe2c: 0.444
     24d8865faff3db54da3b25c99c341bc8: 0.157
+    5cb0d8af92eec4af891189bb61f9dc89: 6.7923827
   m_TransitionOverrides: {}
+--- !u!244 &3069844113701564716
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 81e4de468091b4f1aabc077009a4b060
+  m_EffectName: Attenuation
+  m_MixLevel: 04a26980ce35547128a01f35bb3d062e
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!243 &4231095548248113208
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -175,6 +213,39 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &4332953325064332293
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WavesAgainstBoat
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: eb6e4a9614353470b9b9b999cc5639d1
+  m_Children: []
+  m_Volume: 5cb0d8af92eec4af891189bb61f9dc89
+  m_Pitch: eeef1e3ca1ffe4511b286f0716684e1a
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: 3069844113701564716}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &5240573909103392861
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: a971cf452f5154ce7bc6694ce2ddfde4
+  m_EffectName: Attenuation
+  m_MixLevel: 841c86d0026b94b16abcebc5953c350e
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &6900330675414497522
 AudioMixerEffectController:
   m_ObjectHideFlags: 3

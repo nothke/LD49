@@ -231,6 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72b88b44736eb104f907cccd8448feab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  muted: 0
   chords:
   - clips:
     - {fileID: 8300000, guid: 6ddf085714cc4f247bbff4629bab6100, type: 3}
@@ -290,7 +291,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -482,7 +483,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

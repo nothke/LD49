@@ -1889,11 +1889,25 @@ MonoBehaviour:
   soundPrefab: {fileID: 3095283988263972198, guid: 430bd9cd70e5944158db8abe63ef57f9, type: 3}
   poolSize: 64
   minTimeBetweenCollisionSounds: 0.21
+  wavesAgainstShipClips:
+  - {fileID: 8300000, guid: b365865223f0441cd88b126b729ee71d, type: 3}
+  - {fileID: 8300000, guid: 7fec2b54d4d094b8380b667e749c17c7, type: 3}
+  - {fileID: 8300000, guid: faa0283a47e21494d8d1bcc567277e15, type: 3}
+  - {fileID: 8300000, guid: bd98fc5d40e0548d78721ed59390f355, type: 3}
+  - {fileID: 8300000, guid: 6bdff7fdea1734e8e9089dda363f45ea, type: 3}
+  wavesAgainstShipMixer: {fileID: 4332953325064332293, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  buoyancyPoints: []
+  wavesCrashAgainstShipClips:
+  - {fileID: 8300000, guid: 2683683cbb3fe4638af6e6f3f50fbac6, type: 3}
+  - {fileID: 8300000, guid: 27e66750331ce4f8d8746ea64864940e, type: 3}
+  - {fileID: 8300000, guid: f0605d3e66ab342dd9e2f5e195286009, type: 3}
+  wavesCrashAgainstShipMixer: {fileID: -742862293725350487, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
   shipCrashClips:
   - {fileID: 8300000, guid: 4cbdbc0fa25e24df2aa4cf7cce14f8e8, type: 3}
   - {fileID: 8300000, guid: ee9bd9c07a8b743ed83ab9fffbc11f20, type: 3}
   - {fileID: 8300000, guid: 430608c9d542b412794f53ee82d2b6b7, type: 3}
   - {fileID: 8300000, guid: b6050d7a5f4b1457294227d184d40113, type: 3}
+  shipCrashMixer: {fileID: -178931964656480675, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
   stationary: {fileID: 1318583987767594451}
   frontMoving: {fileID: 4014135546354260794}
   backMoving: {fileID: 4980305724751486874}

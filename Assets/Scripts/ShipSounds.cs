@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ShipSounds : MonoBehaviour
 {
+
     ShipController ship;
+    Rigidbody rb;
 
     [Header("Ship sound pool")]
     public AudioSource soundPrefab;
@@ -13,8 +15,19 @@ public class ShipSounds : MonoBehaviour
     int nextInPool = 0;
     public float minTimeBetweenCollisionSounds = 0.21f;
 
+    [Header("Waves against ship")]
+    public AudioClip[] wavesAgainstShipClips;
+    public UnityEngine.Audio.AudioMixerGroup wavesAgainstShipMixer;
+    BuoyancyPoint[] buoyancyPoints;
+    float[] lastPointAltitudes;
+    public AudioClip[] wavesCrashAgainstShipClips;
+    public UnityEngine.Audio.AudioMixerGroup wavesCrashAgainstShipMixer;
+
     [Header("Ship clash sounds")]
     public AudioClip[] shipCrashClips;
+    public UnityEngine.Audio.AudioMixerGroup shipCrashMixer;
+    float lastWaveClashTime = 0;
+    float lastWaveCrashTime = -5f;
 
 
     [Header("Ship moving sounds")]
@@ -29,6 +42,7 @@ public class ShipSounds : MonoBehaviour
     void Start()
     {
         ship = GetComponent<ShipController>();
+        rb = GetComponent<Rigidbody>();
 
         frontMoving.volume = 0f;
         backMoving.volume = 0f;
@@ -43,6 +57,16 @@ public class ShipSounds : MonoBehaviour
         {
             soundPool[i] = Instantiate(soundPrefab.gameObject, poolParent).GetComponent<AudioSource>();
             soundPool[i].gameObject.SetActive(false);
+        }
+
+        //
+        buoyancyPoints = GetComponentsInChildren<BuoyancyPoint>();
+        lastPointAltitudes = new float[buoyancyPoints.Length];
+
+        for (int i = 0; i < buoyancyPoints.Length; ++i)
+        {
+            Vector3 p = buoyancyPoints[i].transform.position;
+            lastPointAltitudes[i] = p.y - Water.GetHeight(p);
         }
     }
 
@@ -60,6 +84,36 @@ public class ShipSounds : MonoBehaviour
         stationary.volume = (1f - movingFactor);
         frontMoving.volume = movingFactor * (1f - frontBackDirectionalFactor + frontBackDirectionalFactor * Mathf.Max(0, frontDot));
         backMoving.volume = movingFactor * (1f - frontBackDirectionalFactor + frontBackDirectionalFactor * Mathf.Max(0, -frontDot));
+
+        // buoyancy points wave clashes
+        for (int i = 0; i < buoyancyPoints.Length; ++i)
+        {
+            Vector3 p = buoyancyPoints[i].transform.position;
+            float newAltitude = p.y - Water.GetHeight(p);
+
+            if (newAltitude < lastPointAltitudes[i] && newAltitude <= 0 && lastPointAltitudes[i] > 0)
+            {
+                float velocity = rb.GetPointVelocity(p).magnitude;
+                if (velocity > 0.5f || lastPointAltitudes[i] - newAltitude > 0.1f)
+                {
+                    //Debug.Log("velocity? " + velocity);
+                    if (velocity > 8f && Time.time - lastWaveCrashTime > 2.7f)
+                    {
+                        //Debug.Log("Wave Crash " + nextInPool + " " + (lastPointAltitudes[i] - newAltitude) + " " + velocity);
+                        PlaySoundAtPos(p, NextWaveCrash(), Mathf.Clamp01((velocity-5f) / 10f), wavesCrashAgainstShipMixer, 128);
+                        lastWaveCrashTime = Time.time + Random.Range(-1f, 1f);
+                    }
+                    else if (Time.time - lastWaveClashTime > 0.71f)
+                    {
+                        //Debug.Log("Splash " + nextInPool + " " + (lastPointAltitudes[i] - newAltitude) + " " + velocity);
+                        PlaySoundAtPos(p, NextWaveClash(), Mathf.Clamp(velocity / 15f, 0, 2f), wavesAgainstShipMixer);
+                        lastWaveClashTime = Time.time;
+                    }
+                }
+            }
+
+            lastPointAltitudes[i] = newAltitude;
+        }
     }
 
 
@@ -78,7 +132,37 @@ public class ShipSounds : MonoBehaviour
         return shipCrashClips[chosen];
     }
 
-    public void PlaySoundAtPos(Vector3 p, AudioClip clip, float volume)
+    int lastWaveClashClip = -1;
+    AudioClip NextWaveClash()
+    {
+        AudioClip c = wavesAgainstShipClips[Random.Range(0, wavesAgainstShipClips.Length)];
+
+        List<int> clips = new List<int>(wavesAgainstShipClips.Length);
+        for (int i = 0; i < wavesAgainstShipClips.Length; ++i)
+            if (i != lastWaveClashClip) clips.Add(i);
+
+        int chosen = clips[Random.Range(0, clips.Count)];
+        lastWaveClashClip = chosen;
+
+        return wavesAgainstShipClips[chosen];
+    }
+
+    int lastWaveCrashClip = -1;
+    AudioClip NextWaveCrash()
+    {
+        AudioClip c = wavesCrashAgainstShipClips[Random.Range(0, wavesCrashAgainstShipClips.Length)];
+
+        List<int> clips = new List<int>(wavesCrashAgainstShipClips.Length);
+        for (int i = 0; i < wavesCrashAgainstShipClips.Length; ++i)
+            if (i != lastWaveCrashClip) clips.Add(i);
+
+        int chosen = clips[Random.Range(0, clips.Count)];
+        lastWaveCrashClip = chosen;
+
+        return wavesCrashAgainstShipClips[chosen];
+    }
+
+    public void PlaySoundAtPos(Vector3 p, AudioClip clip, float volume, UnityEngine.Audio.AudioMixerGroup mixer, int priority = 158)
     {
         AudioSource pooledSource = soundPool[nextInPool];
         nextInPool = (nextInPool + 1) % soundPool.Length;
@@ -87,6 +171,8 @@ public class ShipSounds : MonoBehaviour
         pooledSource.transform.position = p;
         pooledSource.gameObject.SetActive(true);
         pooledSource.volume = volume;
+        pooledSource.outputAudioMixerGroup = mixer;
+        pooledSource.priority = priority;
         pooledSource.Play();
     }
 
@@ -99,7 +185,7 @@ public class ShipSounds : MonoBehaviour
 
             //Debug.Log(magnitude);
 
-            PlaySoundAtPos(p, NextShipCollisionClip(), Mathf.Clamp(magnitude / 7f, 0, 2f));
+            PlaySoundAtPos(p, NextShipCollisionClip(), Mathf.Clamp(magnitude / 7f, 0, 2f), shipCrashMixer);
         }
     }
 
