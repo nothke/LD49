@@ -62,6 +62,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         livery.textToWrite = (shipId + 1).ToString().PadLeft(3, '0');
         livery.ApplyLivery(shipLiveryColorCombination, shipLiverySailTexture, shipLiveryBodyTexture);
 
+        remoteShip.GetComponent<ShipSounds>().enabled = false;
+        localShip.GetComponent<ShipSounds>().doWavesAgainstShip = false;
+
         //
 
         RoomController.i.RegisterShip(this);
