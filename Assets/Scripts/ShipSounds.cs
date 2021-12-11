@@ -22,6 +22,7 @@ public class ShipSounds : MonoBehaviour
     float[] lastPointAltitudes;
     public AudioClip[] wavesCrashAgainstShipClips;
     public UnityEngine.Audio.AudioMixerGroup wavesCrashAgainstShipMixer;
+    public bool doWavesAgainstShip = true;
 
     [Header("Ship clash sounds")]
     public AudioClip[] shipCrashClips;
@@ -103,7 +104,7 @@ public class ShipSounds : MonoBehaviour
                         PlaySoundAtPos(p, NextWaveCrash(), Mathf.Clamp01((velocity-5f) / 10f), wavesCrashAgainstShipMixer, 128);
                         lastWaveCrashTime = Time.time + Random.Range(-1f, 1f);
                     }
-                    else if (Time.time - lastWaveClashTime > 0.71f)
+                    else if (doWavesAgainstShip && Time.time - lastWaveClashTime > 0.71f)
                     {
                         //Debug.Log("Splash " + nextInPool + " " + (lastPointAltitudes[i] - newAltitude) + " " + velocity);
                         PlaySoundAtPos(p, NextWaveClash(), Mathf.Clamp(velocity / 15f, 0, 2f), wavesAgainstShipMixer);
@@ -162,7 +163,7 @@ public class ShipSounds : MonoBehaviour
         return wavesCrashAgainstShipClips[chosen];
     }
 
-    public void PlaySoundAtPos(Vector3 p, AudioClip clip, float volume, UnityEngine.Audio.AudioMixerGroup mixer, int priority = 158)
+    public void PlaySoundAtPos(Vector3 p, AudioClip clip, float volume, UnityEngine.Audio.AudioMixerGroup mixer, int priority = 158, float spatialBlend = 1)
     {
         AudioSource pooledSource = soundPool[nextInPool];
         nextInPool = (nextInPool + 1) % soundPool.Length;
@@ -173,6 +174,7 @@ public class ShipSounds : MonoBehaviour
         pooledSource.volume = volume;
         pooledSource.outputAudioMixerGroup = mixer;
         pooledSource.priority = priority;
+        pooledSource.spatialBlend = spatialBlend;
         pooledSource.Play();
     }
 
@@ -185,7 +187,7 @@ public class ShipSounds : MonoBehaviour
 
             //Debug.Log(magnitude);
 
-            PlaySoundAtPos(p, NextShipCollisionClip(), Mathf.Clamp(magnitude / 7f, 0, 2f), shipCrashMixer);
+            PlaySoundAtPos(p, NextShipCollisionClip(), Mathf.Clamp(magnitude / 7f, 0, 2f), shipCrashMixer, 128, 0.15f);
         }
     }
 

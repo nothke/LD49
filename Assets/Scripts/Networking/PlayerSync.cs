@@ -495,6 +495,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 ShipUI.instance.ship = s.visualShip;
                 ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId+1);
             }
+
+            s.visualShip.GetComponent<ShipSounds>().doWavesAgainstShip = true;
         }
 
         feet.Init(pos, Vector2.up);
