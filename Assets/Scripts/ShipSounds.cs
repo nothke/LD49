@@ -95,7 +95,7 @@ public class ShipSounds : MonoBehaviour
             if (newAltitude < lastPointAltitudes[i] && newAltitude <= 0 && lastPointAltitudes[i] > 0)
             {
                 float velocity = rb.GetPointVelocity(p).magnitude;
-                if (velocity > 0.5f || lastPointAltitudes[i] - newAltitude > 0.1f)
+                if (velocity > 0.1f || lastPointAltitudes[i] - newAltitude > 0.1f)
                 {
                     //Debug.Log("velocity? " + velocity);
                     if (velocity > 8f && Time.time - lastWaveCrashTime > 2.7f)
@@ -107,7 +107,7 @@ public class ShipSounds : MonoBehaviour
                     else if (doWavesAgainstShip && Time.time - lastWaveClashTime > 0.71f)
                     {
                         //Debug.Log("Splash " + nextInPool + " " + (lastPointAltitudes[i] - newAltitude) + " " + velocity);
-                        PlaySoundAtPos(p, NextWaveClash(), Mathf.Clamp(velocity / 15f, 0, 2f), wavesAgainstShipMixer);
+                        PlaySoundAtPos(p, NextWaveClash(), Mathf.Clamp(velocity / 12f, 0, 1.5f), wavesAgainstShipMixer);
                         lastWaveClashTime = Time.time;
                     }
                 }
