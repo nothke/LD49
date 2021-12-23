@@ -1370,10 +1370,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wantOwnRoom: 0
-  gameVersion: 0.3
+  gameVersion: 0.4
   roomName: Adriatic
   kickAFKPlayers: 1
-  maxAFKtime: 90
+  maxAFKtime: 120
 --- !u!4 &970179863
 Transform:
   m_ObjectHideFlags: 0
