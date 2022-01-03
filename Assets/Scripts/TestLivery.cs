@@ -48,7 +48,7 @@ public class TestLivery : MonoBehaviour
 
     void SetLivery()
     {
-        Debug.Log(string.Format("Appplying livery: combo {0}, sail {1}, hull {2}", combo, sail, hull));
+        Debug.Log(string.Format("Applying livery: combo {0}, sail {1}, hull {2}", combo, sail, hull));
         livery.textToWrite = "001";
         livery.ApplyLivery(combo, sail, hull);
     }

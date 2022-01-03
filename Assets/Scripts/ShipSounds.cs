@@ -163,7 +163,7 @@ public class ShipSounds : MonoBehaviour
         return wavesCrashAgainstShipClips[chosen];
     }
 
-    public void PlaySoundAtPos(Vector3 p, AudioClip clip, float volume, UnityEngine.Audio.AudioMixerGroup mixer, int priority = 158, float spatialBlend = 1)
+    public void PlaySoundAtPos(Vector3 p, AudioClip clip, float volume, UnityEngine.Audio.AudioMixerGroup mixer, int priority = 158, float minDistance = 1f)
     {
         AudioSource pooledSource = soundPool[nextInPool];
         nextInPool = (nextInPool + 1) % soundPool.Length;
@@ -174,20 +174,23 @@ public class ShipSounds : MonoBehaviour
         pooledSource.volume = volume;
         pooledSource.outputAudioMixerGroup = mixer;
         pooledSource.priority = priority;
-        pooledSource.spatialBlend = spatialBlend;
+        pooledSource.minDistance = minDistance;
         pooledSource.Play();
     }
 
     float lastShipCollisionTime = 0;
     public void ShipCollision(Vector3 p, float magnitude)
     {
+        if (!enabled)
+            return;
+
         if (Time.time - lastShipCollisionTime > minTimeBetweenCollisionSounds)
         {
             lastShipCollisionTime = Time.time;
 
             //Debug.Log(magnitude);
 
-            PlaySoundAtPos(p, NextShipCollisionClip(), Mathf.Clamp(magnitude / 7f, 0, 2f), shipCrashMixer, 128, 0.15f);
+            PlaySoundAtPos(p, NextShipCollisionClip(), Mathf.Clamp(magnitude / 7f, 0, 2f), shipCrashMixer, 128, 10f);
         }
     }
 
@@ -195,5 +198,21 @@ public class ShipSounds : MonoBehaviour
     {
         Debug.Log("Collided with " + collision.other.name);
         ShipCollision(collision.contacts[0].point, collision.relativeVelocity.magnitude);
+    }
+
+    private void OnDisable()
+    {
+        frontMoving.volume = 0f;
+        backMoving.volume = 0f;
+        stationary.volume = 0f;
+
+        // pool
+
+        for (int i = 0; i < soundPool.Length; ++i)
+        {
+            Destroy(soundPool[i].gameObject);
+        }
+
+        soundPool = null;
     }
 }
