@@ -237,7 +237,7 @@ public class RoomController : MonoBehaviourPunCallbacks
             playerToShip.Add(p.photonView.Owner, s);
 
 
-            bool localBoat = s.photonView.IsMine || playerToShip[PhotonNetwork.LocalPlayer] == s;
+            bool localBoat = playerToShip[PhotonNetwork.LocalPlayer] == s;
             s.shipSounds.PlaySoundAtPos(s.visualShip.transform.position, localBoat ? joinedOwnShip : joinedOtherShip, 1f, playerJoinedMixer, 128, 10f);
         }
 
