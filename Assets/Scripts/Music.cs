@@ -32,6 +32,7 @@ public class Music : MonoBehaviour
     int chordIt = 0;
 
     public AudioSource[] musicSources;
+    public AudioSource noiseSource;
     int musicSourceIt = 0;
 
     float SecondsPerBeat {
@@ -59,9 +60,10 @@ public class Music : MonoBehaviour
             {
                 foreach (AudioSource s in musicSources)
                     if (s.isPlaying) s.Stop();
+                noiseSource.Stop();
             }
             else {
-
+                noiseSource.Play();
             }
         }
 

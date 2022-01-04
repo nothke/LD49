@@ -58,6 +58,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     public Interactable CurrentlyInteractingWith => interactable;
 
+    public UnityEngine.Audio.AudioMixerGroup defaultGroup, othersGroup;
+
     void Start()
     {
         /*if (!photonView.IsMine)
@@ -499,7 +501,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             s.visualShip.GetComponent<ShipSounds>().doWavesAgainstShip = true;
         }
 
-        feet.Init(pos, Vector2.up);
+        feet.Init(pos, Vector2.up, photonView.IsMine? defaultGroup : othersGroup);
 
         GetComponent<PlayerColors>().SetShipColor(s.shipLiveryColorCombination);
     }

@@ -25,16 +25,16 @@ public class PlayerFeet : MonoBehaviour
 
     Quaternion fromRotR, fromRotL;
     Quaternion toRotR, toRotL;
+    AudioSource leftStep, rightStep;
 
     // Start is called before the first frame update
     void Start()
     {
 
-
     }
 
     bool initialized = false;
-    public void Init(Vector2 pos, Vector2 direction)
+    public void Init(Vector2 pos, Vector2 direction, UnityEngine.Audio.AudioMixerGroup soundGroup)
     {
         Vector2 playerRight = new Vector2(direction.y, -direction.x);// Vector2.playArea.InverseTransformDirection(transform.right);
 
@@ -49,6 +49,13 @@ public class PlayerFeet : MonoBehaviour
         fromRotL = toRotL = Quaternion.identity;
         rightFeet.localRotation = fromRotR;
         leftFeet.localRotation = fromRotL;
+
+
+        leftStep = leftFeet.GetComponent<AudioSource>();
+        rightStep = rightFeet.GetComponent<AudioSource>();
+        leftStep.outputAudioMixerGroup = soundGroup;
+        rightStep.outputAudioMixerGroup = soundGroup;
+
         initialized = true;
     }
 
@@ -127,7 +134,11 @@ public class PlayerFeet : MonoBehaviour
         // Update
         if (leftFeetMoving || rightFeetMoving)
         {
-            moveDistance += feetSpeed * Time.deltaTime;
+            float speed = feetSpeed;
+            if ((rightFeetMoving && rightDistance > maxDistanceFromBody * 1.5f) ||
+                (leftFeetMoving && leftDistance > maxDistanceFromBody * 1.5f)) feetSpeed *= 1.5f;
+
+            moveDistance += speed * Time.deltaTime;
             float moveFactor = Mathf.Clamp01(moveDistance / moveTotalDistance);
 
             float instantHeight = moveFactor * 2f - 1f;
@@ -144,6 +155,8 @@ public class PlayerFeet : MonoBehaviour
                 if (moveFactor >= 1)
                 {
                     leftFeetMoving = false;
+                    if (leftStep.isPlaying) leftStep.Stop();
+                    leftStep.Play();
                 }
             }
             if (rightFeetMoving)
@@ -156,6 +169,8 @@ public class PlayerFeet : MonoBehaviour
                 if (moveFactor >= 1)
                 {
                     rightFeetMoving = false;
+                    if (rightStep.isPlaying) rightStep.Stop();
+                    rightStep.Play();
                 }
             }
         }

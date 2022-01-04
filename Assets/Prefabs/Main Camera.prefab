@@ -273,6 +273,7 @@ MonoBehaviour:
   musicSources:
   - {fileID: 5288797566343437627}
   - {fileID: 8734556369581394630}
+  noiseSource: {fileID: 8028510168205039177}
 --- !u!82 &5288797566343437627
 AudioSource:
   m_ObjectHideFlags: 0

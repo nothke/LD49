@@ -207,10 +207,13 @@ public class ShipSounds : MonoBehaviour
         stationary.volume = 0f;
 
         // pool
-
-        for (int i = 0; i < soundPool.Length; ++i)
+        if (soundPool != null)
         {
-            Destroy(soundPool[i].gameObject);
+            for (int i = 0; i < soundPool.Length; ++i)
+            {
+                if (soundPool[i] != null)
+                    Destroy(soundPool[i].gameObject);
+            }
         }
 
         soundPool = null;
