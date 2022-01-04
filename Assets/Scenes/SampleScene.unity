@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17947549, g: 0.34449583, b: 0.4661827, a: 1}
+  m_IndirectSpecularColor: {r: 0.17947462, g: 0.34449372, b: 0.46618006, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1350,6 +1350,7 @@ GameObject:
   - component: {fileID: 970179862}
   - component: {fileID: 970179864}
   - component: {fileID: 970179865}
+  - component: {fileID: 970179866}
   m_Layer: 0
   m_Name: NETWORKING
   m_TagString: Untagged
@@ -1374,6 +1375,7 @@ MonoBehaviour:
   roomName: Adriatic
   kickAFKPlayers: 1
   maxAFKtime: 120
+  successfulLoginSound: {fileID: 970179866}
 --- !u!4 &970179863
 Transform:
   m_ObjectHideFlags: 0
@@ -1406,6 +1408,10 @@ MonoBehaviour:
   playerPrefab: {fileID: 2302828771738319153, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
   colors: {fileID: 11400000, guid: ef68c2de1f9b9eb42983836a0936a56e, type: 2}
   printableTextTemplate: {fileID: 475060584}
+  joinedOwnShip: {fileID: 8300000, guid: fa9459827152e4d0dae27c4da75aa889, type: 3}
+  joinedOtherShip: {fileID: 8300000, guid: 99313f03fca354cebabc824262e2986c, type: 3}
+  playerLeft: {fileID: 8300000, guid: ece138972c1544c449b93dac0189a793, type: 3}
+  playerJoinedMixer: {fileID: -4927362546935406722, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
 --- !u!114 &970179865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1428,6 +1434,102 @@ MonoBehaviour:
   sceneViewId: 3
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!82 &970179866
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970179861}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -4927362546935406722, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 7491c53fdf8ef4153848927d5709db32, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &975559474
 PrefabInstance:
   m_ObjectHideFlags: 0

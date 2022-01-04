@@ -78,6 +78,7 @@ MonoBehaviour:
   remoteMaterial: {fileID: 2100000, guid: 3bcefcdf8a9971a4eaf1f8a3c5e9977f, type: 2}
   localShip: {fileID: 0}
   remoteShip: {fileID: 0}
+  shipSounds: {fileID: 0}
 --- !u!114 &1969835584439724526
 MonoBehaviour:
   m_ObjectHideFlags: 0
