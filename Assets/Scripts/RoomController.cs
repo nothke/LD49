@@ -22,6 +22,11 @@ public class RoomController : MonoBehaviourPunCallbacks
     public Dictionary<int, List<Player>> shipIdToPlayers = new Dictionary<int, List<Player>>();
     public Dictionary<Player, ShipSync> playerToShip = new Dictionary<Player, ShipSync>();
 
+    [Header("Sounds")]
+    public AudioClip joinedOwnShip;
+    public AudioClip joinedOtherShip, playerLeft;
+    public UnityEngine.Audio.AudioMixerGroup playerJoinedMixer;
+
     private void Awake()
     {
         i = this;
@@ -188,6 +193,9 @@ public class RoomController : MonoBehaviourPunCallbacks
                 {
                     playerToShip.Add(p, s);
                     playerSyncs[p].PlaceOnShip(s);
+
+                    bool localBoat = s.photonView.IsMine || playerToShip[PhotonNetwork.LocalPlayer] == s;
+                    s.shipSounds.PlaySoundAtPos(s.visualShip.transform.position, localBoat ? joinedOwnShip : joinedOtherShip, 1f, playerJoinedMixer, 128, 10f);
                 }
             }
             else shipIdToPlayers[s.shipId] = new List<Player>();
@@ -224,8 +232,13 @@ public class RoomController : MonoBehaviourPunCallbacks
 
         if (ships.ContainsKey(p.shipId))
         {
-            p.PlaceOnShip(ships[p.shipId]);
-            playerToShip.Add(p.photonView.Owner, ships[p.shipId]);
+            ShipSync s = ships[p.shipId];
+            p.PlaceOnShip(s);
+            playerToShip.Add(p.photonView.Owner, s);
+
+
+            bool localBoat = s.photonView.IsMine || playerToShip[PhotonNetwork.LocalPlayer] == s;
+            s.shipSounds.PlaySoundAtPos(s.visualShip.transform.position, localBoat ? joinedOwnShip : joinedOtherShip, 1f, playerJoinedMixer, 128, 10f);
         }
 
         if (!shipIdToPlayers.ContainsKey(p.shipId))
@@ -245,12 +258,12 @@ public class RoomController : MonoBehaviourPunCallbacks
         //Debug.Log("Player left room");
         if (playerSyncs.ContainsKey(otherPlayer))
         {
-            //Debug.Log("playerSyncs had player");
             if (playerToShip.ContainsKey(otherPlayer))
             {
-                //Debug.Log("playerToShip had player");
                 ShipSync s = playerToShip[otherPlayer];
                 shipIdToPlayers[s.shipId].Remove(otherPlayer);
+
+                playerToShip[PhotonNetwork.LocalPlayer].shipSounds.PlaySoundAtPos(s.visualShip.transform.position, playerLeft, 1f, playerJoinedMixer, 132, 10f);
 
                 if (s.photonView.IsMine && playerToShip[PhotonNetwork.LocalPlayer] != s)
                 { // Check for ownership transfer or for removal

@@ -20,6 +20,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
     List<Renderer> remoteRenderers = new List<Renderer>();
 
     public ShipController localShip, remoteShip;
+    [HideInInspector]
+    public ShipSounds shipSounds;
 
     public ShipController visualShip
     {
@@ -62,8 +64,10 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         livery.textToWrite = (shipId + 1).ToString().PadLeft(3, '0');
         livery.ApplyLivery(shipLiveryColorCombination, shipLiverySailTexture, shipLiveryBodyTexture);
 
+        shipSounds = localShip.GetComponent<ShipSounds>();
         remoteShip.GetComponent<ShipSounds>().enabled = false;
-        localShip.GetComponent<ShipSounds>().doWavesAgainstShip = false;
+        shipSounds.doWavesAgainstShip = false;
+        shipSounds.Init();
 
         //
 

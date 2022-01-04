@@ -11,13 +11,20 @@ public class CollisionSounds : MonoBehaviour
     {
         shipSounds = GetComponentInParent<ShipSounds>();
 
-        //if (!shipSounds) enabled = false;
+        if (!shipSounds || !shipSounds.enabled) enabled = false;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collided with " + collision.other.name);
         if (shipSounds)
+        {
+            if (!shipSounds.enabled)
+            {
+                enabled = false;
+                return;
+            }
             shipSounds.ShipCollision(collision.contacts[0].point, collision.relativeVelocity.magnitude);
+        }
     }
 }

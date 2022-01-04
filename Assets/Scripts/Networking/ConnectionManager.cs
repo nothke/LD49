@@ -22,6 +22,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public static double roomCreatedTime = 0;
 
+    public AudioSource successfulLoginSound;
+
     void Start()
     {
         roomCreatedTime = 0;
@@ -102,6 +104,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
 
         ConnectionUI.instance.ShowInRoomPanel();
+        successfulLoginSound.Play();
     }
 
 

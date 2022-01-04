@@ -40,7 +40,7 @@ public class ShipSounds : MonoBehaviour
     public float maxMovingVolume = 2f;
 
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         ship = GetComponent<ShipController>();
         rb = GetComponent<Rigidbody>();
