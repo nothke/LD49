@@ -37,8 +37,13 @@ public class ShipController : MonoBehaviour
 
     public float RudderAngleNormalized => rudderAngle / maxRudderSteeringAngle;
 
+    [System.NonSerialized]
+    public float instantNormalizedRudderSpeed;
+
     [Header("Interactables")]
     public GameObject interactableSteeringWheel;
+
+    float lastRudderAngle = 0;
 
     public void UpdateWithCurrentInput(float dTime)
     {
@@ -48,6 +53,13 @@ public class ShipController : MonoBehaviour
         rudderAngle += -inputX * rudderTurningSpeed * dTime;
         rudderAngle = Mathf.Clamp(rudderAngle, -maxRudderSteeringAngle, maxRudderSteeringAngle);
 
+        if (Mathf.Abs(rudderAngle) < 1f)
+            rudderAngle = Mathf.MoveTowardsAngle(rudderAngle, 0f, dTime * rudderTurningSpeed * 0.1f);
+
+        instantNormalizedRudderSpeed = (rudderAngle - lastRudderAngle) / dTime;
+        instantNormalizedRudderSpeed /= rudderTurningSpeed;
+
+        lastRudderAngle = rudderAngle;
         //Debug.Log("Input is " + inputX + " " + inputR);
     }
 

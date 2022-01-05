@@ -39,6 +39,21 @@ public class ShipSounds : MonoBehaviour
     public float maxExpectedKnots = 20f;
     public float maxMovingVolume = 2f;
 
+    [Header("Interacting")]
+    public AudioSource sailMovingLeft;
+    public AudioSource sailMovingRight;
+    public AudioSource rudderSource;
+    public float rudderMaxVolume;
+    public Vector2 rudderMinMaxPitch = new Vector2(0.5f, 1f);
+
+    bool initialized = false;
+
+    private void Start()
+    {
+        if (!initialized)
+            Init();
+    }
+
     // Start is called before the first frame update
     public void Init()
     {
@@ -69,6 +84,8 @@ public class ShipSounds : MonoBehaviour
             Vector3 p = buoyancyPoints[i].transform.position;
             lastPointAltitudes[i] = p.y - Water.GetHeight(p);
         }
+
+        initialized = true;
     }
 
     // Update is called once per frame
@@ -101,7 +118,7 @@ public class ShipSounds : MonoBehaviour
                     if (velocity > 8f && Time.time - lastWaveCrashTime > 2.7f)
                     {
                         //Debug.Log("Wave Crash " + nextInPool + " " + (lastPointAltitudes[i] - newAltitude) + " " + velocity);
-                        PlaySoundAtPos(p, NextWaveCrash(), Mathf.Clamp01((velocity-5f) / 10f), wavesCrashAgainstShipMixer, 128);
+                        PlaySoundAtPos(p, NextWaveCrash(), Mathf.Clamp01((velocity - 5f) / 10f), wavesCrashAgainstShipMixer, 128);
                         lastWaveCrashTime = Time.time + Random.Range(-1f, 1f);
                     }
                     else if (doWavesAgainstShip && Time.time - lastWaveClashTime > 0.71f)
@@ -115,7 +132,36 @@ public class ShipSounds : MonoBehaviour
 
             lastPointAltitudes[i] = newAltitude;
         }
+
+        //
+        float rudderSpeed = -ship.instantNormalizedRudderSpeed;
+        rudderSpeed = rudderSpeed * 0.5f + 0.5f * ship.inputX;
+        float absRudderSpeed = Mathf.Abs(rudderSpeed);
+
+        if (!rudderSource.isPlaying && absRudderSpeed > 0.01f)
+        {
+            rudderSource.time = rudderSource.clip.length * Random.value;
+            rudderSource.volume = absRudderSpeed * rudderMaxVolume;
+            rudderSource.pitch = Mathf.Lerp(rudderMinMaxPitch.x, rudderMinMaxPitch.y, absRudderSpeed);
+            rudderSource.Play();
+        }
+        else if (rudderSource.isPlaying) {
+            if (absRudderSpeed < 0.01f || Mathf.Sign(rudderSpeed) != Mathf.Sign(lastRudderSpeed))
+            {
+                rudderSource.volume = 0;
+                rudderSource.pitch = rudderMinMaxPitch.x;
+                rudderSource.Stop();
+            }
+            else
+            {
+                rudderSource.volume = absRudderSpeed * rudderMaxVolume;
+                rudderSource.pitch = Mathf.Lerp(rudderMinMaxPitch.x, rudderMinMaxPitch.y, absRudderSpeed);
+            }
+        }
+
+        lastRudderSpeed = rudderSpeed;
     }
+    float lastRudderSpeed = 0;
 
 
     int lastPlayedCollisionClip = -1;

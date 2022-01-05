@@ -19,6 +19,39 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &-6922531218166424576
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Rudder
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 44b9a9526e4fd41f78cf26434db9af66
+  m_Children: []
+  m_Volume: b09ed8e2499f242e1b72c60c177925e6
+  m_Pitch: 40f7740a979bb431384ddfa6032fe5ca
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -6632899322520416320}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &-6632899322520416320
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 3261346dee1be490990a491a36c9f2f2
+  m_EffectName: Attenuation
+  m_MixLevel: 8fc54444e70eb4867b82f0f1b9a9eb5d
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-6631579922978133218
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -193,6 +226,7 @@ AudioMixerController:
     - eb0d6a51a72f44048986e197c72bada7
     - bd7a35ccfffc04fbf90a83e1e9e9dc96
     - da30b101f70244472964638524649085
+    - 44b9a9526e4fd41f78cf26434db9af66
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -294,6 +328,7 @@ AudioMixerGroupController:
   - {fileID: -178931964656480675}
   - {fileID: 4332953325064332293}
   - {fileID: -742862293725350487}
+  - {fileID: -6922531218166424576}
   m_Volume: b3e249b5f00984add9da0148dd15a0b7
   m_Pitch: 56dd8c0cbf6a14c2aadd461690846005
   m_Send: 00000000000000000000000000000000
