@@ -11,7 +11,8 @@ public class Sail : MonoBehaviour
 
     public Vector3 Normal => transform.forward;
 
-    Vector3 force;
+    [System.NonSerialized]
+    public Vector3 force;
     Vector3 windVelocity;
 
     public float bendForceForward = 0;
