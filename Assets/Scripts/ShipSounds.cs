@@ -133,10 +133,10 @@ public class ShipSounds : MonoBehaviour
             lastPointAltitudes[i] = newAltitude;
         }
 
-        //
-        float rudderSpeed = -ship.instantNormalizedRudderSpeed;
-        rudderSpeed = rudderSpeed * 0.5f + 0.5f * ship.inputX;
-        float absRudderSpeed = Mathf.Abs(rudderSpeed);
+        // Rudder
+        float rudderNormalizedSpeed = -ship.instantNormalizedRudderSpeed;
+        rudderNormalizedSpeed = rudderNormalizedSpeed * 0.5f + 0.5f * ship.inputX;
+        float absRudderSpeed = Mathf.Abs(rudderNormalizedSpeed);
 
         if (!rudderSource.isPlaying && absRudderSpeed > 0.01f)
         {
@@ -146,10 +146,10 @@ public class ShipSounds : MonoBehaviour
             rudderSource.Play();
         }
         else if (rudderSource.isPlaying) {
-            if (absRudderSpeed < 0.01f || Mathf.Sign(rudderSpeed) != Mathf.Sign(lastRudderSpeed))
+            if (absRudderSpeed < 0.01f || Mathf.Sign(rudderNormalizedSpeed) != Mathf.Sign(lastRudderSpeed))
             {
                 rudderSource.volume = 0;
-                rudderSource.pitch = rudderMinMaxPitch.x;
+                rudderSource.pitch = rudderMinMaxPitch.x * 0.69f;
                 rudderSource.Stop();
             }
             else
@@ -159,7 +159,40 @@ public class ShipSounds : MonoBehaviour
             }
         }
 
-        lastRudderSpeed = rudderSpeed;
+        lastRudderSpeed = rudderNormalizedSpeed;
+
+        // Sail
+        float mastNormalizedSpeed = -ship.instantNormalizedMastSpeed;
+        mastNormalizedSpeed = mastNormalizedSpeed * 0.5f + 0.5f * ship.inputR;
+
+        float absMastSpeed = Mathf.Abs(mastNormalizedSpeed);
+        if (mastNormalizedSpeed < -0.01f)
+        {
+            if (sailMovingLeft.isPlaying)
+                sailMovingLeft.Stop();
+            if (!sailMovingRight.isPlaying)
+            {
+                sailMovingRight.time = sailMovingRight.clip.length * Random.value;
+                sailMovingRight.Play();
+            }
+        }
+        else if (mastNormalizedSpeed > 0.01f)
+        {
+            if (sailMovingRight.isPlaying)
+                sailMovingRight.Stop();
+            if (!sailMovingLeft.isPlaying)
+            {
+                sailMovingLeft.time = sailMovingLeft.clip.length * Random.value;
+                sailMovingLeft.Play();
+            }
+        }
+        else {
+            if (sailMovingLeft.isPlaying) sailMovingLeft.Stop();
+            if (sailMovingRight.isPlaying) sailMovingRight.Stop();
+        }
+
+        if (sailMovingLeft.isPlaying) sailMovingLeft.volume = absMastSpeed;
+        if (sailMovingRight.isPlaying) sailMovingRight.volume = absMastSpeed;
     }
     float lastRudderSpeed = 0;
 

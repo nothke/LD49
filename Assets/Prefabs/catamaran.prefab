@@ -202,8 +202,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 5
+  MaxDistance: 750
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -909,8 +909,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 5
+  MaxDistance: 750
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -1520,7 +1520,7 @@ AudioSource:
   m_GameObject: {fileID: 4212792376343446401}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 3503405307754247909, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  OutputAudioMixerGroup: {fileID: 328335095601803258, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
   m_audioClip: {fileID: 8300000, guid: 38e0741fa72f143c18fed4251cf30061, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -2174,7 +2174,7 @@ MonoBehaviour:
   sailMovingRight: {fileID: 8955311537596978402}
   rudderSource: {fileID: 3538340666031685201}
   rudderMaxVolume: 1
-  rudderMinMaxPitch: {x: 0.3, y: 1}
+  rudderMinMaxPitch: {x: 0.5, y: 1}
 --- !u!1 &5729977581524548434
 GameObject:
   m_ObjectHideFlags: 0
@@ -3397,7 +3397,7 @@ AudioSource:
   m_GameObject: {fileID: 8461922187740340176}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 3503405307754247909, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  OutputAudioMixerGroup: {fileID: 328335095601803258, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
   m_audioClip: {fileID: 8300000, guid: 596de77cbff7e434382b8378f2819e55, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -3565,8 +3565,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 5
+  MaxDistance: 750
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

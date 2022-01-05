@@ -58,7 +58,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     public Interactable CurrentlyInteractingWith => interactable;
 
-    public UnityEngine.Audio.AudioMixerGroup defaultGroup, othersGroup;
+    [Header("Sounds that should probably be in another script")]
+    public AudioClip[] holdSailSounds;
+    public AudioClip[] releaseSailSounds;
+    public UnityEngine.Audio.AudioMixerGroup ownStepsMixerGroup, othersStepsMixerGroup;
+    public UnityEngine.Audio.AudioMixerGroup ownGrabsMixerGroup, othersGrabsMixerGroup;
+
 
     void Start()
     {
@@ -125,6 +130,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                             interactable = interactableInRange;
                             interactable.OnStartedInteracting();
 
+                            PlayStartInteractingSound(interactable);
+
                             handStartFactor = interactable.GetHandStartFactor();
                             interactable.GetHandStartFactors(
                                 out leftHandHoldStartFactor,
@@ -147,7 +154,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     {
                         interactingAnimationTime = 0;
 
-                        if (interactable) interactable.OnEndedInteracting();
+                        if (interactable)
+                        {
+                            interactable.OnEndedInteracting();
+
+                            PlayEndInteractingSound(interactable);
+                        }
                         interactable = null;
                         interacting = false;
                     }
@@ -501,7 +513,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             s.shipSounds.doWavesAgainstShip = true;
         }
 
-        feet.Init(pos, Vector2.up, photonView.IsMine? defaultGroup : othersGroup);
+        feet.Init(pos, Vector2.up, photonView.IsMine? ownStepsMixerGroup : othersStepsMixerGroup);
 
         GetComponent<PlayerColors>().SetShipColor(s.shipLiveryColorCombination);
     }
@@ -545,6 +557,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             {
                 wasInteracting = interacting;
                 interactingAnimationTime = 0f;
+
+                if (interacting)
+                    PlayStartInteractingSound(interactable);
             }
         }
     }
@@ -563,7 +578,11 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     void SetInteractableFromId(int id)
     {
         if (id < 0)
+        {
+            if (interactable != null)
+                PlayEndInteractingSound(interactable);
             interactable = null;
+        }
         else if (id < interactables.interactables.Length)
             interactable = interactables.interactables[id];
         else
@@ -573,6 +592,31 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     public float InteractingInput()
     {
         return interactingInput;
+    }
+
+    void PlayStartInteractingSound(Interactable i)
+    {
+        if (i.GetType() == Interactable.Type.Rope)
+        {
+            ShipSync s = RoomController.i.ships[shipId];
+            Debug.Log(s);
+            if (s != null)
+            {
+                s.shipSounds.PlaySoundAtPos(leftHand.position, holdSailSounds[Random.Range(0, holdSailSounds.Length)], 1f, photonView.IsMine ? ownGrabsMixerGroup : othersGrabsMixerGroup);
+            }
+        }
+    }
+
+    void PlayEndInteractingSound(Interactable i)
+    {
+        if (i.GetType() == Interactable.Type.Rope)
+        {
+            ShipSync s = RoomController.i.ships[shipId];
+            if (s != null)
+            {
+                s.shipSounds.PlaySoundAtPos(leftHand.position, releaseSailSounds[Random.Range(0, releaseSailSounds.Length)], 1f, photonView.IsMine ? ownGrabsMixerGroup : othersGrabsMixerGroup);
+            }
+        }
     }
 
     void OnDrawGizmos()

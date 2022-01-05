@@ -39,11 +39,14 @@ public class ShipController : MonoBehaviour
 
     [System.NonSerialized]
     public float instantNormalizedRudderSpeed;
+    [System.NonSerialized]
+    public float instantNormalizedMastSpeed;
 
     [Header("Interactables")]
     public GameObject interactableSteeringWheel;
 
     float lastRudderAngle = 0;
+    float lastMastAngl = 0;
 
     public void UpdateWithCurrentInput(float dTime)
     {
@@ -60,6 +63,11 @@ public class ShipController : MonoBehaviour
         instantNormalizedRudderSpeed /= rudderTurningSpeed;
 
         lastRudderAngle = rudderAngle;
+
+        instantNormalizedMastSpeed = (mastAngle - lastMastAngl) / dTime;
+        instantNormalizedMastSpeed /= mastTurningSpeed;
+
+        lastMastAngl = mastAngle;
         //Debug.Log("Input is " + inputX + " " + inputR);
     }
 

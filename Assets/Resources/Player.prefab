@@ -214,8 +214,17 @@ MonoBehaviour:
   leftHand: {fileID: 6164456812060876360}
   restRightHand: {fileID: 5286066015268068918}
   restLeftHand: {fileID: 1394722695817679717}
-  defaultGroup: {fileID: 7701788050842246671, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
-  othersGroup: {fileID: -3529074103984612968, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  holdSailSounds:
+  - {fileID: 8300000, guid: 5b4b547009fd642f2a3b4377aa021e66, type: 3}
+  - {fileID: 8300000, guid: 50e8a20055bd7492daa52f3c2db41631, type: 3}
+  releaseSailSounds:
+  - {fileID: 8300000, guid: 2d3c2beaf3f6f462fab4b43cb8054dd7, type: 3}
+  - {fileID: 8300000, guid: 6bab28ee07b6746cdaad96b9093e931a, type: 3}
+  - {fileID: 8300000, guid: 5baa359aae0bc426d8d05543097508f6, type: 3}
+  ownStepsMixerGroup: {fileID: 7701788050842246671, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  othersStepsMixerGroup: {fileID: -3529074103984612968, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  ownGrabsMixerGroup: {fileID: 1013017919310511127, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
+  othersGrabsMixerGroup: {fileID: 2862796974895924112, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
 --- !u!114 &5030915964336270187
 MonoBehaviour:
   m_ObjectHideFlags: 0

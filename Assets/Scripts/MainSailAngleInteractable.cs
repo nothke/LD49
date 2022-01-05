@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MainSailAngleInteractable : Interactable
 {
+
+    public override Type GetType() { return Type.Rope; }
+
     RopeHolder _rope;
     RopeHolder rope { get { if (!_rope) _rope = GetComponent<RopeHolder>(); return _rope; } }
 
