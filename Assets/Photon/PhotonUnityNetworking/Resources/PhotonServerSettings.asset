@@ -17,7 +17,7 @@ MonoBehaviour:
     AppIdFusion: 
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 0.2
+    AppVersion: 0.5
     UseNameServer: 1
     FixedRegion: 
     Server: 
@@ -42,6 +42,7 @@ MonoBehaviour:
   - PleaseJoinShip
   - RequestShipForPlayer
   - SetId
+  - PlaySound
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

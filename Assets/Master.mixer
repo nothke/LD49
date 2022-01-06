@@ -255,7 +255,27 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 786bb3f4f36404be5aaf00ab3e468aad
+    name: Buoys
+  - guid: ac9eaab72ba1749d9815687103892ed7
+    name: CrashingSounds
+  - guid: 31607935062b042feba4c5aa47e5227b
+    name: CrashWaves
+  - guid: 92599abe200d14d85806a32f3f49172a
+    name: BoatMoving
+  - guid: 51a17174a565f4164bd72c3b0c9ff473
+    name: PlayerSteps
+  - guid: b09ed8e2499f242e1b72c60c177925e6
+    name: Rudder
+  - guid: 608a5773bbd03430495235de23b298b5
+    name: SailMoving
+  - guid: 70dbe3b52d48641cfa01b3e59120c059
+    name: SailGrabbing
+  - guid: 0a4a5f31de9dc4ca093081709fc398a6
+    name: SailFlailing
+  - guid: 5cb0d8af92eec4af891189bb61f9dc89
+    name: WavesAgainstBoat
   m_AudioMixerGroupViews:
   - guids:
     - 882833135cc0e954f8078a62a96ec2a6
@@ -336,6 +356,7 @@ AudioMixerSnapshotController:
     b09ed8e2499f242e1b72c60c177925e6: 20
     51a17174a565f4164bd72c3b0c9ff473: 5.1526933
     047102a4f165adc46ab2d2472bf7a6fb: 0
+    786bb3f4f36404be5aaf00ab3e468aad: 4.165108
     33cc9425a2fabb743a4fe6325b45c990: 1.95
     31607935062b042feba4c5aa47e5227b: -2.2889833
     8847cc75dcc31f24eaafe7625e49f2d1: 0
