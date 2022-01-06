@@ -2263,7 +2263,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2317,6 +2317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   source: {fileID: 7299406016325674054}
   sail: {fileID: 1460523295608452186}
+  minPitch: 0.5
 --- !u!1 &5729977581524548434
 GameObject:
   m_ObjectHideFlags: 0
