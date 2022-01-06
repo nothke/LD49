@@ -363,6 +363,50 @@ PrefabInstance:
       propertyPath: groups.Array.data[0]
       value: volumeRudder
       objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[0]
+      value: Rudder
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[1]
+      value: SailGrabbing
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[2]
+      value: PlayerSteps
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[3]
+      value: SailMoving
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[4]
+      value: SailFlailing
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[5]
+      value: CrashingSounds
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[6]
+      value: BoatMoving
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[7]
+      value: CrashWaves
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[8]
+      value: WavesAgainstBoat
+      objectReference: {fileID: 0}
+    - target: {fileID: 7575280487822498876, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
+      propertyPath: volumeNames.Array.data[9]
+      value: Buoys
+      objectReference: {fileID: 0}
     - target: {fileID: 8044564660172402339, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
