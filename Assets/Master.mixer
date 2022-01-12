@@ -264,6 +264,8 @@ AudioMixerController:
     name: CrashWaves
   - guid: 92599abe200d14d85806a32f3f49172a
     name: BoatMoving
+  - guid: c14fe21c6f4f3b147b8722ab4f6ba98e
+    name: MusicVolume
   - guid: 51a17174a565f4164bd72c3b0c9ff473
     name: PlayerSteps
   - guid: b09ed8e2499f242e1b72c60c177925e6
@@ -370,7 +372,7 @@ AudioMixerSnapshotController:
     f94888a9df3ae094a8bfa5e432b226ce: -10000
     df088cc91220cd04394c2b12efed96db: 1
     b9c9862bfbfca3b46b6f942abed407e3: 5.34
-    c14fe21c6f4f3b147b8722ab4f6ba98e: -10.345207
+    c14fe21c6f4f3b147b8722ab4f6ba98e: -5.3230753
     c5b0284ccd66c094bab8fa575eaae9da: 0
     654d30cca9b6af4409452425bf4f7fbc: 979
     92599abe200d14d85806a32f3f49172a: 6
