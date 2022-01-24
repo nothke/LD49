@@ -135,11 +135,11 @@ Shader "Custom/ReflectyWater" {
 		{
 			v2f o;
 
-			half3 worldSpaceVertex = mul(unity_ObjectToWorld, (v.vertex)).xyz;
-			half3 vtxForAni = (worldSpaceVertex).xzz;
+			float3 worldSpaceVertex = mul(unity_ObjectToWorld, (v.vertex)).xyz;
+			//half3 vtxForAni = (worldSpaceVertex).xzz;
 
 			half3 nrml = half3(0, 1, 0);
-			half3 offsets = 0;
+			float3 offsets = 0;
 
 			// From game
 			float3 worldPos = worldSpaceVertex;

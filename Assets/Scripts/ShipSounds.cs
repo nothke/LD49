@@ -38,6 +38,8 @@ public class ShipSounds : MonoBehaviour
 
     public float maxExpectedKnots = 20f;
     public float maxMovingVolume = 2f;
+    [HideInInspector]
+    public SailSound sailSound;
 
     [Header("Interacting")]
     public AudioSource sailMovingLeft;
@@ -111,14 +113,17 @@ public class ShipSounds : MonoBehaviour
 
             if (newAltitude < lastPointAltitudes[i] && newAltitude <= 0 && lastPointAltitudes[i] > 0)
             {
-                float velocity = rb.GetPointVelocity(p).magnitude;
+                Vector3 velAtPoint = rb.GetPointVelocity(p);
+                float velocity = velAtPoint.magnitude;
                 if (velocity > 0.1f || lastPointAltitudes[i] - newAltitude > 0.1f)
                 {
-                    //Debug.Log("velocity? " + velocity);
-                    if (velocity > 8f && Time.time - lastWaveCrashTime > 2.7f)
+                    //if (velAtPoint.y < -2f) Debug.Log("velocity? " + velocity + " y: " + velAtPoint.y);
+                    if ((velocity > 8f && Time.time - lastWaveCrashTime > 2.7f) || (velAtPoint.y < -2f && Time.time - lastWaveCrashTime > 0.7f))
                     {
                         //Debug.Log("Wave Crash " + nextInPool + " " + (lastPointAltitudes[i] - newAltitude) + " " + velocity);
-                        PlaySoundAtPos(p, NextWaveCrash(), Mathf.Clamp01((velocity - 5f) / 10f), wavesCrashAgainstShipMixer, 128);
+                        float waveClashIntensity = Mathf.Max(Mathf.Clamp01((velocity - 5f) / 10f), Mathf.Clamp01(-velAtPoint.y / 5f));
+
+                        PlaySoundAtPos(p, NextWaveCrash(), waveClashIntensity, wavesCrashAgainstShipMixer, 128);
                         lastWaveCrashTime = Time.time + Random.Range(-1f, 1f);
                     }
                     else if (doWavesAgainstShip && Time.time - lastWaveClashTime > 0.71f)
@@ -193,6 +198,11 @@ public class ShipSounds : MonoBehaviour
 
         if (sailMovingLeft.isPlaying) sailMovingLeft.volume = absMastSpeed;
         if (sailMovingRight.isPlaying) sailMovingRight.volume = absMastSpeed;
+
+        if (sailSound != null)
+        {
+            sailSound.UpdateSailSound(movingFactor);
+        }
     }
     float lastRudderSpeed = 0;
 

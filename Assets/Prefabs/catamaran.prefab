@@ -2170,11 +2170,12 @@ MonoBehaviour:
   frontBackDirectionalFactor: 0.4
   maxExpectedKnots: 20
   maxMovingVolume: 2
+  sailSound: {fileID: 0}
   sailMovingLeft: {fileID: 2313878590786343966}
   sailMovingRight: {fileID: 8955311537596978402}
   rudderSource: {fileID: 3538340666031685201}
   rudderMaxVolume: 1
-  rudderMinMaxPitch: {x: 0.5, y: 1}
+  rudderMinMaxPitch: {x: 0.66, y: 1}
 --- !u!1 &5578890470811965875
 GameObject:
   m_ObjectHideFlags: 0

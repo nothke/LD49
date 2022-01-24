@@ -39,7 +39,9 @@ public class Water : MonoBehaviour
     {
         if (PhotonNetwork.InRoom)
         {
-            Shader.SetGlobalFloat(NETWORK_TIME_ID, (float)(PhotonNetwork.Time - ConnectionManager.roomCreatedTime));
+            double networkTime = PhotonNetwork.Time - ConnectionManager.roomCreatedTime;
+            Shader.SetGlobalFloat(NETWORK_TIME_ID, (float)networkTime);
+            //Debug.Log(PhotonNetwork.Time + " - "+ ConnectionManager.roomCreatedTime + " = "+(float)(PhotonNetwork.Time - ConnectionManager.roomCreatedTime));
         }
         else
         {

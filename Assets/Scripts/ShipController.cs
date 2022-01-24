@@ -19,6 +19,15 @@ public class ShipController : MonoBehaviour
 
     public Transform mast;
     public Transform playableArea;
+    ShipPlayArea _playAreaReference = null;
+    public ShipPlayArea playAreaManager {
+        get {
+            if (_playAreaReference == null)
+                _playAreaReference = GetComponent<ShipPlayArea>();
+
+            return _playAreaReference;
+        }
+    }
 
     public Transform cameraFocusBottom;
     public Transform cameraFocusTop;

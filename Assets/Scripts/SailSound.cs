@@ -21,6 +21,7 @@ public class SailSound : MonoBehaviour
             return;
         }
 
+        s.sailSound = this;
         source.Play();
     }
 
@@ -36,7 +37,10 @@ public class SailSound : MonoBehaviour
             source.enabled = false;
             return;
         }
+    }
 
+    public void UpdateSailSound(float movingFactor)
+    {
         float filter = 0.69f;
         filteredForce = filter * filteredForce + sail.force.magnitude * (1f - filter);
 
@@ -45,7 +49,7 @@ public class SailSound : MonoBehaviour
         float flailIntensity = Mathf.Clamp01(1.2f - filteredForce / 10f);
 
         float easedFlail = Easing.Quadratic.Out(flailIntensity);
-        source.volume = easedFlail;
+        source.volume = Mathf.Max(Easing.Quadratic.In(1f - movingFactor), easedFlail);
         source.pitch = Mathf.Lerp(minPitch, 1f, flailIntensity);
     }
 }

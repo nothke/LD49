@@ -165,6 +165,11 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
             Vector3 playerPosition = ps.transform.position;
+            // Make sure the position we apply the force is within bounds (otherwise it will tilt a lot)
+            Vector2 localPlayerPos = localShip.playAreaManager.InverseTransformPoint(playerPosition);
+            localShip.playAreaManager.EnsureCircleInsideArea(ref localPlayerPos, ps.collisionRadius);
+            playerPosition = localShip.playAreaManager.TransformPoint(localPlayerPos);
+
             localShip.rb.AddForceAtPosition(Vector3.down * ps.boatPushWeight, playerPosition, ForceMode.Acceleration);
 
             if (remoteShip.gameObject.activeSelf)
