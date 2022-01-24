@@ -114,6 +114,7 @@ public class RoomController : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
 
         ConnectionUI.instance.ShowIngamePanel();
+        Music.instance.FadeOut();
     }
 
     int InstantiateNewShip() {

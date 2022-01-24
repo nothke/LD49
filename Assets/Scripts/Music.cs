@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Music : MonoBehaviour
 {
+    public static Music instance;
+
     public bool muted = false;
 
     [System.Serializable]
@@ -35,6 +37,13 @@ public class Music : MonoBehaviour
     public AudioSource noiseSource;
     int musicSourceIt = 0;
 
+    public float fadeOutTime = 13f;
+    float currentFadingTime = 0;
+    bool fadingOut = false;
+    float startVolume = 0;
+    public UnityEngine.Audio.AudioMixer mixer;
+
+
     float SecondsPerBeat {
         get {
             return 60f / bpm;
@@ -46,14 +55,20 @@ public class Music : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        instance = this;
+        mixer.GetFloat("MusicVolume", out startVolume);
+    }
+
+    public void FadeOut() {
+        currentFadingTime = 0;
+        fadingOut = true;
     }
 
     int chordsPlayed = 0;
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (false && Input.GetKeyDown(KeyCode.M))
         {
             muted = !muted;
             if (muted)
@@ -72,6 +87,23 @@ public class Music : MonoBehaviour
         if (muted)
         {
             return;
+        }
+
+        if (fadingOut) {
+            currentFadingTime += Time.deltaTime;
+
+            float fadingFactor = Mathf.Clamp01(currentFadingTime / fadeOutTime);
+
+            if (fadingFactor >= 1f)
+            {
+                foreach (AudioSource s in musicSources)
+                    if (s.isPlaying) s.Stop();
+                noiseSource.Stop();
+                muted = true;
+                fadingOut = false;
+            }
+            else
+                mixer.SetFloat("MusicVolume", Mathf.Lerp(startVolume, -80f, Easing.Circular.In(fadingFactor)));
         }
         //Debug.Log(bpm);
 
