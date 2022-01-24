@@ -255,14 +255,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1562324674, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1562324677, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
-      propertyPath: tellerDistance
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1060222766535452083, guid: 99f8a8378c5922e4ca438ec29ced6977, type: 3}
       propertyPath: m_Name
       value: HUD Canvas
