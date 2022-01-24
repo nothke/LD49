@@ -145,6 +145,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                             // Raise hand in the air
                             leftHandHoldStartFactor = Random.Range(-0.2f, 0.2f); // used for raised-hand positioning
                             ShipUI.instance.EnableWheelSlider(false);
+                            ShipUI.instance.EnableWindViz(false);
                         }
 
                         interacting = true;

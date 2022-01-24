@@ -36,6 +36,7 @@ public class ShipUI : MonoBehaviour
     public GameObject introPanel, ingamePanel, inRoomPanel;
     public ShipInfoButton shipInfoPrefab;
     public Transform shipInfoPanel;
+    public GameObject windPanel;
 
     private void FixedUpdate()
     {
@@ -82,5 +83,10 @@ public class ShipUI : MonoBehaviour
     public void EnableWheelSlider(bool b)
     {
         steeringWheelSlider.gameObject.SetActive(b);
+    }
+
+    public void EnableWindViz(bool b)
+    {
+        windPanel.gameObject.SetActive(b);
     }
 }

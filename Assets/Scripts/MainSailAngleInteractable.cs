@@ -47,4 +47,17 @@ public class MainSailAngleInteractable : Interactable
     {
         ShipUI.instance.SetInteractionText("Hold ACTION and < > to turn the sail");
     }
+
+    public override void OnStartedInteracting()
+    {
+        base.OnStartedInteracting();
+
+        ShipUI.instance.EnableWindViz(true);
+    }
+
+    public override void OnEndedInteracting()
+    {
+        base.OnEndedInteracting();
+        ShipUI.instance.EnableWindViz(false);
+    }
 }

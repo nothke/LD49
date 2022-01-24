@@ -97,6 +97,8 @@ public class ShipInteractables : MonoBehaviour
             case InteractingThing.Rope:
                 Facepunch.Highlight.AddRenderer(visualRope);
                 ShipUI.instance.SetInteractionText("Hold ACTION and < > to turn the sail");
+
+                ShipUI.instance.EnableWindViz(false);
                 break;
             case InteractingThing.LeftWheel:
                 Facepunch.Highlight.AddRenderer(visualLeftWheel);
