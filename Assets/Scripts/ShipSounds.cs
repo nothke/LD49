@@ -285,7 +285,7 @@ public class ShipSounds : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collided with " + collision.other.name);
+        //Debug.Log("Collided with " + collision.other.name);
         ShipCollision(collision.contacts[0].point, collision.relativeVelocity.magnitude);
     }
 

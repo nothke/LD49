@@ -114,8 +114,8 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
                 smoothFrames++;
 
 
-                localShip.mastAngle = Mathf.Lerp(localShip.mastAngle, remoteShip.mastAngle, smoothFactor);
-                localShip.rudderAngle = Mathf.Lerp(localShip.rudderAngle, remoteShip.rudderAngle, smoothFactor);
+                localShip.mastAngle = Mathf.Lerp(localShip.mastAngle, remoteShip.mastAngle, Time.deltaTime * 4f);
+                localShip.rudderAngle = Mathf.Lerp(localShip.rudderAngle, remoteShip.rudderAngle, Time.deltaTime * 4f);
 
                 shipInput.UpdateInput(shipId, ref localShip.inputX, ref localShip.inputY, ref localShip.inputR);
                 localShip.UpdateWithCurrentInput(Time.deltaTime);
