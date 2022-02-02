@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17947462, g: 0.34449372, b: 0.46618006, a: 1}
+  m_IndirectSpecularColor: {r: 0.17947549, g: 0.34449583, b: 0.4661827, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -736,15 +736,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 5288797566343437627, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5288797566343437627, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 043f0a20ee0010d4fb9983baf09b6aa4, type: 3}
+    - target: {fileID: 5288797566343437627, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7408936726229213162, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
       propertyPath: mixer
       value: 
       objectReference: {fileID: 24100000, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
     - target: {fileID: 7408936726229213162, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
+      propertyPath: source
+      value: 
+      objectReference: {fileID: 465489548}
+    - target: {fileID: 7408936726229213162, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
       propertyPath: fadeOutTime
       value: 30
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8028510168205039177, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8028510168205039177, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
+    - {fileID: 8734556369581394630, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
 --- !u!1 &432481995
 GameObject:
@@ -791,6 +813,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &465489548 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5288797566343437627, guid: d57ea0d7c39a375448592717a78459b9, type: 3}
+  m_PrefabInstance: {fileID: 428923880}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &475060584 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5875386056475101596, guid: 63d2bacc42a6455418511dc1acde3cbb, type: 3}

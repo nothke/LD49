@@ -8,49 +8,15 @@ public class Music : MonoBehaviour
 
     public bool muted = false;
 
-    [System.Serializable]
-    public class Chord {
-        public AudioClip[] clips;
-    }
-
-    public Chord[] chords;
-
-    [System.Serializable]
-    public class ChordTiming {
-        public int beats = 1;
-        public int chordId = 0;
-    }
-    public ChordTiming[] chordProgression;
-
-    float bpm {
-        get {
-            return Mathf.Lerp(minMaxBPM.x, minMaxBPM.y, (Mathf.Sin(Time.time * 2f * Mathf.PI / bpmPeriod) + 1f) / 2f);
-        }
-    }
-
-    public Vector2Int minMaxBPM = new Vector2Int(23, 27);
-    public float bpmPeriod = 120f;
-
-    int chordIt = 0;
-
-    public AudioSource[] musicSources;
-    public AudioSource noiseSource;
-    int musicSourceIt = 0;
+    public AudioSource source;
 
     public float fadeOutTime = 13f;
     float currentFadingTime = 0;
     bool fadingOut = false;
+    bool fadingIn = false;
     float startVolume = 0;
+    float startFadingVolume = 0;
     public UnityEngine.Audio.AudioMixer mixer;
-
-
-    float SecondsPerBeat {
-        get {
-            return 60f / bpm;
-        }
-    }
-    float timeSinceLastBeat = 0;
-    int lastChordBeatDuration = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -59,90 +25,83 @@ public class Music : MonoBehaviour
         mixer.GetFloat("MusicVolume", out startVolume);
     }
 
-    public void FadeOut() {
+    void FadeOut() {
         currentFadingTime = 0;
         fadingOut = true;
+        mixer.GetFloat("MusicVolume", out startFadingVolume);
     }
 
-    int chordsPlayed = 0;
+    void FadeIn()
+    {
+        currentFadingTime = 0;
+        fadingIn = true;
+        mixer.GetFloat("MusicVolume", out startFadingVolume);
+        source.Play();
+        muted = false;
+    }
+
+    ShipController ship;
+    public void SetShip(ShipController s)
+    {
+        ship = s;
+    }
+
+    float speedAverage = 0f;
+
     // Update is called once per frame
     void Update()
     {
-        if (false && Input.GetKeyDown(KeyCode.M))
+        if (ship != null)
         {
-            muted = !muted;
-            if (muted)
-            {
-                foreach (AudioSource s in musicSources)
-                    if (s.isPlaying) s.Stop();
-                noiseSource.Stop();
-            }
-            else {
-                noiseSource.Play();
-            }
-        }
+            float speed = ship.SpeedKnots();
+            float f = 0.1f;
 
-        timeSinceLastBeat += Time.deltaTime;
+            speedAverage = speedAverage * (1f - f) + speed * f;
+            //Debug.Log(speedAverage);
+        }
 
         if (muted)
         {
-            return;
-        }
-
-        if (fadingOut) {
-            currentFadingTime += Time.deltaTime;
-
-            float fadingFactor = Mathf.Clamp01(currentFadingTime / fadeOutTime);
-
-            if (fadingFactor >= 1f)
+            if (speedAverage < 2f && !fadingIn)
             {
-                foreach (AudioSource s in musicSources)
-                    if (s.isPlaying) s.Stop();
-                noiseSource.Stop();
-                muted = true;
-                fadingOut = false;
+                FadeIn();
             }
-            else
-                mixer.SetFloat("MusicVolume", Mathf.Lerp(startVolume, -80f, Easing.Circular.In(fadingFactor)));
         }
-        //Debug.Log(bpm);
+        else {
+            if (fadingIn)
+            {
+                currentFadingTime += Time.deltaTime;
 
-        if (timeSinceLastBeat >= SecondsPerBeat * lastChordBeatDuration)
-        {
-            timeSinceLastBeat = 0;// timeSinceLastBeat % SecondsPerBeat;
+                float fadingFactor = 1f - Mathf.Clamp01(currentFadingTime / fadeOutTime);
 
-            //
-            AudioSource s = GetNextAudioSource();
-            ChordTiming c = GetNextChord();
+                if (fadingFactor <= 0f)
+                {
+                    fadingIn = false;
+                }
+                else
+                    mixer.SetFloat("MusicVolume", Mathf.Lerp(startVolume, startFadingVolume, Easing.Circular.In(fadingFactor)));
+            }
+            else if (fadingOut)
+            {
+                currentFadingTime += Time.deltaTime;
 
-            int whichClip = Random.Range(0, chords[c.chordId].clips.Length);
-            if (chordsPlayed == 0) whichClip = 0;
+                float fadingFactor = Mathf.Clamp01(currentFadingTime / fadeOutTime);
 
-            s.clip = chords[c.chordId].clips[whichClip];
-            lastChordBeatDuration = c.beats;
+                if (fadingFactor >= 1f)
+                {
+                    source.Stop();
+                    muted = true;
+                    fadingOut = false;
+                }
+                else
+                    mixer.SetFloat("MusicVolume", Mathf.Lerp(startFadingVolume, -80f, Easing.Circular.In(fadingFactor)));
+            }
 
-            // Todo playScheduled if we want better timming
-            s.Play();
-            chordsPlayed++;
+
+            if (speedAverage > 2f && !fadingOut)
+            {
+                FadeOut();
+            }
         }
-    }
-
-    AudioSource GetNextAudioSource()
-    {
-        AudioSource s = musicSources[musicSourceIt];
-
-        if (s.isPlaying)
-            s.Stop();
-
-        musicSourceIt = (musicSourceIt + 1) % musicSources.Length;
-
-        return s;
-    }
-
-    ChordTiming GetNextChord()
-    {
-        ChordTiming c = chordProgression[chordIt];
-        chordIt = (chordIt + 1) % chordProgression.Length;
-        return c;
     }
 }

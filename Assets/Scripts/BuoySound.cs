@@ -20,7 +20,7 @@ public class BuoySound : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-        if (photonView.IsMine && !source.isPlaying)
+        if (PhotonNetwork.InRoom && photonView.IsMine && !source.isPlaying)
         {
             timeUntilBellRing -= Time.deltaTime;
 
