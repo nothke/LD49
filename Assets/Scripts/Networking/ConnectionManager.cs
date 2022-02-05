@@ -66,10 +66,17 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         {
             retryConnectionCoroutine = StartCoroutine(WaitABitAndTryToConnectAgain());
         }
+
+#if !UNITY_WEBGL && !UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+#endif
     }
 
 
-    #region photoncallbacks
+#region photoncallbacks
     public override void OnConnectedToMaster()
     {
         ConnectionUI.instance.LogConnectionInfo(string.Format("Connected to server, fetching rooms.."));
@@ -205,7 +212,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         }
     }
 
-    #endregion photoncallbacks
+#endregion photoncallbacks
 
 #if !UNITY_EDITOR
     void OnApplicationFocus(bool focus)

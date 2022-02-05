@@ -14,7 +14,7 @@ public class Music : MonoBehaviour
     float currentFadingTime = 0;
     bool fadingOut = false;
     bool fadingIn = false;
-    float startVolume = 0;
+    float maxVolume = 0;
     float startFadingVolume = 0;
     public UnityEngine.Audio.AudioMixer mixer;
 
@@ -22,12 +22,13 @@ public class Music : MonoBehaviour
     void Start()
     {
         instance = this;
-        mixer.GetFloat("MusicVolume", out startVolume);
+        mixer.GetFloat("MusicVolume", out maxVolume);
     }
 
     void FadeOut() {
         currentFadingTime = 0;
         fadingOut = true;
+        fadingIn = false;
         mixer.GetFloat("MusicVolume", out startFadingVolume);
     }
 
@@ -35,8 +36,9 @@ public class Music : MonoBehaviour
     {
         currentFadingTime = 0;
         fadingIn = true;
+        fadingOut = false;
         mixer.GetFloat("MusicVolume", out startFadingVolume);
-        source.Play();
+        if (!source.isPlaying) source.Play();
         muted = false;
     }
 
@@ -47,6 +49,8 @@ public class Music : MonoBehaviour
     }
 
     float speedAverage = 0f;
+    float timeSlow = 0;
+    float timeFast = 0;
 
     // Update is called once per frame
     void Update()
@@ -54,20 +58,17 @@ public class Music : MonoBehaviour
         if (ship != null)
         {
             float speed = ship.SpeedKnots();
-            float f = 0.1f;
+            float f = 0.01f;
 
             speedAverage = speedAverage * (1f - f) + speed * f;
-            //Debug.Log(speedAverage);
         }
 
-        if (muted)
-        {
-            if (speedAverage < 2f && !fadingIn)
-            {
-                FadeIn();
-            }
-        }
-        else {
+        if (speedAverage < 2f) timeSlow += Time.deltaTime;
+        else timeSlow = 0;
+        if (speedAverage > 2f) timeFast += Time.deltaTime;
+        else timeFast = 0;
+
+        if (!muted) { // music playing
             if (fadingIn)
             {
                 currentFadingTime += Time.deltaTime;
@@ -77,9 +78,10 @@ public class Music : MonoBehaviour
                 if (fadingFactor <= 0f)
                 {
                     fadingIn = false;
+                    mixer.SetFloat("MusicVolume", maxVolume);
                 }
                 else
-                    mixer.SetFloat("MusicVolume", Mathf.Lerp(startVolume, startFadingVolume, Easing.Circular.In(fadingFactor)));
+                    mixer.SetFloat("MusicVolume", Mathf.Lerp(maxVolume, startFadingVolume, Easing.Circular.In(fadingFactor)));
             }
             else if (fadingOut)
             {
@@ -92,16 +94,22 @@ public class Music : MonoBehaviour
                     source.Stop();
                     muted = true;
                     fadingOut = false;
+                    mixer.SetFloat("MusicVolume", -80f);
                 }
                 else
                     mixer.SetFloat("MusicVolume", Mathf.Lerp(startFadingVolume, -80f, Easing.Circular.In(fadingFactor)));
             }
 
 
-            if (speedAverage > 2f && !fadingOut)
+            if (timeFast > 5f && !fadingOut)
             {
                 FadeOut();
             }
+        }
+
+        if (timeSlow > 5f && !fadingIn)
+        {
+            FadeIn();
         }
     }
 }
