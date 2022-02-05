@@ -19,6 +19,7 @@ public class MouthSounds : MonoBehaviour
     {
         mouth = transform;
         source = mouth.GetComponent<AudioSource>();
+        mouth.transform.localScale = Vector3.zero;
     }
 
     bool mouthOpen = false;
