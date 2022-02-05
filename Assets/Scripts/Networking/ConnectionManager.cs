@@ -45,6 +45,8 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
+    float lastEscTime = 0;
+
     private void Update()
     {
         if (kickAFKPlayers && PhotonNetwork.InRoom)
@@ -70,13 +72,17 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 #if !UNITY_WEBGL && !UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
+            if (Time.time - lastEscTime < 0.5f)
+            {
+                Application.Quit();
+            }
+            lastEscTime = Time.time;
         }
 #endif
     }
 
 
-#region photoncallbacks
+    #region photoncallbacks
     public override void OnConnectedToMaster()
     {
         ConnectionUI.instance.LogConnectionInfo(string.Format("Connected to server, fetching rooms.."));

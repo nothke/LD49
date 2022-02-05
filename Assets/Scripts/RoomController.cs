@@ -270,7 +270,7 @@ public class RoomController : MonoBehaviourPunCallbacks
                 if (playerToShip.ContainsKey(PhotonNetwork.LocalPlayer))
                     playerToShip[PhotonNetwork.LocalPlayer].shipSounds.PlaySoundAtPos(s.visualShip.transform.position, playerLeft, 1f, playerJoinedMixer, 132, 10f);
 
-                if (s.photonView.IsMine && playerToShip[PhotonNetwork.LocalPlayer] != s)
+                if (s.photonView.IsMine && (!playerToShip.ContainsKey(PhotonNetwork.LocalPlayer) || playerToShip[PhotonNetwork.LocalPlayer] != s))
                 { // Check for ownership transfer or for removal
                     if (shipIdToPlayers[s.shipId].Count == 0)
                     {// Empty ship
