@@ -99,12 +99,15 @@ public class RoomController : MonoBehaviourPunCallbacks
     [PunRPC]
     void PleaseJoinShip(int shipId)
     {
-        object[] playerInstantiationData = new object[5] {
+        Vector2 playerVoice = MouthSounds.GetRandomPitchRange();
+        object[] playerInstantiationData = new object[7] {
             shipId,
             Random.Range(0, colors.eyeColors.Length),
             Random.Range(0, colors.furColors.Length),
             Random.Range(0, colors.pantsColors.Length),
-            Random.Range(0, colors.jacketColors.Length)
+            Random.Range(0, colors.jacketColors.Length),
+            playerVoice.x,
+            playerVoice.y
         };
         PlayerSync newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity, 0, playerInstantiationData).GetComponent<PlayerSync>();
         //newPlayer.shipId = shipId;

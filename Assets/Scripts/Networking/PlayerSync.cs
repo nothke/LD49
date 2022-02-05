@@ -63,6 +63,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     public AudioClip[] releaseSailSounds;
     public UnityEngine.Audio.AudioMixerGroup ownStepsMixerGroup, othersStepsMixerGroup;
     public UnityEngine.Audio.AudioMixerGroup ownGrabsMixerGroup, othersGrabsMixerGroup;
+    [Header("Mouth")]
+    public MouthSounds mouth;
 
 
     void Start()
@@ -93,6 +95,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             colorManager.SetColors((int)instantiationData[1], (int)instantiationData[2], (int)instantiationData[3], (int)instantiationData[4]);
         }
 
+        if (mouth)
+        {
+            mouth.pitchRange = new Vector2((float)instantiationData[5], (float)instantiationData[6]);
+        }
         // Old Start
         lastFramePosition = receivedPos = pos;
 
@@ -146,6 +152,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                             leftHandHoldStartFactor = Random.Range(-0.2f, 0.2f); // used for raised-hand positioning
                             ShipUI.instance.EnableWheelSlider(false);
                             ShipUI.instance.EnableWindViz(false);
+
+                            mouth.MiauNetwork(photonView);
                         }
 
                         interacting = true;
@@ -564,7 +572,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 wasInteracting = interacting;
                 interactingAnimationTime = 0f;
 
-                if (interacting)
+                if (interacting && interactable != null)
                     PlayStartInteractingSound(interactable);
             }
         }
@@ -623,6 +631,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 s.shipSounds.PlaySoundAtPos(leftHand.position, releaseSailSounds[Random.Range(0, releaseSailSounds.Length)], 1f, photonView.IsMine ? ownGrabsMixerGroup : othersGrabsMixerGroup);
             }
         }
+    }
+
+    [PunRPC]
+    public void Miau(int which, float pitch)
+    {
+        if (mouth)
+            mouth.PlayMiau(which, pitch);
     }
 
     void OnDrawGizmos()

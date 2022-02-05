@@ -63,7 +63,7 @@ public class ConnectionUI : MonoBehaviour
 
     public void LogConnectionInfo(string str)
     {
-        connectionInfo.text = string.Format("{0}\n{1}", str, connectionInfo.text);
+        connectionInfo.text = string.Format("{1}\n{0}", str, connectionInfo.text);
     }
 
     public void ClearConnectionInfo()
