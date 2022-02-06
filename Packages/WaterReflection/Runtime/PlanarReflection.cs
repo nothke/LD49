@@ -166,8 +166,8 @@ namespace IFL.Rendering.Water
 
             Matrix4x4 projection = cam.projectionMatrix;
             //projection = CalculateObliqueMatrix(projection, clipPlane);
-            projection = cam.CalculateObliqueMatrix(clipPlane);
-            reflectCamera.projectionMatrix = projection;
+            //projection = cam.CalculateObliqueMatrix(clipPlane);
+            //reflectCamera.projectionMatrix = projection;
 
             reflectCamera.transform.position = newpos;
             Vector3 euler = cam.transform.eulerAngles;

@@ -20,8 +20,10 @@ public class ShipController : MonoBehaviour
     public Transform mast;
     public Transform playableArea;
     ShipPlayArea _playAreaReference = null;
-    public ShipPlayArea playAreaManager {
-        get {
+    public ShipPlayArea playAreaManager
+    {
+        get
+        {
             if (_playAreaReference == null)
                 _playAreaReference = GetComponent<ShipPlayArea>();
 
@@ -88,6 +90,19 @@ public class ShipController : MonoBehaviour
         }
 
         mast.localRotation = Quaternion.Euler(0, mastAngle, 0);
+
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            float f01 = Input.GetAxis("Vertical");
+            float f02 = Input.GetAxis("Horizontal");
+            if (f01 != 0)
+                transform.position += Vector3.forward * f01 * Time.deltaTime * 100.0f;
+
+            if (f02 != 0)
+                transform.position += Vector3.right * f02 * Time.deltaTime * 100.0f;
+        }
+#endif
     }
 
     public float SpeedKnots()

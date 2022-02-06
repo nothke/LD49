@@ -1,0 +1,17 @@
+{
+    "name": "Nothke.GradientFog.Editor",
+    "references": [
+        "GUID:3355755fbc21be645aec5e4554614fcb"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

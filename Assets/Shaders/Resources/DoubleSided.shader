@@ -11,7 +11,8 @@ Shader "Custom/DoubleSided"
     {
         Tags { "RenderType"="Opaque" }
         LOD 200
-        Cull Off
+        Cull Back
+        ZTest Always
 
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
