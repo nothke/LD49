@@ -32,6 +32,8 @@ namespace IFL.Rendering.Water
         RenderTexture reflectionColor;
         RenderTexture reflectionDepth;
 
+        public bool useObliqueMatrix = true;
+
         public void Start()
         {
             if (!mainCamera) mainCamera = Camera.main;
@@ -164,10 +166,12 @@ namespace IFL.Rendering.Water
 
             Vector4 clipPlane = CameraSpacePlane(reflectCamera, pos, normal, 1.0f);
 
-            Matrix4x4 projection = cam.projectionMatrix;
-            //projection = CalculateObliqueMatrix(projection, clipPlane);
-            projection = cam.CalculateObliqueMatrix(clipPlane);
-            reflectCamera.projectionMatrix = projection;
+            if (useObliqueMatrix)
+            {
+                //Matrix4x4 projection = cam.projectionMatrix;
+                Matrix4x4 projection = cam.CalculateObliqueMatrix(clipPlane);
+                reflectCamera.projectionMatrix = projection;
+            }
 
             reflectCamera.transform.position = newpos;
             Vector3 euler = cam.transform.eulerAngles;
