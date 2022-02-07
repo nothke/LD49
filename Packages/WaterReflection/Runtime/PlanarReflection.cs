@@ -49,6 +49,14 @@ namespace IFL.Rendering.Water
                 waterMaterial.SetTexture(REFLECTION_SAMPLER, reflectionColor);
                 waterMaterial.SetTexture(REFLECTION_DEPTH_SAMPLER, reflectionDepth);
             }
+
+#if UNITY_EDITOR
+            if (ScreenResolutionChanged())
+            {
+                DestroyRenderTextures();
+                CreateTextureFor(mainCamera, reflectionCamera);
+            }
+#endif
         }
 
         public void OnEnable()
@@ -64,6 +72,11 @@ namespace IFL.Rendering.Water
         }
 
         private void OnDestroy()
+        {
+            DestroyRenderTextures();
+        }
+
+        void DestroyRenderTextures()
         {
             if (reflectionColor) Destroy(reflectionColor);
             if (reflectionDepth) Destroy(reflectionDepth);
@@ -259,6 +272,18 @@ namespace IFL.Rendering.Water
         }
 
 #if UNITY_EDITOR
+
+        Vector2Int cachedResolution;
+
+        private bool ScreenResolutionChanged()
+        {
+            Vector2Int currentResolution = new Vector2Int(Screen.width, Screen.height);
+
+            bool changed = currentResolution != cachedResolution;
+            cachedResolution = currentResolution;
+            return changed;
+        }
+
         void OnValidate()
         {
             if (Application.isPlaying)
