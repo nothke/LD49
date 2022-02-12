@@ -62,6 +62,7 @@ Shader "Custom/ReflectyWater" {
 			float4 bumpCoords : TEXCOORD2;
 			float4 screenPos : TEXCOORD3;
 			float4 grabPassPos : TEXCOORD4;
+			//float3 worldPos : TEXCOORD5;
 			UNITY_FOG_COORDS(5)
 		};
 
@@ -186,6 +187,8 @@ Shader "Custom/ReflectyWater" {
 			o.normalInterpolator.w = 1;//GetDistanceFadeout(o.screenPos.w, DISTANCE_SCALE);
 
 			UNITY_TRANSFER_FOG(o, o.pos);
+
+			//o.worldPos = mul(unity_ObjectToWorld, (v.vertex)).xyz;
 			return o;
 		}
 
@@ -246,6 +249,7 @@ Shader "Custom/ReflectyWater" {
 
 				baseColor.a = edgeBlendFactors.x;
 
+				//baseColor.r = (i.worldPos.y+1)/2;
 				UNITY_APPLY_FOG(i.fogCoord, baseColor);
 				return baseColor;
 		}
