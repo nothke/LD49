@@ -29,7 +29,7 @@ namespace IFL.Rendering.Water
 
         public bool renderFromScript;
 
-        RenderTexture reflectionColor;
+        public RenderTexture reflectionColor;
         RenderTexture reflectionDepth;
 
         public bool useObliqueMatrix = true;

@@ -245,6 +245,7 @@ Shader "Custom/ReflectyWater" {
 				baseColor.rgb += foam.rgb * _Foam.x * (edgeBlendFactors.y + saturate(i.viewInterpolator.w - _Foam.y));
 
 				baseColor.a = edgeBlendFactors.x;
+
 				UNITY_APPLY_FOG(i.fogCoord, baseColor);
 				return baseColor;
 		}
