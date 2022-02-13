@@ -1,17 +1,15 @@
-Shader "Custom/DoubleSidedRGB"
+Shader "Custom/ClipBelowWaterRGB"
 {
     Properties
     {
-        _ColorR ("Color R", Color) = (1,0,0,1)
-        _ColorG("Color G", Color) = (0,1,0,1)
-        _ColorB("Color B", Color) = (0,0,1,1)
+        _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "RGBCustom"="TRUE"}
+        Tags { "RenderType"="Opaque" "RGBCustom" = "TRUE"}
         LOD 200
         Cull Off
 
@@ -21,18 +19,20 @@ Shader "Custom/DoubleSidedRGB"
 
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.0
-
+        #include "Waves.cginc"
 
         sampler2D _MainTex;
 
         struct Input
         {
             float2 uv_MainTex;
+            float3 worldPos;
             bool isFacing : SV_IsFrontFace;
         };
 
         half _Glossiness;
         half _Metallic;
+        fixed4 _Color;
         fixed3 _ColorR;
         fixed3 _ColorG;
         fixed3 _ColorB;
@@ -44,31 +44,38 @@ Shader "Custom/DoubleSidedRGB"
             // put more per-instance properties here
         UNITY_INSTANCING_BUFFER_END(Props)
 
-
-
-            void surf(Input IN, inout SurfaceOutputStandard o)
+        void surf (Input IN, inout SurfaceOutputStandard o)
         {
-            // Albedo comes from a texture tinted by color
-            fixed4 c;
 
-            if (IN.isFacing)
-                c = tex2D(_MainTex, IN.uv_MainTex);
-            else
+            if (IN.worldPos.y < WaterHeight(IN.worldPos) )
+                discard;
+
+            fixed3 inputColors = _ColorR + _ColorG + _ColorR;
+
+            fixed4 c;
+            if (inputColors.r + inputColors.g + inputColors.b <= 0)
             {
-                fixed2 uv = IN.uv_MainTex;
-                uv.x = 1 - uv.x;
-                c = tex2D(_MainTex, uv);
+                c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+                o.Albedo = c;
+            }
+            else {
+
+                if (IN.isFacing)
+                    c = tex2D(_MainTex, IN.uv_MainTex);
+                else
+                {
+                    fixed2 uv = IN.uv_MainTex;
+                    uv.x = 1 - uv.x;
+                    c = tex2D(_MainTex, uv);
+                }
+
+                float total = c.r + c.g + c.b;
+
+                fixed3 colorMix = _ColorR * c.r / total + _ColorG * c.g / total + _ColorB * c.b / total;
+                colorMix = lerp(fixed3(0, 0, 0), colorMix, min(1, total));
+                o.Albedo = colorMix;
             }
 
-            float total = c.r + c.g + c.b;
-
-
-            fixed3 colorMix = _ColorR * c.r / total + _ColorG * c.g / total + _ColorB * c.b / total;
-
-            colorMix = lerp(fixed3(0, 0, 0), colorMix, min(1, total));
-           
-            o.Albedo = colorMix;
-           
             //if (IN.isFacing)
                 //o.Albedo = float4(0, 1, 0, 1);
 
@@ -80,5 +87,4 @@ Shader "Custom/DoubleSidedRGB"
         }
         ENDCG
     }
-    FallBack "Diffuse"
 }

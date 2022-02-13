@@ -34,6 +34,8 @@ namespace IFL.Rendering.Water
 
         public bool useObliqueMatrix = true;
 
+        public Shader replacementStandard, replacementRGB;
+
         public void Start()
         {
             if (!mainCamera) mainCamera = Camera.main;
@@ -146,6 +148,9 @@ namespace IFL.Rendering.Water
             reflectCamera.allowMSAA = false;
 
             reflectCamera.farClipPlane = 10000;
+
+            //reflectCamera.SetReplacementShader(replacementStandard, "RenderType");
+            reflectCamera.SetReplacementShader(replacementRGB, "RenderType");
         }
 
         void RenderReflectionFor(Camera cam, Camera reflectCamera)
