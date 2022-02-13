@@ -36,9 +36,12 @@ namespace IFL.Rendering.Water
 
         public Shader replacementStandard, replacementRGB;
 
+        public Transform reflectionPivot;
+
         public void Start()
         {
             if (!mainCamera) mainCamera = Camera.main;
+
             reflectionCamera = CreateReflectionCameraFor(mainCamera);
         }
 
@@ -162,17 +165,20 @@ namespace IFL.Rendering.Water
 
             GL.invertCulling = true;
 
-            Transform reflectiveSurface = transform; //waterHeight;
+            //Transform reflectiveSurface = transform; //waterHeight;
+            Vector3 reflectivePosition = transform.position;
+            if (reflectionPivot != null)
+                reflectivePosition = reflectionPivot.position;
 
             Vector3 eulerA = cam.transform.eulerAngles;
 
             reflectCamera.transform.eulerAngles = new Vector3(-eulerA.x, eulerA.y, eulerA.z);
             reflectCamera.transform.position = cam.transform.position;
 
-            Vector3 pos = reflectiveSurface.transform.position;
-            pos.y = reflectiveSurface.position.y;
-            Vector3 normal = reflectiveSurface.transform.up;
-            float d = -Vector3.Dot(normal, pos) - clipPlaneOffset;
+            Vector3 pos = reflectivePosition;
+            pos.y = reflectivePosition.y;
+            Vector3 normal = Vector3.up;
+            float d = -pos.y - clipPlaneOffset;
             Vector4 reflectionPlane = new Vector4(normal.x, normal.y, normal.z, d);
 
             Matrix4x4 reflection = Matrix4x4.zero;
