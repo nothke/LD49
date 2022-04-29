@@ -20,31 +20,31 @@ public class ShipPlayArea : MonoBehaviour
         
     }
 
-    public Vector3 TransformDirection(Vector2 local)
+    virtual public Vector3 TransformDirection(Vector2 local)
     {
         Vector3 l = new Vector3(local.x, 0, local.y);
         return areaCenter.TransformDirection(l);
     }
 
-    public Vector3 TransformPoint(Vector2 local)
+    virtual public Vector3 TransformPoint(Vector2 local)
     {
         Vector3 l = new Vector3(local.x, 0, local.y);
         return areaCenter.TransformPoint(l);
     }
 
-    public Vector2 InverseTransformDirection(Vector3 world)
+    virtual public Vector2 InverseTransformDirection(Vector3 world)
     {
         Vector3 l = areaCenter.InverseTransformDirection(world);
         return new Vector2(l.x, l.z);
     }
 
-    public Vector2 InverseTransformPoint(Vector3 world)
+    virtual public Vector2 InverseTransformPoint(Vector3 world)
     {
         Vector3 l = areaCenter.InverseTransformPoint(world);
         return new Vector2(l.x, l.z);
     }
 
-    public void EnsureCircleInsideArea(ref Vector2 pos, float radius)
+    virtual public void EnsureCircleInsideArea(ref Vector2 pos, float radius)
     {
         pos.x = Mathf.Max(minMaxX.x + radius, pos.x);
         pos.x = Mathf.Min(minMaxX.y - radius, pos.x);

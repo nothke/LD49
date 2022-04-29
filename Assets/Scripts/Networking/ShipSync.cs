@@ -38,15 +38,10 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
         name = "NetworkedShip " + shipId;
 
-        // old Start()
-
-        // Setup remote ship simulation.
-        // Ideally we would want 2 simulations running, the local and the remote, and lerp the actual values from one to the other
-        // In this case I'm trying to lerp the local towards the remote without keeping track of the "untouched/unlerped" local values
-        // This might look a bit worse but might be simpler and enough
         Vector3 spawnPos = transform.position;
         spawnPos.y = shipPrefab.transform.position.y;
 
+        // Setup remote ship simulation.
         localShip = Instantiate(shipPrefab.gameObject, spawnPos, shipPrefab.transform.rotation).GetComponent<ShipController>();
         remoteShip = Instantiate(shipPrefab.gameObject, spawnPos, shipPrefab.transform.rotation).GetComponent<ShipController>();
 

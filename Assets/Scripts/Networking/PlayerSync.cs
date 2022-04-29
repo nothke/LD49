@@ -112,6 +112,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 float inputX = Input.GetAxis("Horizontal");
                 float inputY = Input.GetAxis("Vertical");
                 float inputInteract = Input.GetAxis("Submit");
+                float inputExit = Input.GetAxis("Cancel");
 
                 Interactable interactableInRange =
                     interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up);
@@ -314,10 +315,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             // Feet
             feet.UpdateFeet(pos, facingDirection);
         }
-        else {
-            // on water/land
-
-        }
     }
 
     void GetPushedByOtherPlayers(ref Vector2 ownPosition)
@@ -346,9 +343,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         ownPosition += push * pushSpeed * Time.deltaTime;
     }
 
-    public void PlaceOnShip(ShipSync s)
+    bool needsToWearColors = true;
+    public void PlaceOnShip(ShipSync s, ShipPlayArea area)
     {
-        playArea = s.visualShip.GetComponent<ShipPlayArea>();
+        playArea = area;
 
         if (feet == null) feet = GetComponent<PlayerFeet>();
         feet.playArea = playArea;
@@ -379,7 +377,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
         feet.Init(pos, Vector2.up, photonView.IsMine? ownStepsMixerGroup : othersStepsMixerGroup);
 
-        GetComponent<PlayerColors>().SetShipColor(s.shipLiveryColorCombination);
+        if (needsToWearColors)
+        {
+            GetComponent<PlayerColors>().SetShipColor(s.shipLiveryColorCombination);
+            needsToWearColors = false;
+        }
+    }
+
+    void ExitShip() {
+        
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
