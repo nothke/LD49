@@ -7,8 +7,8 @@ using Photon.Pun;
 
 public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCallback
 {
-    public const string PLAYER_SHIP = "PLAYER_SHIP";
-    public int shipId = -1;
+    public int shipId { get; private set; } = -1;
+    public int originalShipId { get; private set; } = -1;
 
     ShipPlayArea playArea;
     ShipInteractables interactables;
@@ -58,6 +58,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     [Header("Mouth")]
     public MouthSounds mouth;
 
+    [Header("World movement")]
+    public PlayerFreeMovement worldMovement;
+
 
     void Start()
     {
@@ -76,10 +79,16 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         RoomController.i.RegisterPlayer(this);*/
     }
 
+    public void SetShipIdLocally(int sid) {
+        int prev = shipId;
+        shipId = sid;
+
+        RoomController.i.RassignPlayerToShip(this, prev);
+    }
+
     void IPunInstantiateMagicCallback.OnPhotonInstantiate(PhotonMessageInfo info)
     {
         object[] instantiationData = info.photonView.InstantiationData;
-        shipId = (int)instantiationData[0];
 
         PlayerColors colorManager = GetComponent<PlayerColors>();
         if (colorManager)
@@ -91,7 +100,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         {
             mouth.pitchRange = new Vector2((float)instantiationData[5], (float)instantiationData[6]);
         }
-        // Old Start
+
         lastFramePosition = receivedPos = pos;
 
         restRightHandPos = restRightHand.position;
@@ -100,8 +109,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         feet = GetComponent<PlayerFeet>();
         //
 
-        RoomController.i.RegisterPlayer(this);
+        originalShipId = (int)instantiationData[0];
+        ShipSync s = RoomController.i.ships[originalShipId];
+        colorManager.SetShipColor(s.shipLiveryColorCombination);
+
+        RoomController.i.RegisterPlayer(this, originalShipId);
     }
+
+    float lastJumpingAxis = 0;
 
     void Update()
     {
@@ -112,13 +127,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 float inputX = Input.GetAxis("Horizontal");
                 float inputY = Input.GetAxis("Vertical");
                 float inputInteract = Input.GetAxis("Submit");
-                float inputExit = Input.GetAxis("Cancel");
+                float inputJump = Input.GetAxis("Jump");
 
                 Interactable interactableInRange =
                     interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up);
 
                 bool startedInteracting = inputInteract > 0 && !interacting;
                 bool endedInteracting = inputInteract <= 0.01f && interacting;
+                bool startedJumping = inputJump > 0 && lastJumpingAxis <= 0.01f;
+                lastJumpingAxis = inputJump;
 
                 if (startedInteracting)
                 {
@@ -164,87 +181,114 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     interacting = false;
                 }
 
-                // Body position handling
-
-                if (interactable && interacting)
+                if (!interacting && startedJumping)
                 {
-                    Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition(leftHandHoldStartFactor, rightHandHoldStartFactor);
+                    // Jump
+                    // TODO
 
-                    gizmoDebugPos = desiredBodyPosition;
+                    worldMovement.enabled = true;
+                }
 
-                    Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(desiredBodyPosition);
-
-                    float intFactor = Mathf.Clamp01(interactingAnimationTime / 2f);
-                    pos = Vector3.Lerp(pos, wantedInteractingShipPos, intFactor);
-
-                    // input
-                    interactingInput = inputX;
+                if (worldMovement.enabled)
+                {
+                    // WorldMovement
+                    worldMovement.UpdatePosition(ref pos, true, Time.deltaTime);
                 }
                 else
-                {
-                    // Player movement
+                {// Boat movement
 
-                    Vector3 camRight = Camera.main.transform.right;
-                    Vector3 camForward = Camera.main.transform.forward;
-                    //camForward.y = 0;
-                    //camForward.Normalize();
-                    Vector3 camUp = Camera.main.transform.up;
-
-                    Vector2 input = new Vector2(inputX, inputY);
-                    if (input.sqrMagnitude > 1f) input.Normalize();
-
-                    Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
-                    Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
-
-                    //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
-
-                    pos += shipRelativeInput * speed * Time.deltaTime;
-
-                    interactingInput = 0;
-                }
-
-                GetPushedByOtherPlayers(ref pos);
-
-                // Highligting should only happen if not interacting
-                if (!interacting)
-                {
-                    // On got close to
-                    if (interactableInRange != lastInteractableInRange || endedInteracting)
+                    // Body position handling
+                    if (interactable && interacting)
                     {
-                        if (interactableInRange)
+                        Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition(leftHandHoldStartFactor, rightHandHoldStartFactor);
+
+                        gizmoDebugPos = desiredBodyPosition;
+
+                        Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(desiredBodyPosition);
+
+                        float intFactor = Mathf.Clamp01(interactingAnimationTime / 2f);
+                        pos = Vector3.Lerp(pos, wantedInteractingShipPos, intFactor);
+
+                        // input
+                        interactingInput = inputX;
+                    }
+                    else
+                    {
+                        // Player movement
+
+                        Vector3 camRight = Camera.main.transform.right;
+                        Vector3 camForward = Camera.main.transform.forward;
+                        //camForward.y = 0;
+                        //camForward.Normalize();
+                        Vector3 camUp = Camera.main.transform.up;
+
+                        Vector2 input = new Vector2(inputX, inputY);
+                        if (input.sqrMagnitude > 1f) input.Normalize();
+
+                        Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
+                        Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
+
+                        //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
+
+                        pos += shipRelativeInput * speed * Time.deltaTime;
+
+                        interactingInput = 0;
+                    }
+
+                    GetPushedByOtherPlayers(ref pos);
+
+                    // Highligting should only happen if not interacting
+                    if (!interacting)
+                    {
+                        // On got close to
+                        if (interactableInRange != lastInteractableInRange || endedInteracting)
                         {
-                            interactableInRange.Highlight();
-                            highlightedInteractable = interactableInRange;
-                        }
-                        else if (highlightedInteractable)
-                        {
-                            Facepunch.Highlight.ClearAll();
-                            Facepunch.Highlight.Rebuild();
-                            ShipUI.instance.SetInteractionText("");
-                            highlightedInteractable = null;
+                            if (interactableInRange)
+                            {
+                                interactableInRange.Highlight();
+                                highlightedInteractable = interactableInRange;
+                            }
+                            else if (highlightedInteractable)
+                            {
+                                Facepunch.Highlight.ClearAll();
+                                Facepunch.Highlight.Rebuild();
+                                ShipUI.instance.SetInteractionText("");
+                                highlightedInteractable = null;
+                            }
                         }
                     }
-                }
-                else if (highlightedInteractable)
-                {
-                    Facepunch.Highlight.ClearAll();
-                    Facepunch.Highlight.Rebuild();
-                    ShipUI.instance.SetInteractionText("");
-                    highlightedInteractable = null;
-                }
+                    else if (highlightedInteractable)
+                    {
+                        Facepunch.Highlight.ClearAll();
+                        Facepunch.Highlight.Rebuild();
+                        ShipUI.instance.SetInteractionText("");
+                        highlightedInteractable = null;
+                    }
 
-                lastInteractableInRange = interactableInRange;
+                    lastInteractableInRange = interactableInRange;
+                }
             }
             else // if not photonView.IsMine
             {
-                GetPushedByOtherPlayers(ref receivedPos);
-                playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
+                if (!worldMovement.enabled)
+                {
+                    // WorldMovement
+                    worldMovement.UpdatePosition(ref pos, false, Time.deltaTime);
+                }
+                else
+                {
+                    GetPushedByOtherPlayers(ref receivedPos);
+                    playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
 
-                pos = Vector2.Lerp(pos, receivedPos, 5f * Time.deltaTime);
+                    pos = Vector2.Lerp(pos, receivedPos, 5f * Time.deltaTime);
+                }
             }
 
-            playArea.EnsureCircleInsideArea(ref pos, collisionRadius);
+            //////////////////
+            // Actual moving
+            //////////////////
 
+            playArea.EnsureCircleInsideArea(ref pos, collisionRadius);
 
             transform.position = playArea.TransformPoint(pos) - Vector3.up * 0.15f;
 
@@ -320,7 +364,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     void GetPushedByOtherPlayers(ref Vector2 ownPosition)
     {
         Vector2 push = Vector2.zero;
-        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayers[shipId])
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToOriginalPlayers[shipId])
         {
             if (p != photonView.Owner)
             {
@@ -343,7 +387,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         ownPosition += push * pushSpeed * Time.deltaTime;
     }
 
-    bool needsToWearColors = true;
     public void PlaceOnShip(ShipSync s, ShipPlayArea area)
     {
         playArea = area;
@@ -376,12 +419,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
 
         feet.Init(pos, Vector2.up, photonView.IsMine? ownStepsMixerGroup : othersStepsMixerGroup);
-
-        if (needsToWearColors)
-        {
-            GetComponent<PlayerColors>().SetShipColor(s.shipLiveryColorCombination);
-            needsToWearColors = false;
-        }
     }
 
     void ExitShip() {
@@ -392,6 +429,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     {
         if (stream.IsWriting)
         {
+            stream.SendNext(shipId);
             stream.SendNext(pos);
             stream.SendNext(interacting);
             if (interacting)
@@ -404,6 +442,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         }
         else // if reading
         {
+            int newShipId = (int)stream.ReceiveNext();
+            if (newShipId != shipId)
+            {
+                // TODO
+                
+            }
             receivedPos = (Vector2)stream.ReceiveNext();
 
             interacting = (bool)stream.ReceiveNext();
@@ -424,6 +468,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     PlayStartInteractingSound(interactable);
             }
         }
+        // Basically I'm placing all logic about world movement in a separate script
+        worldMovement.OnPhotonSerializeView(stream);
     }
 
     public bool IsInteracting()

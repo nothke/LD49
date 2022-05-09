@@ -26,7 +26,7 @@ public class ConnectionUI : MonoBehaviour
         if (inRoomPanel.activeInHierarchy)
         {
             int count = 0;
-            foreach (KeyValuePair<int, List<Photon.Realtime.Player>> kvp in RoomController.i.shipIdToPlayers)
+            foreach (KeyValuePair<int, List<Photon.Realtime.Player>> kvp in RoomController.i.shipIdToOriginalPlayers)
             {
                 ShipInfoButton inf = GetInfo(count);
 

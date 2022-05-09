@@ -20,7 +20,7 @@ public class RoomController : MonoBehaviourPunCallbacks
 
     public Dictionary<Player, PlayerSync> playerSyncs = new Dictionary<Player, PlayerSync>();
     public Dictionary<int, ShipSync> ships = new Dictionary<int, ShipSync>();
-    public Dictionary<int, List<Player>> shipIdToPlayers = new Dictionary<int, List<Player>>();
+    public Dictionary<int, List<Player>> shipIdToOriginalPlayers = new Dictionary<int, List<Player>>();
     public Dictionary<Player, ShipSync> playerToShip = new Dictionary<Player, ShipSync>();
     public Dictionary<int, List<Player>> shipIdToBoardedPlayers = new Dictionary<int, List<Player>>();
 
@@ -38,6 +38,7 @@ public class RoomController : MonoBehaviourPunCallbacks
         liveryHullUsage = new int[colors.hullLiveryTextures.Length];
         //for (int i = 0; i < liveryUsage.Length; ++i)
         //    liveryUsage[i] = 0;
+        shipIdToBoardedPlayers[-1] = new List<Player>();
 
         InvokeRepeating("ShipOwnershipPeriodicCheckup", 5f, 5f); // very much a patch
     }
@@ -73,7 +74,7 @@ public class RoomController : MonoBehaviourPunCallbacks
         int shipId = -1;
         foreach (KeyValuePair<int, ShipSync> kvp in ships)
         {
-            if (shipIdToPlayers[kvp.Key].Count < maxPlayersPerShip)
+            if (shipIdToBoardedPlayers[kvp.Key].Count < maxPlayersPerShip)
             {
                 shipId = kvp.Key;
                 foundShip = true;
@@ -112,11 +113,11 @@ public class RoomController : MonoBehaviourPunCallbacks
             playerVoice.y
         };
         PlayerSync newPlayer = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity, 0, playerInstantiationData).GetComponent<PlayerSync>();
-        //newPlayer.shipId = shipId;
+        newPlayer.SetShipIdLocally(shipId);
 
-        ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
-        ht[PlayerSync.PLAYER_SHIP] = shipId;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+        //ExitGames.Client.Photon.Hashtable ht = new ExitGames.Client.Photon.Hashtable();
+        //ht[PlayerSync.PLAYER_SHIP] = shipId;
+        //PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
 
         ConnectionUI.instance.ShowIngamePanel();
         //Music.instance.FadeOut();
@@ -189,24 +190,21 @@ public class RoomController : MonoBehaviourPunCallbacks
     int[] liveryHullUsage;
     public void RegisterShip(ShipSync s)
     {
+        Debug.Log($"Registering ship in ship ${s.shipId}");
         if (!ships.ContainsKey(s.shipId))
         {
             ships.Add(s.shipId, s);
 
-            if (shipIdToPlayers.ContainsKey(s.shipId))
+            if (shipIdToBoardedPlayers.ContainsKey(s.shipId))
             {
-                foreach (Player p in shipIdToPlayers[s.shipId])
+                foreach (Player p in shipIdToBoardedPlayers[s.shipId])
                 {
-                    playerToShip.Add(p, s);
-                    playerSyncs[p].PlaceOnShip(s, s.visualShip.GetComponent<ShipPlayArea>());
-
-                    bool localBoat = s.photonView.IsMine || playerToShip[PhotonNetwork.LocalPlayer] == s;
-                    s.shipSounds.PlaySoundAtPos(s.visualShip.transform.position, localBoat ? joinedOwnShip : joinedOtherShip, 1f, playerJoinedMixer, 128, 10f);
+                    RassignPlayerToShip(playerSyncs[p], s.shipId);
                 }
             }
             else
             {
-                shipIdToPlayers[s.shipId] = new List<Player>();
+                shipIdToOriginalPlayers[s.shipId] = new List<Player>();
                 shipIdToBoardedPlayers[s.shipId] = new List<Player>();
             }
 
@@ -222,61 +220,72 @@ public class RoomController : MonoBehaviourPunCallbacks
     public void DeregisterShip(ShipSync s)
     {
         ships.Remove(s.shipId);
-        shipIdToPlayers.Remove(s.shipId);
+        shipIdToOriginalPlayers.Remove(s.shipId);
         shipIdToBoardedPlayers.Remove(s.shipId);
         liveryColorUsage[s.shipLiveryColorCombination]--;
         liverySailUsage[s.shipLiverySailTexture]--;
         liveryHullUsage[s.shipLiveryBodyTexture]--;
     }
 
-    public void RegisterPlayer(PlayerSync p)
+    public void RegisterPlayer(PlayerSync p, int originalShipId)
     {
+        Debug.Log($"Registering player in ship {p.shipId}, originally from ship {originalShipId}");
         playerSyncs.Add(p.photonView.Owner, p);
 
-        if (p.shipId == -1)
-        {
-            if (p.photonView.Owner.CustomProperties.TryGetValue(PlayerSync.PLAYER_SHIP, out object o))
-            {
-                p.shipId = (int)o;
-            }
-        }
+        if (!shipIdToOriginalPlayers.ContainsKey(originalShipId))
+            shipIdToOriginalPlayers.Add(originalShipId, new List<Player>());
+
+        shipIdToOriginalPlayers[originalShipId].Add(p.photonView.Owner);
+
+        // We do this to all players first
+        shipIdToBoardedPlayers[-1].Add(p.photonView.Owner);
 
         if (ships.ContainsKey(p.shipId))
         {
-            ShipSync s = ships[p.shipId];
-            p.PlaceOnShip(s, s.visualShip.GetComponent<ShipPlayArea>());
-            playerToShip.Add(p.photonView.Owner, s);
-
-
-            bool localBoat = playerToShip.ContainsKey(PhotonNetwork.LocalPlayer) && playerToShip[PhotonNetwork.LocalPlayer] == s;
-            s.shipSounds.PlaySoundAtPos(s.visualShip.transform.position, localBoat ? joinedOwnShip : joinedOtherShip, 1f, playerJoinedMixer, 128, 10f);
-        }
-
-        if (!shipIdToPlayers.ContainsKey(p.shipId))
-            shipIdToPlayers.Add(p.shipId, new List<Player>());
-        if (!shipIdToBoardedPlayers.ContainsKey(p.shipId))
-            shipIdToBoardedPlayers.Add(p.shipId, new List<Player>());
-
-        shipIdToPlayers[p.shipId].Add(p.photonView.Owner);
-
-        if (!shipIdToBoardedPlayers[p.shipId].Contains(p.photonView.Owner))
-            shipIdToBoardedPlayers[p.shipId].Add(p.photonView.Owner);
-
-        if (shipIdToPlayers[p.shipId].Count == 1 && ships[p.shipId].photonView.IsMine && !p.photonView.IsMine)
-        {
-            ships[p.shipId].photonView.TransferOwnership(p.photonView.Owner);
+            RassignPlayerToShip(p, -1);
         }
     }
 
-    public void RassignPlayer(Player p, ShipSync s)
+    public void RassignPlayerToShip(PlayerSync ps, int fromShip)
     {
-        //public Dictionary<Player, PlayerSync> playerSyncs = new Dictionary<Player, PlayerSync>();
-        //public Dictionary<int, ShipSync> ships = new Dictionary<int, ShipSync>();
-        //public Dictionary<int, List<Player>> shipIdToPlayers = new Dictionary<int, List<Player>>();
-        //public Dictionary<Player, ShipSync> playerToShip = new Dictionary<Player, ShipSync>();
-        //public Dictionary<int, List<Player>> shipIdToBoardedPlayers = new Dictionary<int, List<Player>>();
+        Debug.Log($"Reassigning player to ship {ps.shipId}, from ship {fromShip}");
+        Player p = ps.photonView.Owner;
 
-        // TODO
+        // Removals & Cleanup
+        if (!shipIdToBoardedPlayers.ContainsKey(fromShip))
+            Debug.LogWarning($"Reassigning player from ship ${fromShip}, but that ship was not present!", ps);
+        else shipIdToBoardedPlayers[fromShip].Remove(p);
+
+        if (playerToShip.ContainsKey(p))
+        {
+            playerToShip.Remove(p);
+        }
+
+        // Assignments
+
+        if (ps.shipId != -1 && ships.ContainsKey(ps.shipId))
+        {
+            ShipSync s = ships[ps.shipId];
+            playerToShip.Add(p, s);
+            ps.PlaceOnShip(s, s.visualShip.GetComponent<ShipPlayArea>());
+            if (!shipIdToBoardedPlayers[ps.shipId].Contains(p))
+                shipIdToBoardedPlayers[ps.shipId].Add(p);
+
+            bool localBoat = playerToShip.ContainsKey(PhotonNetwork.LocalPlayer) && playerToShip[PhotonNetwork.LocalPlayer] == s;
+            s.shipSounds.PlaySoundAtPos(s.visualShip.transform.position, localBoat ? joinedOwnShip : joinedOtherShip, 1f, playerJoinedMixer, 128, 10f);
+
+            if (shipIdToBoardedPlayers[ps.shipId].Count == 1 && ships[ps.shipId].photonView.IsMine && !ps.photonView.IsMine)
+            {
+                ships[ps.shipId].photonView.TransferOwnership(ps.photonView.Owner);
+            }
+        }
+        else {
+            // Ship not there yet?
+            if (!shipIdToBoardedPlayers.ContainsKey(ps.shipId))
+                shipIdToBoardedPlayers.Add(ps.shipId, new List<Player>());
+
+            shipIdToBoardedPlayers[ps.shipId].Add(p);
+        }
     }
 
     // Probably overcomplicated function that deals with disconnection of players and ship ownership
@@ -290,23 +299,22 @@ public class RoomController : MonoBehaviourPunCallbacks
                 ShipSync s = playerToShip[otherPlayer];
                 if (s != null)
                 {
-                    shipIdToPlayers[s.shipId].Remove(otherPlayer);
+                    shipIdToBoardedPlayers[s.shipId].Remove(otherPlayer);
 
                     if (playerToShip.ContainsKey(PhotonNetwork.LocalPlayer))
                         playerToShip[PhotonNetwork.LocalPlayer].shipSounds.PlaySoundAtPos(s.visualShip.transform.position, playerLeft, 1f, playerJoinedMixer, 132, 10f);
 
                     if (s.photonView.IsMine && (!playerToShip.ContainsKey(PhotonNetwork.LocalPlayer) || playerToShip[PhotonNetwork.LocalPlayer] != s))
                     { // Check for ownership transfer or for removal
-                        if (shipIdToPlayers[s.shipId].Count == 0)
+                        if (shipIdToBoardedPlayers[s.shipId].Count == 0)
                         {// Empty ship
 
                             Debug.Log($"Ship {s.shipId} now empty");
-                            //PhotonNetwork.Destroy(s.gameObject);
                         }
                         else
                         { // Give the ship to a player on that ship
                             Debug.Log("Giving ownership to player driving ship");
-                            s.photonView.TransferOwnership(shipIdToPlayers[s.shipId][0]);
+                            s.photonView.TransferOwnership(shipIdToBoardedPlayers[s.shipId][0]);
                         }
                     }
                 }
@@ -315,24 +323,20 @@ public class RoomController : MonoBehaviourPunCallbacks
             }
 
             // Double checking in case
-            if (shipIdToPlayers[playerSyncs[otherPlayer].shipId].Contains(otherPlayer))
-                shipIdToPlayers[playerSyncs[otherPlayer].shipId].Remove(otherPlayer);
+            if (shipIdToBoardedPlayers[playerSyncs[otherPlayer].shipId].Contains(otherPlayer))
+                shipIdToBoardedPlayers[playerSyncs[otherPlayer].shipId].Remove(otherPlayer);
 
-            foreach (KeyValuePair<int, List<Player>> kvp in shipIdToBoardedPlayers)
-            {
-                if (kvp.Value.Contains(otherPlayer))
+
+            int originalShip = playerSyncs[otherPlayer].originalShipId;
+            shipIdToOriginalPlayers[originalShip].Remove(otherPlayer);
+
+            if (shipIdToOriginalPlayers[originalShip].Count == 0 && originalShip != -1 && ships.ContainsKey(originalShip))
+            {// forgotten ship
+                ShipSync s = ships[originalShip];
+                if (s.photonView.IsMine)
                 {
-                    kvp.Value.Remove(otherPlayer);
-
-                    if (kvp.Value.Count == 0)
-                    {// forgotten ship
-                        ShipSync s = ships[kvp.Key];
-                        if (s.photonView.IsMine)
-                        {
-                            Debug.Log("Destroying empty ship");
-                            PhotonNetwork.Destroy(s.gameObject);
-                        }
-                    }
+                    Debug.Log("Destroying empty ship");
+                    PhotonNetwork.Destroy(s.gameObject);
                 }
             }
 
@@ -352,7 +356,7 @@ public class RoomController : MonoBehaviourPunCallbacks
 
             Player owner = s.photonView.Owner; // This is always going to be me because of prev condition
 
-            if (shipIdToPlayers[s.shipId].Count == 0 && !owner.IsMasterClient)
+            if (shipIdToBoardedPlayers[s.shipId].Count == 0 && !owner.IsMasterClient)
             {
                 Debug.Log("Giving ownership to master client");
                 s.photonView.TransferOwnership(PhotonNetwork.MasterClient);
@@ -361,7 +365,7 @@ public class RoomController : MonoBehaviourPunCallbacks
 
 
             bool ownedByPlayerDriving = false;
-            foreach (var player in shipIdToPlayers[kvp.Value.shipId])
+            foreach (var player in shipIdToBoardedPlayers[kvp.Value.shipId])
             {
                 if (owner == player)
                 {
@@ -370,10 +374,10 @@ public class RoomController : MonoBehaviourPunCallbacks
                 }
             }
 
-            if (!ownedByPlayerDriving)
+            if (!ownedByPlayerDriving && shipIdToBoardedPlayers[s.shipId].Count > 0)
             {
                 Debug.Log("Giving ownership to player driving ship");
-                s.photonView.TransferOwnership(shipIdToPlayers[s.shipId][0]);
+                s.photonView.TransferOwnership(shipIdToBoardedPlayers[s.shipId][0]);
             }
         }
     }
@@ -382,7 +386,7 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         playerSyncs.Clear();
         ships.Clear();
-        shipIdToPlayers.Clear();
+        shipIdToOriginalPlayers.Clear();
         playerToShip.Clear();
         shipIdToBoardedPlayers.Clear();
     }

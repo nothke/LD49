@@ -22,7 +22,7 @@ public class ShipInputCalculator : MonoBehaviourPun
         float instantInputR = 0;
         float instantInputX = 0;
 
-        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayers[shipIt])
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToOriginalPlayers[shipIt])
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
 
