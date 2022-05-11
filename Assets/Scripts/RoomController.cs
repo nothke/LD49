@@ -12,7 +12,9 @@ public class RoomController : MonoBehaviourPunCallbacks
     public PlayerSync playerPrefab;
     [UnityEngine.Serialization.FormerlySerializedAs("catColors")]
     public CatColors colors;
+    [Header("World")]
     public WorldPlayArea world;
+    public ShipInteractables worldInteractables;
 
     public static RoomController i;
 
@@ -267,7 +269,7 @@ public class RoomController : MonoBehaviourPunCallbacks
         {
             ShipSync s = ships[ps.shipId];
             playerToShip.Add(p, s);
-            ps.PlaceOnShip(s, s.visualShip.GetComponent<ShipPlayArea>());
+            ps.PlaceOnShip(s, s.visualShip.GetComponent<ShipPlayArea>(), s.visualShip.GetComponent<ShipInteractables>());
             if (!shipIdToBoardedPlayers[ps.shipId].Contains(p))
                 shipIdToBoardedPlayers[ps.shipId].Add(p);
 
@@ -285,7 +287,29 @@ public class RoomController : MonoBehaviourPunCallbacks
                 shipIdToBoardedPlayers.Add(ps.shipId, new List<Player>());
 
             shipIdToBoardedPlayers[ps.shipId].Add(p);
+
+            if (ps.shipId == -1)
+            {
+                ps.PlaceOnShip(null, world, worldInteractables);
+            }
         }
+    }
+
+    public int ClosestShipTo(Vector3 pos)
+    {
+        int closest = -1;
+        float minDistanceSqr = Mathf.Infinity;
+        foreach (KeyValuePair<int, ShipSync> kvp in ships)
+        {
+            float dist = (kvp.Value.transform.position - pos).sqrMagnitude;
+            if (dist < minDistanceSqr)
+            {
+                minDistanceSqr = dist;
+                closest = kvp.Key;
+            }
+        }
+
+        return closest;
     }
 
     // Probably overcomplicated function that deals with disconnection of players and ship ownership

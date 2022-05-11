@@ -156,7 +156,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
             }
         }
 
-        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToOriginalPlayers[shipId])
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToBoardedPlayers[shipId])
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
             Vector3 playerPosition = ps.transform.position;

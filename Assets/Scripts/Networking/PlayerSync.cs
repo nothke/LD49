@@ -186,102 +186,97 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     // Jump
                     // TODO
 
-                    worldMovement.enabled = true;
+                    worldMovement.enabled = !worldMovement.enabled;
+
+                    int prevShip = shipId;
+                    if (worldMovement.enabled)
+                    {
+                        shipId = -1;
+                    }
+                    else {
+                        shipId = RoomController.i.ClosestShipTo(transform.position);
+                    }
+
+                    RoomController.i.RassignPlayerToShip(this, prevShip);
                 }
 
-                if (worldMovement.enabled)
+
+                // Body position handling
+                if (interactable && interacting)
                 {
-                    // WorldMovement
-                    worldMovement.UpdatePosition(ref pos, true, Time.deltaTime);
+                    Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition(leftHandHoldStartFactor, rightHandHoldStartFactor);
+
+                    gizmoDebugPos = desiredBodyPosition;
+
+                    Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(desiredBodyPosition);
+
+                    float intFactor = Mathf.Clamp01(interactingAnimationTime / 2f);
+                    pos = Vector3.Lerp(pos, wantedInteractingShipPos, intFactor);
+
+                    // input
+                    interactingInput = inputX;
                 }
                 else
-                {// Boat movement
+                {
+                    // Player movement
 
-                    // Body position handling
-                    if (interactable && interacting)
+                    Vector3 camRight = Camera.main.transform.right;
+                    Vector3 camForward = Camera.main.transform.forward;
+                    //camForward.y = 0;
+                    //camForward.Normalize();
+                    Vector3 camUp = Camera.main.transform.up;
+
+                    Vector2 input = new Vector2(inputX, inputY);
+                    if (input.sqrMagnitude > 1f) input.Normalize();
+
+                    Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
+                    Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
+
+                    //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
+
+                    pos += shipRelativeInput * speed * Time.deltaTime;
+
+                    interactingInput = 0;
+                }
+
+                GetPushedByOtherPlayers(ref pos);
+
+                // Highligting should only happen if not interacting
+                if (!interacting)
+                {
+                    // On got close to
+                    if (interactableInRange != lastInteractableInRange || endedInteracting)
                     {
-                        Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition(leftHandHoldStartFactor, rightHandHoldStartFactor);
-
-                        gizmoDebugPos = desiredBodyPosition;
-
-                        Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(desiredBodyPosition);
-
-                        float intFactor = Mathf.Clamp01(interactingAnimationTime / 2f);
-                        pos = Vector3.Lerp(pos, wantedInteractingShipPos, intFactor);
-
-                        // input
-                        interactingInput = inputX;
-                    }
-                    else
-                    {
-                        // Player movement
-
-                        Vector3 camRight = Camera.main.transform.right;
-                        Vector3 camForward = Camera.main.transform.forward;
-                        //camForward.y = 0;
-                        //camForward.Normalize();
-                        Vector3 camUp = Camera.main.transform.up;
-
-                        Vector2 input = new Vector2(inputX, inputY);
-                        if (input.sqrMagnitude > 1f) input.Normalize();
-
-                        Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
-                        Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
-
-                        //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
-
-                        pos += shipRelativeInput * speed * Time.deltaTime;
-
-                        interactingInput = 0;
-                    }
-
-                    GetPushedByOtherPlayers(ref pos);
-
-                    // Highligting should only happen if not interacting
-                    if (!interacting)
-                    {
-                        // On got close to
-                        if (interactableInRange != lastInteractableInRange || endedInteracting)
+                        if (interactableInRange)
                         {
-                            if (interactableInRange)
-                            {
-                                interactableInRange.Highlight();
-                                highlightedInteractable = interactableInRange;
-                            }
-                            else if (highlightedInteractable)
-                            {
-                                Facepunch.Highlight.ClearAll();
-                                Facepunch.Highlight.Rebuild();
-                                ShipUI.instance.SetInteractionText("");
-                                highlightedInteractable = null;
-                            }
+                            interactableInRange.Highlight();
+                            highlightedInteractable = interactableInRange;
+                        }
+                        else if (highlightedInteractable)
+                        {
+                            Facepunch.Highlight.ClearAll();
+                            Facepunch.Highlight.Rebuild();
+                            ShipUI.instance.SetInteractionText("");
+                            highlightedInteractable = null;
                         }
                     }
-                    else if (highlightedInteractable)
-                    {
-                        Facepunch.Highlight.ClearAll();
-                        Facepunch.Highlight.Rebuild();
-                        ShipUI.instance.SetInteractionText("");
-                        highlightedInteractable = null;
-                    }
-
-                    lastInteractableInRange = interactableInRange;
                 }
+                else if (highlightedInteractable)
+                {
+                    Facepunch.Highlight.ClearAll();
+                    Facepunch.Highlight.Rebuild();
+                    ShipUI.instance.SetInteractionText("");
+                    highlightedInteractable = null;
+                }
+
+                lastInteractableInRange = interactableInRange;
             }
             else // if not photonView.IsMine
             {
-                if (!worldMovement.enabled)
-                {
-                    // WorldMovement
-                    worldMovement.UpdatePosition(ref pos, false, Time.deltaTime);
-                }
-                else
-                {
-                    GetPushedByOtherPlayers(ref receivedPos);
-                    playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
+                GetPushedByOtherPlayers(ref receivedPos);
+                playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
 
-                    pos = Vector2.Lerp(pos, receivedPos, 5f * Time.deltaTime);
-                }
+                pos = Vector2.Lerp(pos, receivedPos, 5f * Time.deltaTime);
             }
 
             //////////////////
@@ -364,7 +359,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     void GetPushedByOtherPlayers(ref Vector2 ownPosition)
     {
         Vector2 push = Vector2.zero;
-        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToOriginalPlayers[shipId])
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToBoardedPlayers[shipId])
         {
             if (p != photonView.Owner)
             {
@@ -387,42 +382,60 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         ownPosition += push * pushSpeed * Time.deltaTime;
     }
 
-    public void PlaceOnShip(ShipSync s, ShipPlayArea area)
+    public void PlaceOnShip(ShipSync s, ShipPlayArea area, ShipInteractables shipInteractables)
     {
+        ShipPlayArea previousArea = playArea;
         playArea = area;
 
         if (feet == null) feet = GetComponent<PlayerFeet>();
         feet.playArea = playArea;
-        interactables = s.visualShip.GetComponent<ShipInteractables>();
+        interactables = shipInteractables;//
 
         transform.SetParent(playArea.areaCenter);
 
         if (photonView.IsMine)
         {
-            pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
 
-            Camera.main.GetComponent<OrbitCam>()
-                .SetLerpByDistanceTargets(s.visualShip.cameraFocusBottom, s.visualShip.cameraFocusTop);
-
-            if (ShipUI.instance)
-            {
-                ShipUI.instance.ship = s.visualShip;
-                ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId+1);
+            if (previousArea == null)
+                pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
+            else {
+                pos = playArea.InverseTransformPoint(previousArea.TransformPoint(pos));
             }
 
-            if (Music.instance)
+            if (s != null)
             {
-                Music.instance.SetShip(s.visualShip);
-            }
+                Camera.main.GetComponent<OrbitCam>()
+                    .SetLerpByDistanceTargets(s.visualShip.cameraFocusBottom, s.visualShip.cameraFocusTop);
 
-            s.shipSounds.doWavesAgainstShip = true;
+
+                if (ShipUI.instance)
+                {
+                    ShipUI.instance.ship = s.visualShip;
+                    ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId + 1);
+                }
+
+                if (Music.instance)
+                {
+                    Music.instance.SetShip(s.visualShip);
+                }
+
+                s.shipSounds.doWavesAgainstShip = true;
+            }
+            else {
+                // On land/water
+                // TODO
+
+                Camera.main.GetComponent<OrbitCam>().SetLerpByDistanceTargets(transform, null);
+
+                if (ShipUI.instance)
+                {
+                    ShipUI.instance.ship = null;
+                    ShipUI.instance.shipIdText.text = "";
+                }
+            }
         }
 
         feet.Init(pos, Vector2.up, photonView.IsMine? ownStepsMixerGroup : othersStepsMixerGroup);
-    }
-
-    void ExitShip() {
-        
     }
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -445,8 +458,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             int newShipId = (int)stream.ReceiveNext();
             if (newShipId != shipId)
             {
-                // TODO
-                
+                int oldSHipId = shipId;
+                shipId = newShipId;
+                RoomController.i.RassignPlayerToShip(this, oldSHipId);
             }
             receivedPos = (Vector2)stream.ReceiveNext();
 
@@ -468,7 +482,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     PlayStartInteractingSound(interactable);
             }
         }
-        // Basically I'm placing all logic about world movement in a separate script
+        // Basically I'm hoping of placing all logic about world movement in a separate script
         worldMovement.OnPhotonSerializeView(stream);
     }
 

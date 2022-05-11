@@ -1954,6 +1954,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 2302828771738319153, guid: c03dd81c9ad7ae444b5c60e1280423eb, type: 3}
   colors: {fileID: 11400000, guid: ef68c2de1f9b9eb42983836a0936a56e, type: 2}
   world: {fileID: 1616099191}
+  worldInteractables: {fileID: 1616099193}
   printableTextTemplate: {fileID: 475060584}
   joinedOwnShip: {fileID: 8300000, guid: fa9459827152e4d0dae27c4da75aa889, type: 3}
   joinedOtherShip: {fileID: 8300000, guid: 99313f03fca354cebabc824262e2986c, type: 3}
@@ -2614,6 +2615,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1616099192}
   - component: {fileID: 1616099191}
+  - component: {fileID: 1616099193}
   m_Layer: 7
   m_Name: World
   m_TagString: Untagged
@@ -2662,6 +2664,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 38
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1616099193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616099190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7c1cc8070fc0144a865816a771115c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftWheel: {fileID: 0}
+  rightWheel: {fileID: 0}
+  rope: {fileID: 0}
+  interactionReach: 1
+  visualLeftWheel: {fileID: 0}
+  visualRightWheel: {fileID: 0}
+  visualRope: {fileID: 0}
+  interactables: []
 --- !u!1 &1656237307 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e012f81bcd735764a98d2694c24a7b43, type: 3}
