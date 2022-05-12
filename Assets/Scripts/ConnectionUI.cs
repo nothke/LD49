@@ -26,7 +26,7 @@ public class ConnectionUI : MonoBehaviour
         if (inRoomPanel.activeInHierarchy)
         {
             int count = 0;
-            foreach (KeyValuePair<int, List<Photon.Realtime.Player>> kvp in RoomController.i.shipIdToBoardedPlayers)
+            foreach (KeyValuePair<int, List<Photon.Realtime.Player>> kvp in RoomController.i.shipIdToPlayersCurrentlyBoarding)
             {
                 if (kvp.Key == -1) continue;
                 ShipInfoButton inf = GetInfo(count);
@@ -99,12 +99,13 @@ public class ConnectionUI : MonoBehaviour
 
     public void RandomShipPressed()
     {
-        RoomController.i.JoinRandomShip();
         Debug.Log("Random ship pressed");
+        RoomController.i.JoinRandomShip();
     }
 
     public void NewShipPressed()
     {
+        Debug.Log("New ship pressed");
         RoomController.i.RequestAndJoinNewShip();
     }
 

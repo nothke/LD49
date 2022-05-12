@@ -359,7 +359,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     void GetPushedByOtherPlayers(ref Vector2 ownPosition)
     {
         Vector2 push = Vector2.zero;
-        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToBoardedPlayers[shipId])
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[shipId])
         {
             if (p != photonView.Owner)
             {
@@ -455,13 +455,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         else // if reading
         {
             int newShipId = (int)stream.ReceiveNext();
+            receivedPos = (Vector2)stream.ReceiveNext();
             if (newShipId != shipId)
             {
                 int oldSHipId = shipId;
                 shipId = newShipId;
+
+                pos = receivedPos;
                 RoomController.i.RassignPlayerToShip(this, oldSHipId);
             }
-            receivedPos = (Vector2)stream.ReceiveNext();
 
             interacting = (bool)stream.ReceiveNext();
             if (interacting)

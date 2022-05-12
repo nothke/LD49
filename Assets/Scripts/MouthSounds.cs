@@ -44,6 +44,9 @@ public class MouthSounds : MonoBehaviour
 
     public void PlayMiau(int which, float pitch)
     {
+        if (source == null)
+            Start();
+
         if (source.isPlaying)
             source.Stop();
 

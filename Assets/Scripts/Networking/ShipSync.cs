@@ -156,7 +156,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
             }
         }
 
-        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToBoardedPlayers[shipId])
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[shipId])
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
             Vector3 playerPosition = ps.transform.position;
@@ -196,6 +196,15 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
             stream.SendNext(localShip.rb.rotation);
             stream.SendNext(localShip.rb.velocity);
             stream.SendNext(localShip.rb.angularVelocity); // Maybe unnecessary?
+
+            // These are to prevent big jumps in case of ownership change:
+            receivedPosition = localShip.rb.position;
+            receivedRotation = localShip.rb.rotation;
+            receivedVelocity = localShip.rb.velocity;
+            receivedAngularVelocity = localShip.rb.angularVelocity;
+
+            remoteShip.rb.MovePosition(receivedPosition);
+            remoteShip.rb.MoveRotation(receivedRotation);
         }
         else
         {

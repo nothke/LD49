@@ -1917,7 +1917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wantOwnRoom: 0
-  gameVersion: 0.5
+  gameVersion: 0.5.1
   roomName: Adriatic
   kickAFKPlayers: 1
   maxAFKtime: 120
