@@ -231,7 +231,7 @@ public class RoomController : MonoBehaviourPunCallbacks
 
     public void RegisterPlayer(PlayerSync p, int originalShipId)
     {
-        Debug.Log($"Registering player in ship {p.shipId}, originally from ship {originalShipId}");
+        //Debug.Log($"Registering player in ship {p.shipId}, originally from ship {originalShipId}");
         playerSyncs.Add(p.photonView.Owner, p);
 
         if (!shipIdToOriginalPlayers.ContainsKey(originalShipId))
@@ -250,7 +250,7 @@ public class RoomController : MonoBehaviourPunCallbacks
 
     public void RassignPlayerToShip(PlayerSync ps, int fromShip)
     {
-        Debug.Log($"Reassigning player to ship {ps.shipId}, from ship {fromShip}");
+        //Debug.Log($"Reassigning player to ship {ps.shipId}, from ship {fromShip}");
         Player p = ps.photonView.Owner;
 
         // Removals & Cleanup

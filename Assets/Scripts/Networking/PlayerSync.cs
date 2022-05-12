@@ -404,8 +404,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
             if (s != null)
             {
-                Camera.main.GetComponent<OrbitCam>()
-                    .SetLerpByDistanceTargets(s.visualShip.cameraFocusBottom, s.visualShip.cameraFocusTop);
+                Camera.main.GetComponent<OrbitCam>().SmoothLerpTo(s.visualShip.cameraFocusBottom, s.visualShip.cameraFocusTop, 0.7f);
 
 
                 if (ShipUI.instance)
@@ -425,7 +424,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 // On land/water
                 // TODO
 
-                Camera.main.GetComponent<OrbitCam>().SetLerpByDistanceTargets(transform, null);
+                Camera.main.GetComponent<OrbitCam>().SmoothLerpTo(transform, null, 0.7f);
 
                 if (ShipUI.instance)
                 {

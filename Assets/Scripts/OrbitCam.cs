@@ -50,6 +50,31 @@ public class OrbitCam : MonoBehaviour
         target2 = t2;
     }
 
+    Vector3 fromTarget, fromTarget2;
+    bool fromTarget2Existed = false;
+    float lerpingTotalTime;
+    float lerpingCountdownTime;
+    public void SmoothLerpTo(Transform newTarget, Transform newTarget2, float time)
+    {
+        if (target == null)
+        {
+            target = newTarget;
+            target2 = newTarget2;
+            return;
+        }
+
+        fromTarget = target.position;
+        fromTarget2Existed = target2 != null;
+        if (fromTarget2Existed)
+            fromTarget2 = target2.position;
+
+        lerpingTotalTime = time;
+        lerpingCountdownTime = time;
+
+        target = newTarget;
+        target2 = newTarget2;
+    }
+
     void UpdateCamera()
     {
         if (!target)
@@ -59,7 +84,7 @@ public class OrbitCam : MonoBehaviour
         float maxInputDistance = Mathf.Pow(distanceMax, 1.0f / pow);
         float minInputDistance = Mathf.Pow(distanceMin, 1.0f / pow);
 
-        const float FRAME_TIME = 1.0f / 60.0f;
+        float FRAME_TIME = Time.deltaTime;// 1.0f / 60.0f;
 
         x += Input.GetAxis("Mouse X") * turnSpeed * FRAME_TIME;
         y -= Input.GetAxis("Mouse Y") * turnSpeed * FRAME_TIME;
@@ -80,14 +105,23 @@ public class OrbitCam : MonoBehaviour
         distance = Mathf.SmoothDamp(distance, distanceTarget, ref smoothDistanceVelo, 0.1f);
 
         Vector3 targetPos;
-        if (!target2)
+        float t = Mathf.InverseLerp(distanceMin, distanceMax, distance);
+
+        if (lerpingCountdownTime > 0)
         {
-            targetPos = target.position;
+            lerpingCountdownTime = Mathf.Max(0, lerpingCountdownTime - FRAME_TIME);
+
+            float lerpFactor = 1f - lerpingCountdownTime / lerpingTotalTime;
+            lerpFactor = Easing.Quadratic.InOut(lerpFactor);
+
+            Vector3 newTargetPos = GetTargetPosFromTargets(target.position, target2 ? target2.position : Vector3.zero, target2 != null, t);
+            Vector3 oldTargetPos = GetTargetPosFromTargets(fromTarget, fromTarget2, fromTarget2Existed, t);
+
+            targetPos = Vector3.Lerp(oldTargetPos, newTargetPos, lerpFactor);
         }
         else
         {
-            float t = Mathf.InverseLerp(distanceMin, distanceMax, distance);
-            targetPos = Vector3.Lerp(target.position, target2.position, t);
+            targetPos = GetTargetPosFromTargets(target.position, target2? target2.position : Vector3.zero, target2 != null, t);
         }
 
         Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
@@ -95,6 +129,20 @@ public class OrbitCam : MonoBehaviour
 
         transform.rotation = rotation;
         transform.position = position;
+    }
+
+    static Vector3 GetTargetPosFromTargets(Vector3 target, Vector3 target2, bool hasTarget2, float t)
+    {
+        Vector3 targetPos;
+        if (!hasTarget2)
+        {
+            targetPos = target;
+        }
+        else
+        {
+            targetPos = Vector3.Lerp(target, target2, t);
+        }
+        return targetPos;
     }
 
     public static float ClampAngle(float angle, float min, float max)
