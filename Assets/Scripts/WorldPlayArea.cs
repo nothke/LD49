@@ -20,8 +20,10 @@ public class WorldPlayArea : ShipPlayArea
         hits = new RaycastHit[4];
     }
 
-    public override void EnsureCircleInsideArea(ref Vector2 pos, float radius)
+    public override void EnsureCircleInsideArea(ref Vector3 pos, float radius)
     {
+        pos.y = Mathf.Max(pos.y, GetMinPlayerPositionY(pos));
+
         return;
     }
 
@@ -38,21 +40,29 @@ public class WorldPlayArea : ShipPlayArea
     public override Vector3 TransformPoint(Vector2 local)
     {
         Vector3 p = new Vector3(local.x, 0, local.y);
-        p.y = Water.GetHeight(p) - waterMaxDepth;
+        p.y = GetMinPlayerPositionY(p);
+        return p;
+    }
 
-        ray.origin = new Vector3(local.x, maxHeight, local.y);
+    public float GetMinPlayerPositionY(Vector3 p)
+    {
+        float minHeight = Water.GetHeight(p) - waterMaxDepth;
+
+        ray.origin = new Vector3(p.x, maxHeight, p.z);
 
         int hitCount = Physics.RaycastNonAlloc(ray, hits, maxHeight - minHeight, hitMask.value);
         if (hitCount > 0)
         {
             for (int i = 0; i < hitCount; ++i)
-                p.y = Mathf.Max(p.y, hits[i].point.y);
+            {
+                minHeight = Mathf.Max(minHeight, hits[i].point.y);
+            }
         }
 
-        return p;
+        return minHeight;
     }
 
-    public float GetMinHeight(Vector3 p)
+    public float GetMinCameraPositionY(Vector3 p)
     {
         float minHeight = Water.GetHeight(p);
 

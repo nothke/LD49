@@ -44,13 +44,15 @@ public class ShipPlayArea : MonoBehaviour
         return new Vector2(l.x, l.z);
     }
 
-    virtual public void EnsureCircleInsideArea(ref Vector2 pos, float radius)
+    virtual public void EnsureCircleInsideArea(ref Vector3 pos, float radius)
     {
         pos.x = Mathf.Max(minMaxX.x + radius, pos.x);
         pos.x = Mathf.Min(minMaxX.y - radius, pos.x);
 
-        pos.y = Mathf.Max(minMaxZ.x + radius, pos.y);
-        pos.y = Mathf.Min(minMaxZ.y - radius, pos.y);
+        pos.y = Mathf.Max(0, pos.y);
+
+        pos.z = Mathf.Max(minMaxZ.x + radius, pos.z);
+        pos.z = Mathf.Min(minMaxZ.y - radius, pos.z);
     }
 
     private void OnDrawGizmos()

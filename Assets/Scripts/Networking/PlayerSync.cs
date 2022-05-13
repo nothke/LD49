@@ -13,7 +13,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     ShipPlayArea playArea;
     ShipInteractables interactables;
 
-    Vector2 pos = Vector2.zero;
+    Vector3 pos = Vector3.zero;
     [Header("Player")]
     public float collisionRadius = 0.5f;
     public float speed = 10f;
@@ -36,7 +36,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     Vector3 gizmoDebugPos = Vector3.zero;
 
     float interactingAnimationTime = 0;
-    Vector2 lastFramePosition;
+    Vector3 lastFramePosition;
     Vector2 instantVelocityAverage;
     Vector2 lastFacingDirection = Vector2.up;
 
@@ -44,7 +44,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     Interactable interactable;
     float handStartFactor;
 
-    Vector2 receivedPos;
+    Vector3 receivedPos;
     bool wasInteracting = false;
     Interactable highlightedInteractable;
 
@@ -130,7 +130,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 float inputJump = Input.GetAxis("Jump");
 
                 Interactable interactableInRange =
-                    interactables.InInteractableReach(playArea.TransformPoint(pos) + Vector3.up);
+                    interactables.InInteractableReach(playArea.areaCenter.TransformPoint(pos) + Vector3.up);
 
                 bool startedInteracting = inputInteract > 0 && !interacting;
                 bool endedInteracting = inputInteract <= 0.01f && interacting;
@@ -208,7 +208,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
                     gizmoDebugPos = desiredBodyPosition;
 
-                    Vector2 wantedInteractingShipPos = playArea.InverseTransformPoint(desiredBodyPosition);
+                    Vector3 wantedInteractingShipPos = playArea.areaCenter.InverseTransformPoint(desiredBodyPosition);
 
                     float intFactor = Mathf.Clamp01(interactingAnimationTime / 2f);
                     pos = Vector3.Lerp(pos, wantedInteractingShipPos, intFactor);
@@ -242,7 +242,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
                     //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
 
-                    pos += shipRelativeInput * speed * Time.deltaTime;
+                    pos += new Vector3(shipRelativeInput.x, 0, shipRelativeInput.y) * speed * Time.deltaTime;
 
                     interactingInput = 0;
                 }
@@ -284,7 +284,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 GetPushedByOtherPlayers(ref receivedPos);
                 playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
 
-                pos = Vector2.Lerp(pos, receivedPos, 5f * Time.deltaTime);
+                pos = Vector3.Lerp(pos, receivedPos, 5f * Time.deltaTime);
             }
 
             //////////////////
@@ -293,12 +293,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
             playArea.EnsureCircleInsideArea(ref pos, collisionRadius);
 
-            transform.position = playArea.TransformPoint(pos) - Vector3.up * 0.15f;
+            transform.position = playArea.areaCenter.TransformPoint(pos) - Vector3.up * 0.15f;
 
-            Vector2 deltaPos = pos - lastFramePosition;
+            Vector3 deltaPos = pos - lastFramePosition;
             lastFramePosition = pos;
 
-            Vector2 instantVelocity = deltaPos / Time.deltaTime;
+            Vector2 instantVelocity = new Vector2(deltaPos.x, deltaPos.z) / Time.deltaTime;
             instantVelocityAverage = instantVelocityAverage * 0.3f + instantVelocity * 0.7f;
 
             bool _interacting = interacting && interactable;
@@ -360,25 +360,25 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             rightHand.position = Vector3.Lerp(rightHand.position, wantedRightHandPos, interactingFinishFactor);
 
             // Feet
-            feet.UpdateFeet(pos, facingDirection);
+            feet.UpdateFeet(new Vector2(pos.x, pos.z), facingDirection);
         }
     }
 
-    void GetPushedByOtherPlayers(ref Vector2 ownPosition)
+    void GetPushedByOtherPlayers(ref Vector3 ownPosition)
     {
-        Vector2 push = Vector2.zero;
+        Vector3 push = Vector3.zero;
         foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[shipId])
         {
             if (p != photonView.Owner)
             {
-                Vector2 otherPos = RoomController.i.playerSyncs[p].pos;
+                Vector3 otherPos = RoomController.i.playerSyncs[p].pos;
 
-                float distance = Vector2.Distance(ownPosition, otherPos);
+                float distance = Vector3.Distance(ownPosition, otherPos);
                 if (distance < collisionRadius * 2f)
                 {
                     float pushIntensity = 1 - (distance / (collisionRadius * 2f));
                     pushIntensity = Easing.Cubic.Out(pushIntensity);
-                    Vector2 playerPush = (ownPosition - otherPos).normalized * pushIntensity;
+                    Vector3 playerPush = (ownPosition - otherPos).normalized * pushIntensity;
                     push += playerPush;
 
                     //Debug.Log(string.Format("pushing! own {0}, other {1}, intensity {2}, playerPush {3}", ownPosition, otherPos, pushIntensity, playerPush));
@@ -407,7 +407,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             if (previousArea == null)
                 pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
             else {
-                pos = playArea.InverseTransformPoint(previousArea.TransformPoint(pos));
+                pos = playArea.areaCenter.InverseTransformPoint(previousArea.areaCenter.TransformPoint(pos));
             }
 
             if (s != null)
@@ -463,7 +463,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         else // if reading
         {
             int newShipId = (int)stream.ReceiveNext();
-            receivedPos = (Vector2)stream.ReceiveNext();
+            receivedPos = (Vector3)stream.ReceiveNext();
             if (newShipId != shipId)
             {
                 int oldSHipId = shipId;
