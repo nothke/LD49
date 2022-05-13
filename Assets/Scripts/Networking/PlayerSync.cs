@@ -232,6 +232,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
                     Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
 
+                    if (worldMovement.enabled)
+                    {
+                        shipRelativeInput *= 3f;
+
+                        if (Input.GetKey(KeyCode.LeftShift))
+                            shipRelativeInput *= 2f;
+                    }
+
                     //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
 
                     pos += shipRelativeInput * speed * Time.deltaTime;

@@ -24,6 +24,8 @@ public class OrbitCam : MonoBehaviour
     float x = 0.0f;
     float y = 0.0f;
 
+    WorldPlayArea world;
+
     void Start()
     {
         Vector3 angles = transform.eulerAngles;
@@ -37,6 +39,8 @@ public class OrbitCam : MonoBehaviour
         {
             cameraRigidBody.freezeRotation = true;
         }
+
+        world = RoomController.i.world;
     }
 
     void LateUpdate()
@@ -126,6 +130,8 @@ public class OrbitCam : MonoBehaviour
 
         Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
         Vector3 position = rotation * negDistance + targetPos;
+
+        position.y = Mathf.Max(position.y, world.GetMinHeight(position) + 0.3f);
 
         transform.rotation = rotation;
         transform.position = position;
