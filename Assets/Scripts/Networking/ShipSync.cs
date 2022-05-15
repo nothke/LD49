@@ -159,6 +159,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[shipId])
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
+            if (ps.IsJumping)
+                continue;
+
             Vector3 playerPosition = ps.transform.position;
             // Make sure the position we apply the force is within bounds (otherwise it will tilt a lot)
             Vector3 localPlayerPos = localShip.playAreaManager.areaCenter.InverseTransformPoint(playerPosition);

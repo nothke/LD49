@@ -19,6 +19,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     public float speed = 10f;
     public float pushSpeed = 5f;
     public float boatPushWeight = 10f;
+    public float gravity = -9.81f;
+
+    public float jumpSpeed = 2f;
+    float verticalSpeed = 0;
 
     bool interacting = false;
 
@@ -60,6 +64,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     [Header("World movement")]
     public PlayerFreeMovement worldMovement;
+
+    bool jumping = false;
+
+    public bool IsJumping {
+        get { return jumping; }
+    }
 
 
     void Start()
@@ -152,7 +162,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                             out rightHandHoldStartFactor,
                             handStartFactor);
 
-                        Debug.Log("Started interacting with: " + interactable);
+                        //Debug.Log("Local player Started interacting with: " + interactable);
                     }
                     else // if no interactables in range
                     {
@@ -186,6 +196,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     // Jump
                     // TODO
 
+                    if (!jumping)
+                    {
+                        verticalSpeed = jumpSpeed;
+                        jumping = true;
+
+                        // TODO prevent jumping if boat tilted? force a jump to the sea in that case
+                    }
+                    /*
                     worldMovement.enabled = !worldMovement.enabled;
 
                     int prevShip = shipId;
@@ -198,6 +216,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     }
 
                     RoomController.i.RassignPlayerToShip(this, prevShip);
+                    */
                 }
 
 
@@ -207,6 +226,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     Vector3 desiredBodyPosition = interactable.GetTargetBodyPosition(leftHandHoldStartFactor, rightHandHoldStartFactor);
 
                     gizmoDebugPos = desiredBodyPosition;
+
+                    desiredBodyPosition.y = 0;
 
                     Vector3 wantedInteractingShipPos = playArea.areaCenter.InverseTransformPoint(desiredBodyPosition);
 
@@ -278,10 +299,84 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 }
 
                 lastInteractableInRange = interactableInRange;
+
+                // Jumping
+                if (shipId >= 0)
+                { // On a boat
+                    if (jumping || pos.y > 0)
+                    {
+                        pos.y += verticalSpeed * Time.deltaTime;
+                        verticalSpeed += Time.deltaTime * gravity;
+
+                        if (pos.y <= 0)
+                        {
+                            // Hit the boat
+
+                            ShipSync ss = RoomController.i.ships[shipId];
+                            Vector3 impulse = Vector3.up * verticalSpeed;
+                            //ss.localShip.rb.AddForceAtPosition(impulse, transform.position, ForceMode.Impulse);
+                            Debug.Log("hit a boat after jumping");
+                            jumping = false;
+                            pos.y = 0;
+                            receivedPos.y = 0;
+                            verticalSpeed = 0;
+                        }
+                    }
+                    else
+                    {
+                        pos.y = 0;
+                        receivedPos.y = 0;
+                        verticalSpeed = 0;
+                        jumping = false;
+                    }
+                }
+                else
+                { // On water or land
+
+                }
             }
             else // if not photonView.IsMine
             {
                 GetPushedByOtherPlayers(ref receivedPos);
+
+                // Jumping
+                if (shipId >= 0)
+                { // On a boat
+                    if (jumping || receivedPos.y > 0)
+                    {
+                        receivedPos.y += verticalSpeed * Time.deltaTime;
+                        pos.y += verticalSpeed * Time.deltaTime;
+                        verticalSpeed += Time.deltaTime * gravity;
+
+                        if (pos.y <= 0)
+                        {
+                            // Hit the boat
+
+                            ShipSync ss = RoomController.i.ships[shipId];
+                            Vector3 impulse = Vector3.up * verticalSpeed;
+                            //ss.localShip.rb.AddForceAtPosition(impulse, transform.position, ForceMode.Impulse); ;
+                            //if (ss.remoteShip.gameObject.activeSelf)
+                            //    ss.remoteShip.rb.AddForceAtPosition(impulse, transform.position, ForceMode.Impulse);
+                            Debug.Log("hit a boat after jumping");
+                            jumping = false;
+                            pos.y = 0;
+                            receivedPos.y = 0;
+                            verticalSpeed = 0;
+                        }
+                    }
+                    else
+                    {
+                        pos.y = 0;
+                        receivedPos.y = 0;
+                        verticalSpeed = 0;
+                        jumping = false;
+                    }
+                }
+                else
+                { // On water or land
+
+                }
+
                 playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
 
                 pos = Vector3.Lerp(pos, receivedPos, 5f * Time.deltaTime);
@@ -290,6 +385,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             //////////////////
             // Actual moving
             //////////////////
+            
 
             playArea.EnsureCircleInsideArea(ref pos, collisionRadius);
 
@@ -459,6 +555,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 stream.SendNext(rightHandHoldStartFactor);
                 stream.SendNext(leftHandHoldStartFactor);
             }
+            stream.SendNext(jumping);
+            stream.SendNext(verticalSpeed);
         }
         else // if reading
         {
@@ -489,6 +587,19 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
                 if (interacting && interactable != null)
                     PlayStartInteractingSound(interactable);
+            }
+
+            bool wasJumping = jumping;
+            jumping = (bool)stream.ReceiveNext();
+            verticalSpeed = (float)stream.ReceiveNext();
+
+            if (jumping && !wasJumping)
+            { // let's catch up
+                float deltaTime = (float)(PhotonNetwork.Time - info.SentServerTime);
+
+                float deltaHeight = verticalSpeed * deltaTime + 0.5f * gravity * deltaTime * deltaTime;
+                receivedPos.y += deltaHeight;
+                verticalSpeed = verticalSpeed + gravity * deltaTime;
             }
         }
         // Basically I'm hoping of placing all logic about world movement in a separate script
@@ -524,7 +635,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         if (i.GetType() == Interactable.Type.Rope)
         {
             ShipSync s = RoomController.i.ships[shipId];
-            Debug.Log(s);
             if (s != null)
             {
                 s.shipSounds.PlaySoundAtPos(leftHand.position, holdSailSounds[Random.Range(0, holdSailSounds.Length)], 1f, photonView.IsMine ? ownGrabsMixerGroup : othersGrabsMixerGroup);
