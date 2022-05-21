@@ -159,8 +159,9 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[shipId])
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
-            if (ps.IsJumping)
-                continue;
+
+            //if (ps.IsJumping)
+            //    continue;
 
             Vector3 playerPosition = ps.transform.position;
             // Make sure the position we apply the force is within bounds (otherwise it will tilt a lot)
@@ -172,6 +173,38 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
             if (remoteShip.gameObject.activeSelf)
                 remoteShip.rb.AddForceAtPosition(Vector3.down * ps.boatPushWeight, playerPosition, ForceMode.Acceleration);
+        }
+
+        foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[-1])
+        { // For each player in the world
+            PlayerSync ps = RoomController.i.playerSyncs[p];
+
+            //if (ps.IsJumping)
+            //    continue;
+
+            Vector3 playerPosition = ps.transform.position;
+            // Make sure the position we apply the force is within bounds (otherwise it will tilt a lot)
+            Vector3 localPlayerPos = localShip.playAreaManager.areaCenter.InverseTransformPoint(playerPosition);
+            localShip.playAreaManager.EnsureCircleInsideArea(ref localPlayerPos, 0);
+            Vector3 forcePosition = localShip.playAreaManager.areaCenter.TransformPoint(localPlayerPos);
+
+            Vector3 forceDirection = forcePosition - playerPosition;
+            float sqrMagnitude = forceDirection.sqrMagnitude;
+            float maxPushDistanceSqr = 3f * 3f;
+            if (sqrMagnitude < maxPushDistanceSqr)
+            { // Close to the ship, so push
+
+                Vector3 pushForce = forceDirection.normalized * (1f - (sqrMagnitude / maxPushDistanceSqr)); //* ps.boatPushWeight
+                //localShip.rb.AddForceAtPosition(pushForce, forcePosition, ForceMode.Acceleration);
+
+                ////ps.ApplyAcceleration(-pushForce);
+
+                //Debug.Log("Pushing boat from world force:" + pushForce);
+                //if (remoteShip.gameObject.activeSelf)
+                //   remoteShip.rb.AddForceAtPosition(pushForce, forcePosition, ForceMode.Acceleration);
+            }
+
+
         }
     }
 

@@ -41,6 +41,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     float interactingAnimationTime = 0;
     Vector3 lastFramePosition;
+    bool lastFrameUnderwater = false;
     Vector2 instantVelocityAverage;
     Vector2 lastFacingDirection = Vector2.up;
 
@@ -64,6 +65,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     [Header("World movement")]
     public PlayerFreeMovement worldMovement;
+    public float waterDynamicFriction = 0.1f;
+    public float waterToBodyDensityRatio = 1.1f; // more than 1 means denser water than body
 
     bool jumping = false;
 
@@ -196,12 +199,31 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     // Jump
                     // TODO
 
-                    if (!jumping)
+                    if (shipId != -1)
                     {
-                        verticalSpeed = jumpSpeed;
-                        jumping = true;
+                        worldMovement.enabled = !worldMovement.enabled;
 
-                        // TODO prevent jumping if boat tilted? force a jump to the sea in that case
+                        int prevShip = shipId;
+                        if (worldMovement.enabled)
+                        {
+                            shipId = -1;
+                        }
+                        else
+                        {
+                            shipId = RoomController.i.ClosestShipTo(transform.position);
+                        }
+
+                        RoomController.i.RassignPlayerToShip(this, prevShip);
+                    }
+                    else
+                    {
+                        if (!jumping)
+                        {
+                            verticalSpeed = jumpSpeed;
+                            jumping = true;
+
+                            // TODO prevent jumping if boat tilted? force a jump to the sea in that case
+                        }
                     }
                     /*
                     worldMovement.enabled = !worldMovement.enabled;
@@ -253,12 +275,13 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     Vector3 camRelativeInput = camRight * input.x + camForward * input.y + camUp * input.y;
                     Vector2 shipRelativeInput = playArea.InverseTransformDirection(camRelativeInput).normalized * input.magnitude;
 
+                    
                     if (worldMovement.enabled)
                     {
-                        shipRelativeInput *= 3f;
+                        //shipRelativeInput *= 3f;
 
                         if (Input.GetKey(KeyCode.LeftShift))
-                            shipRelativeInput *= 2f;
+                            shipRelativeInput *= 5f;
                     }
 
                     //Debug.Log(inputX + " "+ inputY + " => "+ camRelativeInput + " == "+shipRelativeInput);
@@ -332,7 +355,60 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 }
                 else
                 { // On water or land
+                    float minPos = ((WorldPlayArea)playArea).GetMinPlayerPositionY(pos);
+                    float waterLvl = Water.GetHeight(pos);
 
+                    float prevSpeed = verticalSpeed;
+
+                    bool isUnderwater = pos.y < waterLvl;
+                    if (isUnderwater)
+                    {
+                        float depth = waterLvl - pos.y;
+                        float buoyancyFactor = waterToBodyDensityRatio *  Mathf.Clamp01(depth / 1.1f);
+                        verticalSpeed += -gravity * buoyancyFactor * Time.deltaTime;
+                    }
+
+                    if (jumping || pos.y > minPos || isUnderwater)
+                    {
+                        pos.y += verticalSpeed * Time.deltaTime;
+                        verticalSpeed += Time.deltaTime * gravity;
+
+                        //Debug.Log("Being affected by gravity");
+
+                        if (pos.y <= minPos && verticalSpeed < 0)
+                        {
+                            // Hit the boat
+
+                            //ShipSync ss = RoomController.i.ships[shipId];
+                            //Vector3 impulse = Vector3.up * verticalSpeed;
+                            //ss.localShip.rb.AddForceAtPosition(impulse, transform.position, ForceMode.Impulse);
+                            //Debug.Log("hit a world after jumping");
+                            jumping = false;
+                            pos.y = minPos;
+                            receivedPos.y = minPos;
+
+                            if (!isUnderwater || verticalSpeed < 0)
+                                verticalSpeed = 0;
+                        }
+                    }
+                    else if (!jumping && !isUnderwater)
+                    {
+                        pos.y = minPos;
+                        receivedPos.y = minPos;
+                        //Debug.Log("standing on world, above water");
+                    }
+
+                    if (isUnderwater)
+                    {
+                        if (prevSpeed < 0 && verticalSpeed >= 0 && jumping)
+                        {
+                            jumping = false;
+                            //Debug.Log("not jumping because water pushing us up now");
+                        }
+                        if (verticalSpeed < 0) verticalSpeed = Mathf.Lerp(verticalSpeed, 0, Time.deltaTime * waterDynamicFriction);
+                    }
+
+                    //Debug.Log($"underwater: {underwater}, jumping: {jumping}, verticalSpeed: {verticalSpeed}, [minpos, waterLevel]: [{minPos}, {waterLevel}]:{pos.y}");
                 }
             }
             else // if not photonView.IsMine
@@ -385,11 +461,28 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             //////////////////
             // Actual moving
             //////////////////
-            
 
             playArea.EnsureCircleInsideArea(ref pos, collisionRadius);
 
             transform.position = playArea.areaCenter.TransformPoint(pos) - Vector3.up * 0.15f;
+
+            ////////////////
+            // Water particles player
+            ////////////////
+
+            float waterLevel = Water.GetHeight(pos);
+            bool underwater = waterLevel < pos.y;
+
+            if (underwater && !lastFrameUnderwater && verticalSpeed < 0)
+            { // Splash TODO
+
+            }
+            if (underwater != lastFrameUnderwater)
+            { // update water swimming splash particles TODO
+
+            }
+            lastFrameUnderwater = underwater;
+            //
 
             Vector3 deltaPos = pos - lastFramePosition;
             lastFramePosition = pos;
@@ -458,6 +551,12 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             // Feet
             feet.UpdateFeet(new Vector2(pos.x, pos.z), facingDirection);
         }
+    }
+
+    public void ApplyAcceleration(Vector3 acc)
+    {
+        Vector3 localAcceleration = playArea.areaCenter.InverseTransformDirection(acc);
+        pos += Time.deltaTime * localAcceleration;
     }
 
     void GetPushedByOtherPlayers(ref Vector3 ownPosition)

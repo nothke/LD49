@@ -229,6 +229,8 @@ MonoBehaviour:
   othersGrabsMixerGroup: {fileID: 2862796974895924112, guid: 2c71b5700508dce4fb7d257178013338, type: 2}
   mouth: {fileID: 2057219981989825164}
   worldMovement: {fileID: 7605974056834173262}
+  waterDynamicFriction: 2
+  waterToBodyDensityRatio: 1.08
 --- !u!114 &5030915964336270187
 MonoBehaviour:
   m_ObjectHideFlags: 0

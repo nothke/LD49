@@ -2784,7 +2784,7 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 128
-  waterMaxDepth: 1.5
+  waterMaxDepth: 2
 --- !u!4 &1616099192
 Transform:
   m_ObjectHideFlags: 0
