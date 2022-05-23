@@ -130,6 +130,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     }
 
     float lastJumpingAxis = 0;
+    float lastExitAxis = 0;
 
     void Update()
     {
@@ -149,6 +150,11 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 bool endedInteracting = inputInteract <= 0.01f && interacting;
                 bool startedJumping = inputJump > 0 && lastJumpingAxis <= 0.01f;
                 lastJumpingAxis = inputJump;
+
+
+                float inputExit = Input.GetAxis("Cancel");
+                bool startedExiting = inputExit > 0 && lastExitAxis <= 0.01f;
+                lastExitAxis = inputExit;
 
                 if (startedInteracting)
                 {
@@ -194,12 +200,22 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     interacting = false;
                 }
 
-                if (!interacting && startedJumping)
-                {
-                    // Jump
-                    // TODO
+                if (!interacting) {
+                    if (startedJumping)
+                    {
+                        // Jump
+                        // TODO
 
-                    if (shipId != -1)
+                        if (!jumping)
+                        {
+                            verticalSpeed = jumpSpeed;
+                            jumping = true;
+
+                            // TODO prevent jumping if boat tilted? force a jump to the sea in that case
+                        }
+                    }
+
+                    if (startedExiting)
                     {
                         worldMovement.enabled = !worldMovement.enabled;
 
@@ -215,30 +231,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
                         RoomController.i.RassignPlayerToShip(this, prevShip);
                     }
-                    else
-                    {
-                        if (!jumping)
-                        {
-                            verticalSpeed = jumpSpeed;
-                            jumping = true;
-
-                            // TODO prevent jumping if boat tilted? force a jump to the sea in that case
-                        }
-                    }
-                    /*
-                    worldMovement.enabled = !worldMovement.enabled;
-
-                    int prevShip = shipId;
-                    if (worldMovement.enabled)
-                    {
-                        shipId = -1;
-                    }
-                    else {
-                        shipId = RoomController.i.ClosestShipTo(transform.position);
-                    }
-
-                    RoomController.i.RassignPlayerToShip(this, prevShip);
-                    */
                 }
 
 
@@ -549,14 +541,8 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             rightHand.position = Vector3.Lerp(rightHand.position, wantedRightHandPos, interactingFinishFactor);
 
             // Feet
-            feet.UpdateFeet(new Vector2(pos.x, pos.z), facingDirection);
+            feet.UpdateFeet(new Vector2(pos.x, pos.z), facingDirection, !underwater);
         }
-    }
-
-    public void ApplyAcceleration(Vector3 acc)
-    {
-        Vector3 localAcceleration = playArea.areaCenter.InverseTransformDirection(acc);
-        pos += Time.deltaTime * localAcceleration;
     }
 
     void GetPushedByOtherPlayers(ref Vector3 ownPosition)

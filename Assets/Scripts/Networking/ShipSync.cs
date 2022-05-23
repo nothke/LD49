@@ -156,12 +156,13 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
             }
         }
 
+        // Apply player weight to boat
         foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[shipId])
         {
             PlayerSync ps = RoomController.i.playerSyncs[p];
 
-            //if (ps.IsJumping)
-            //    continue;
+            if (ps.IsJumping)
+                continue;
 
             Vector3 playerPosition = ps.transform.position;
             // Make sure the position we apply the force is within bounds (otherwise it will tilt a lot)
@@ -175,12 +176,10 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
                 remoteShip.rb.AddForceAtPosition(Vector3.down * ps.boatPushWeight, playerPosition, ForceMode.Acceleration);
         }
 
+        // Pushing forces?
         foreach (Photon.Realtime.Player p in RoomController.i.shipIdToPlayersCurrentlyBoarding[-1])
         { // For each player in the world
             PlayerSync ps = RoomController.i.playerSyncs[p];
-
-            //if (ps.IsJumping)
-            //    continue;
 
             Vector3 playerPosition = ps.transform.position;
             // Make sure the position we apply the force is within bounds (otherwise it will tilt a lot)

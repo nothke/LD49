@@ -59,7 +59,7 @@ public class PlayerFeet : MonoBehaviour
         initialized = true;
     }
 
-    public void UpdateFeet(Vector2 pos, Vector2 direction)
+    public void UpdateFeet(Vector2 pos, Vector2 direction, bool onLand)
     {
         if (!initialized) return;
 
@@ -155,8 +155,11 @@ public class PlayerFeet : MonoBehaviour
                 if (moveFactor >= 1)
                 {
                     leftFeetMoving = false;
-                    if (leftStep.isPlaying) leftStep.Stop();
-                    leftStep.Play();
+                    if (onLand)
+                    {
+                        if (leftStep.isPlaying) leftStep.Stop();
+                        leftStep.Play();
+                    }
                 }
             }
             if (rightFeetMoving)
@@ -169,8 +172,11 @@ public class PlayerFeet : MonoBehaviour
                 if (moveFactor >= 1)
                 {
                     rightFeetMoving = false;
-                    if (rightStep.isPlaying) rightStep.Stop();
-                    rightStep.Play();
+                    if (onLand)
+                    {
+                        if (rightStep.isPlaying) rightStep.Stop();
+                        rightStep.Play();
+                    }
                 }
             }
         }
