@@ -463,7 +463,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             ////////////////
 
             float waterLevel = Water.GetHeight(pos);
-            bool underwater = waterLevel < pos.y;
+            bool underwater = waterLevel > pos.y;
 
             if (underwater && !lastFrameUnderwater && verticalSpeed < 0)
             { // Splash TODO
