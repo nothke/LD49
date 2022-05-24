@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1969835584439724524}
   - component: {fileID: 1969835584439724525}
   - component: {fileID: 1969835584439724526}
+  - component: {fileID: 7745615902775007910}
   m_Layer: 0
   m_Name: NetworkedShip
   m_TagString: Untagged
@@ -92,3 +93,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   singlePlayerStrength: 0.3
+--- !u!114 &7745615902775007910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1969835584439724527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a741ebe44341a13419482774ccaf590f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightRenderers: []
+  shipPlayArea: {fileID: 0}

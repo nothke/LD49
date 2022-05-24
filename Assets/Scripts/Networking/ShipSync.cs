@@ -64,6 +64,11 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
         shipSounds.doWavesAgainstShip = false;
         shipSounds.Init();
 
+        WorldShipInteractable si = GetComponent<WorldShipInteractable>();
+        WorldInteractable wi = localShip.GetComponent<WorldInteractable>();
+        si.shipPlayArea = wi.shipPlayArea;
+        si.highlightRenderers = wi.highlightRenderers;
+
         //
 
         RoomController.i.RegisterShip(this);

@@ -2822,11 +2822,12 @@ MonoBehaviour:
   leftWheel: {fileID: 0}
   rightWheel: {fileID: 0}
   rope: {fileID: 0}
-  interactionReach: 1
+  interactionReach: 2
   visualLeftWheel: {fileID: 0}
   visualRightWheel: {fileID: 0}
   visualRope: {fileID: 0}
   interactables: []
+  worldInteractable: {fileID: 0}
 --- !u!1 &1656237307 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e012f81bcd735764a98d2694c24a7b43, type: 3}

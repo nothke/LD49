@@ -159,7 +159,16 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
                             RoomController.i.RassignPlayerToShip(this, prevShip);
                         }
-                        else {
+                        else if (interactableInRange.GetType() == Interactable.Type.Ship)
+                        {
+                            // Enter ship
+                            worldMovement.enabled = false;
+                            int prevShip = shipId;
+                            shipId = RoomController.i.ClosestShipTo(transform.position);
+                            RoomController.i.RassignPlayerToShip(this, prevShip);
+                        }
+                        else
+                        {
                             interactable = interactableInRange;
                             interactable.OnStartedInteracting();
 
@@ -208,33 +217,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     }
                     interactable = null;
                     interacting = false;
-                }
-
-                if (!interacting) {
-                    if (false)
-                    {
-                        // Jump
-                        // TODO
-
-                        
-                    }
-
-                    if (false)
-                    {
-                        worldMovement.enabled = !worldMovement.enabled;
-
-                        int prevShip = shipId;
-                        if (worldMovement.enabled)
-                        {
-                            shipId = -1;
-                        }
-                        else
-                        {
-                            shipId = RoomController.i.ClosestShipTo(transform.position);
-                        }
-
-                        RoomController.i.RassignPlayerToShip(this, prevShip);
-                    }
                 }
 
 
@@ -334,7 +316,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                             ShipSync ss = RoomController.i.ships[shipId];
                             Vector3 impulse = Vector3.up * verticalSpeed;
                             //ss.localShip.rb.AddForceAtPosition(impulse, transform.position, ForceMode.Impulse);
-                            Debug.Log("hit a boat after jumping");
+                            //Debug.Log("hit a boat after jumping");
                             jumping = false;
                             pos.y = 0;
                             receivedPos.y = 0;
@@ -708,7 +690,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 PlayEndInteractingSound(interactable);
             interactable = null;
         }
-        else if (id < interactables.interactables.Length)
+        else if (id < interactables.interactables.Count)
             interactable = interactables.interactables[id];
         else
             Debug.LogError("Attempting to set an id that is out of range of interactables, you might be running a wrong version with a different number of interactables?");

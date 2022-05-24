@@ -13,7 +13,7 @@ public class ShipInteractables : MonoBehaviour
     public Renderer visualRightWheel;
     public Renderer visualRope;
 
-    public Interactable[] interactables;
+    public List<Interactable> interactables;
     public Interactable worldInteractable;
 
     public enum InteractingThing
@@ -26,7 +26,7 @@ public class ShipInteractables : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < interactables.Length; i++)
+        for (int i = 0; i < interactables.Count; i++)
         {
             interactables[i].id = i;
         }
