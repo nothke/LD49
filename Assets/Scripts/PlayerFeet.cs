@@ -27,6 +27,8 @@ public class PlayerFeet : MonoBehaviour
     Quaternion toRotR, toRotL;
     AudioSource leftStep, rightStep;
 
+    const float feetPlayareaMargin = 0.3f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -149,6 +151,10 @@ public class PlayerFeet : MonoBehaviour
             {
                 Vector2 lerpedP = Vector2.Lerp(fromPosL, toPosL, Easing.Cubic.Out(moveFactor));
 
+                Vector3 aux = new Vector3(lerpedP.x, 0, lerpedP.y);
+                playArea.EnsureCircleInsideArea(ref aux, feetPlayareaMargin);
+                lerpedP = new Vector2(aux.x, aux.z);
+
                 leftFeet.position = playArea.TransformPoint(lerpedP) + playArea.areaCenter.up * instantHeight;
                 leftFeet.localRotation = Quaternion.Lerp(fromRotL, toRotL, moveFactor);
 
@@ -165,6 +171,10 @@ public class PlayerFeet : MonoBehaviour
             if (rightFeetMoving)
             {
                 Vector2 lerpedP = Vector2.Lerp(fromPosR, toPosR, Easing.Cubic.Out(moveFactor));
+
+                Vector3 aux = new Vector3(lerpedP.x, 0, lerpedP.y);
+                playArea.EnsureCircleInsideArea(ref aux, feetPlayareaMargin);
+                lerpedP = new Vector2(aux.x, aux.z);
 
                 rightFeet.position = playArea.TransformPoint(lerpedP) + playArea.areaCenter.up * instantHeight;
                 rightFeet.localRotation = Quaternion.Lerp(fromRotR, toRotR, moveFactor);
@@ -183,11 +193,22 @@ public class PlayerFeet : MonoBehaviour
 
         if (!rightFeetMoving)
         {
-            rightFeet.position = playArea.TransformPoint(toPosR);
+            Vector2 p = toPosR;
+            Vector3 aux = new Vector3(p.x, 0, p.y);
+            playArea.EnsureCircleInsideArea(ref aux, feetPlayareaMargin);
+            p = new Vector2(aux.x, aux.z);
+
+            rightFeet.position = playArea.TransformPoint(p);
             rightFeet.rotation = toRotR * playArea.areaCenter.rotation;
         }
-        if (!leftFeetMoving) {
-            leftFeet.position = playArea.TransformPoint(toPosL);
+        if (!leftFeetMoving)
+        {
+            Vector2 p = toPosL;
+            Vector3 aux = new Vector3(p.x, 0, p.y);
+            playArea.EnsureCircleInsideArea(ref aux, feetPlayareaMargin);
+            p = new Vector2(aux.x, aux.z);
+
+            leftFeet.position = playArea.TransformPoint(p);
             leftFeet.rotation = toRotL * playArea.areaCenter.rotation;
         }
     }

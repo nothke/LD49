@@ -14,6 +14,7 @@ public class ShipInteractables : MonoBehaviour
     public Renderer visualRope;
 
     public Interactable[] interactables;
+    public Interactable worldInteractable;
 
     public enum InteractingThing
     {
@@ -46,7 +47,15 @@ public class ShipInteractables : MonoBehaviour
         }
 
         if (minDistance > interactionReach)
+        {
+            if (worldInteractable != null)
+            {
+                worldInteractable.GetClosestPoint(pos, out float distance);
+                if (distance < interactionReach * 0.4f)
+                    return worldInteractable;
+            }
             return null;
+        }
 
         return closestInteractable;
     }

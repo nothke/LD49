@@ -129,9 +129,6 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         RoomController.i.RegisterPlayer(this, originalShipId);
     }
 
-    float lastJumpingAxis = 0;
-    float lastExitAxis = 0;
-
     void Update()
     {
         if (playArea != null)
@@ -140,41 +137,54 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             {
                 float inputX = Input.GetAxis("Horizontal");
                 float inputY = Input.GetAxis("Vertical");
-                float inputInteract = Input.GetAxis("Submit");
-                float inputJump = Input.GetAxis("Jump");
+                float inputInteract = Mathf.Max(Input.GetAxis("Submit"), Input.GetAxis("Jump"));
 
                 Interactable interactableInRange =
                     interactables.InInteractableReach(playArea.areaCenter.TransformPoint(pos) + Vector3.up);
 
                 bool startedInteracting = inputInteract > 0 && !interacting;
                 bool endedInteracting = inputInteract <= 0.01f && interacting;
-                bool startedJumping = inputJump > 0 && lastJumpingAxis <= 0.01f;
-                lastJumpingAxis = inputJump;
-
-
-                float inputExit = Input.GetAxis("Cancel");
-                bool startedExiting = inputExit > 0 && lastExitAxis <= 0.01f;
-                lastExitAxis = inputExit;
 
                 if (startedInteracting)
                 {
                     if (interactableInRange)
                     {
-                        interactable = interactableInRange;
-                        interactable.OnStartedInteracting();
+                        if (interactableInRange.GetType() == Interactable.Type.World)
+                        {
+                            // Leave ship
+                            worldMovement.enabled = true;
 
-                        PlayStartInteractingSound(interactable);
+                            int prevShip = shipId;
+                            shipId = -1;
 
-                        handStartFactor = interactable.GetHandStartFactor();
-                        interactable.GetHandStartFactors(
-                            out leftHandHoldStartFactor,
-                            out rightHandHoldStartFactor,
-                            handStartFactor);
+                            RoomController.i.RassignPlayerToShip(this, prevShip);
+                        }
+                        else {
+                            interactable = interactableInRange;
+                            interactable.OnStartedInteracting();
 
-                        //Debug.Log("Local player Started interacting with: " + interactable);
+                            PlayStartInteractingSound(interactable);
+
+                            handStartFactor = interactable.GetHandStartFactor();
+                            interactable.GetHandStartFactors(
+                                out leftHandHoldStartFactor,
+                                out rightHandHoldStartFactor,
+                                handStartFactor);
+
+                            //Debug.Log("Local player Started interacting with: " + interactable);
+                        }
                     }
                     else // if no interactables in range
                     {
+                        if (shipId == -1)
+                        { // In the world
+                            if (!jumping)
+                            {
+                                verticalSpeed = jumpSpeed;
+                                jumping = true;
+                            }
+                        }
+
                         // Raise hand in the air
                         leftHandHoldStartFactor = Random.Range(-0.2f, 0.2f); // used for raised-hand positioning
                         ShipUI.instance.EnableWheelSlider(false);
@@ -201,21 +211,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 }
 
                 if (!interacting) {
-                    if (startedJumping)
+                    if (false)
                     {
                         // Jump
                         // TODO
 
-                        if (!jumping)
-                        {
-                            verticalSpeed = jumpSpeed;
-                            jumping = true;
-
-                            // TODO prevent jumping if boat tilted? force a jump to the sea in that case
-                        }
+                        
                     }
 
-                    if (startedExiting)
+                    if (false)
                     {
                         worldMovement.enabled = !worldMovement.enabled;
 
@@ -445,7 +449,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
                 }
 
-                playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius);
+                playArea.EnsureCircleInsideArea(ref receivedPos, collisionRadius * 0.5f);
 
                 pos = Vector3.Lerp(pos, receivedPos, 5f * Time.deltaTime);
             }
@@ -454,7 +458,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             // Actual moving
             //////////////////
 
-            playArea.EnsureCircleInsideArea(ref pos, collisionRadius);
+            playArea.EnsureCircleInsideArea(ref pos, collisionRadius * 0.5f);
 
             transform.position = playArea.areaCenter.TransformPoint(pos) - Vector3.up * 0.15f;
 

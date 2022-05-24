@@ -8,7 +8,7 @@ public abstract class Interactable : MonoBehaviour
 
     public Renderer[] highlightRenderers;
 
-    public enum Type { NonSpecific, Rope, Wheel };
+    public enum Type { NonSpecific, Rope, Wheel, World, Ship };
     public virtual Type GetType() { return Type.NonSpecific; }
 
     public abstract Vector3 GetClosestPoint(Vector3 fromPosition, out float distance);
