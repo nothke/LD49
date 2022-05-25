@@ -70,6 +70,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
     bool jumping = false;
 
+    float lastBoatChangeTime = 0f;
+    const float minBoatChangeTime = 0.7f;
+
     public bool IsJumping {
         get { return jumping; }
     }
@@ -151,21 +154,27 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     {
                         if (interactableInRange.GetType() == Interactable.Type.World)
                         {
-                            // Leave ship
-                            worldMovement.enabled = true;
+                            if (Time.time - lastBoatChangeTime > minBoatChangeTime)
+                            {
+                                // Leave ship
+                                worldMovement.enabled = true;
 
-                            int prevShip = shipId;
-                            shipId = -1;
+                                int prevShip = shipId;
+                                shipId = -1;
 
-                            RoomController.i.RassignPlayerToShip(this, prevShip);
+                                RoomController.i.RassignPlayerToShip(this, prevShip);
+                            }
                         }
                         else if (interactableInRange.GetType() == Interactable.Type.Ship)
                         {
-                            // Enter ship
-                            worldMovement.enabled = false;
-                            int prevShip = shipId;
-                            shipId = RoomController.i.ClosestShipTo(transform.position);
-                            RoomController.i.RassignPlayerToShip(this, prevShip);
+                            if (Time.time - lastBoatChangeTime > minBoatChangeTime)
+                            {
+                                // Enter ship
+                                worldMovement.enabled = false;
+                                int prevShip = shipId;
+                                shipId = RoomController.i.ClosestShipTo(transform.position);
+                                RoomController.i.RassignPlayerToShip(this, prevShip);
+                            }
                         }
                         else
                         {
@@ -563,13 +572,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         playArea = area;
 
         if (feet == null) feet = GetComponent<PlayerFeet>();
-        feet.playArea = playArea;
+        feet.SetPlayArea(playArea);
         interactables = shipInteractables;//
 
         transform.SetParent(playArea.areaCenter);
 
         if (photonView.IsMine)
         {
+            lastBoatChangeTime = Time.time;
 
             if (previousArea == null)
                 pos = new Vector2(Random.Range(playArea.minMaxX.x, playArea.minMaxX.y), playArea.minMaxZ.x);
@@ -717,6 +727,9 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
     {
         if (i.GetType() == Interactable.Type.Rope)
         {
+            if (!RoomController.i.ships.ContainsKey(shipId))
+                return;
+
             ShipSync s = RoomController.i.ships[shipId];
             if (s != null)
             {

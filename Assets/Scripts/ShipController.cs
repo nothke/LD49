@@ -91,7 +91,7 @@ public class ShipController : MonoBehaviour
 
         mast.localRotation = Quaternion.Euler(0, mastAngle, 0);
 
-#if UNITY_EDITOR && FALSE
+#if UNITY_EDITOR
         if (Input.GetKey(KeyCode.LeftShift))
         {
             float f01 = Input.GetAxis("Vertical");

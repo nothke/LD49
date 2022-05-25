@@ -18,7 +18,7 @@ public class PlayerFeet : MonoBehaviour
     float moveDistance = 1f;
     float moveTotalDistance = 1f;
 
-    public ShipPlayArea playArea;
+    ShipPlayArea playArea;
 
     Vector2 fromPosR, fromPosL;
     Vector2 toPosR, toPosL;
@@ -33,6 +33,18 @@ public class PlayerFeet : MonoBehaviour
     void Start()
     {
 
+    }
+
+    public void SetPlayArea(ShipPlayArea newArea)
+    {
+        if (playArea != null)
+        {
+            fromPosL = newArea.InverseTransformPoint(playArea.TransformPoint(fromPosL));
+            fromPosR = newArea.InverseTransformPoint(playArea.TransformPoint(fromPosR));
+            toPosL = newArea.InverseTransformPoint(playArea.TransformPoint(toPosL));
+            toPosR = newArea.InverseTransformPoint(playArea.TransformPoint(toPosR));
+        }
+        playArea = newArea;
     }
 
     bool initialized = false;
@@ -86,6 +98,7 @@ public class PlayerFeet : MonoBehaviour
 
                     //moveDistance = 0f;
                     //moveTotalDistance = Vector2.Distance(fromPosR, toPosR);
+                    moveTotalDistance *= 0.3f;
 
                     toRotR = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)) * Quaternion.AngleAxis(pointOutFeetAngle, Vector3.up);
                     if (float.IsNaN(toRotR.x))
@@ -110,6 +123,7 @@ public class PlayerFeet : MonoBehaviour
 
                 //moveDistance = 0f;
                 //moveTotalDistance = Vector2.Distance(fromPosL, toPosL);
+                moveTotalDistance *= 0.3f;
 
                 toRotL = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.y)) * Quaternion.AngleAxis(-pointOutFeetAngle, Vector3.up);
                 if (float.IsNaN(toRotL.x))
@@ -137,8 +151,8 @@ public class PlayerFeet : MonoBehaviour
         if (leftFeetMoving || rightFeetMoving)
         {
             float speed = feetSpeed;
-            if ((rightFeetMoving && rightDistance > maxDistanceFromBody * 1.5f) ||
-                (leftFeetMoving && leftDistance > maxDistanceFromBody * 1.5f)) feetSpeed *= 1.5f;
+            if ((rightFeetMoving && leftDistance > maxDistanceFromBody) ||
+                (leftFeetMoving && rightDistance > maxDistanceFromBody)) speed *= 3.5f;
 
             moveDistance += speed * Time.deltaTime;
             float moveFactor = Mathf.Clamp01(moveDistance / moveTotalDistance);
@@ -222,7 +236,7 @@ public class PlayerFeet : MonoBehaviour
             toRotR = fromRotR;
 
         moveDistance = 0f;
-        moveTotalDistance = Vector2.Distance(fromPosR, toPosR);
+        moveTotalDistance = Mathf.Min(1.5f, Vector2.Distance(fromPosR, toPosR));
         rightFeetMoving = true;
     }
 
@@ -236,7 +250,7 @@ public class PlayerFeet : MonoBehaviour
             toRotL = fromRotL;
 
         moveDistance = 0f;
-        moveTotalDistance = Vector2.Distance(fromPosL, toPosL);
+        moveTotalDistance = Mathf.Min(1.5f, Vector2.Distance(fromPosL, toPosL));
         leftFeetMoving = true;
     }
 }
