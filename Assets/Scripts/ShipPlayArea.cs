@@ -55,6 +55,18 @@ public class ShipPlayArea : MonoBehaviour
         pos.z = Mathf.Min(minMaxZ.y - radius, pos.z);
     }
 
+    virtual public void ClosestInsidePoint(ref Vector3 pos, Vector2 addedSideX, Vector2 addedSideZ)
+    {
+        pos.x = Mathf.Max(minMaxX.x + addedSideX.x, pos.x);
+        pos.x = Mathf.Min(minMaxX.y + addedSideX.y, pos.x);
+
+        pos.y = Mathf.Max(0, pos.y);
+
+        pos.z = Mathf.Max(minMaxZ.x + addedSideZ.x, pos.z);
+        pos.z = Mathf.Min(minMaxZ.y + addedSideZ.y, pos.z);
+    }
+
+
     private void OnDrawGizmos()
     {
         Transform t = areaCenter;

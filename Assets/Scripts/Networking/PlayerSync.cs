@@ -77,6 +77,11 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         get { return jumping; }
     }
 
+    bool grounded = false;
+    public bool IsGrownded {
+        get { return grounded; }
+    }
+
 
     void Start()
     {
@@ -460,6 +465,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
             float waterLevel = Water.GetHeight(pos);
             bool underwater = waterLevel > pos.y;
 
+            if (shipId == -1)
+            {
+                float floorLevel = ((WorldPlayArea)playArea).GetMinPlayerPositionY(pos);
+
+                //Debug.Log($"grounded? {grounded}, pos.y {pos.y}, floor {floorLevel}, diff = {Mathf.Abs(pos.y - floorLevel)}");
+                grounded = Mathf.Abs(pos.y - floorLevel) < 0.008f;
+            }
+            else grounded = false;
+
             if (underwater && !lastFrameUnderwater && verticalSpeed < 0)
             { // Splash TODO
 
@@ -566,6 +580,14 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         ownPosition += push * pushSpeed * Time.deltaTime;
     }
 
+    public void ApplyAcceleration(Vector3 acc)
+    {
+        Vector3 localAcc = playArea.areaCenter.InverseTransformDirection(acc);
+        localAcc.y = 0;
+
+        pos += localAcc * Time.deltaTime;
+    }
+
     public void PlaceOnShip(ShipSync s, ShipPlayArea area, ShipInteractables shipInteractables)
     {
         ShipPlayArea previousArea = playArea;
@@ -596,6 +618,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 {
                     ShipUI.instance.ship = s.visualShip;
                     ShipUI.instance.shipIdText.text = string.Format("Vessel #{0}", shipId + 1);
+                    ConnectionUI.instance.ShowIngameShipUI(true);
                 }
 
                 if (Music.instance)
@@ -615,6 +638,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 {
                     ShipUI.instance.ship = null;
                     ShipUI.instance.shipIdText.text = "";
+                    ConnectionUI.instance.ShowIngameShipUI(false);
                 }
             }
         }

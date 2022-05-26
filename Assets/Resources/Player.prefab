@@ -251,7 +251,6 @@ MonoBehaviour:
   stepArchHeight: 0.5
   rightFeet: {fileID: 8644262222647029801}
   leftFeet: {fileID: 6028300066768592947}
-  playArea: {fileID: 0}
 --- !u!114 &5334113952920334763
 MonoBehaviour:
   m_ObjectHideFlags: 0

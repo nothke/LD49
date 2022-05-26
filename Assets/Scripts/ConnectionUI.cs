@@ -19,6 +19,8 @@ public class ConnectionUI : MonoBehaviour
     public ShipInfoButton shipInfoPrefab;
     public Transform shipInfoPanel;
 
+    public GameObject[] shipRelatedUI;
+
     List<ShipInfoButton> shipInfos = new List<ShipInfoButton>();
 
     private void Update()
@@ -87,6 +89,14 @@ public class ConnectionUI : MonoBehaviour
         introPanel.SetActive(false);
         inRoomPanel.SetActive(false);
         ingamePanel.SetActive(true);
+    }
+
+    public void ShowIngameShipUI(bool b)
+    {
+        foreach (GameObject go in shipRelatedUI)
+        {
+            go.SetActive(b);
+        }
     }
 
     public void ShowInRoomPanel()
