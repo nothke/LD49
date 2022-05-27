@@ -456,7 +456,15 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
 
             playArea.EnsureCircleInsideArea(ref pos, collisionRadius * 0.5f);
 
-            transform.position = playArea.areaCenter.TransformPoint(pos) - Vector3.up * 0.15f;
+            Vector3 visualPos = pos;
+            if (worldToShipLerpTime > 0)
+            {
+                worldToShipLerpTime = Mathf.Max(0, worldToShipLerpTime - Time.deltaTime);
+                float lerpFactor = 1f - worldToShipLerpTime / WORLD_TO_SHIP_TIME;
+                visualPos = Vector3.Lerp(posPreJoinShip, pos, Easing.Cubic.Out(lerpFactor));
+            }
+
+            transform.position = playArea.areaCenter.TransformPoint(visualPos) - Vector3.up * 0.15f;
 
             ////////////////
             // Water particles player
@@ -588,6 +596,10 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
         pos += localAcc * Time.deltaTime;
     }
 
+    Vector3 posPreJoinShip = Vector3.zero;
+    float worldToShipLerpTime = 0f;
+    const float WORLD_TO_SHIP_TIME = 0.7f;
+
     public void PlaceOnShip(ShipSync s, ShipPlayArea area, ShipInteractables shipInteractables)
     {
         ShipPlayArea previousArea = playArea;
@@ -627,6 +639,7 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                 }
 
                 s.shipSounds.doWavesAgainstShip = true;
+
             }
             else {
                 // On land/water
@@ -641,6 +654,11 @@ public class PlayerSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagic
                     ConnectionUI.instance.ShowIngameShipUI(false);
                 }
             }
+        }
+
+        if (s != null && previousArea != null) {
+            posPreJoinShip = pos;
+            worldToShipLerpTime = WORLD_TO_SHIP_TIME;
         }
 
         feet.Init(pos, Vector2.up, photonView.IsMine? ownStepsMixerGroup : othersStepsMixerGroup);

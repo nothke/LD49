@@ -215,6 +215,7 @@ public class ShipSync : MonoBehaviourPun, IPunObservable, IPunInstantiateMagicCa
 
                 Vector3 pushForce = forceDirection.normalized * (1f - (sqrMagnitude / maxPushDistanceSqr)) * 3.7f; //* ps.boatPushWeight
                 localShip.rb.AddForceAtPosition(pushForce, forcePosition, ForceMode.Acceleration);
+                Debug.DrawLine(forcePosition, forcePosition + pushForce, Color.green);
 
                 ps.ApplyAcceleration(-pushForce);
 
