@@ -39,6 +39,12 @@ public class ConnectionUI : MonoBehaviour
 
             DisableInfosOver(count);
         }
+
+        if (Input.GetMouseButtonDown(0) && (Cursor.lockState != CursorLockMode.Locked || Cursor.visible))
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     ShipInfoButton GetInfo(int i)
